@@ -1,0 +1,378 @@
+package com.jgranados.koky.interpreter.parser;
+
+import com.jgranados.koky.interpreter.lexer.Lexer;
+import com.jgranados.koky.interpreter.token.Token;
+import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import com.jgranados.koky.instructions.*;
+import com.jgranados.koky.instructions.graphicinstructions.*;
+import com.jgranados.koky.instructions.varinstructions.*;
+import java_cup.runtime.*;
+
+
+parser code {:
+        private Lexer myLexer;
+        private List<String> errorsList;
+        private SymbolsTable symTable;
+        
+
+	// Connect this parser to a scanner!
+	public Parser(Lexer lex, SymbolsTable symTable) {
+            super(lex);
+            myLexer = lex;
+            this.errorsList = myLexer.getErrorsList();
+            this.symTable = symTable;
+	}
+
+        @Override
+        public void syntax_error(Symbol st) {
+            if (st.sym != sym.LINE_TERMINATOR) {
+                Token token = (Token) st.value;
+                report_error("Error Sintactico:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
+                if (myLexer.isAnalyzingFile()) {
+                    System.out.println("No entiendo que hacer con " + token.getLexeme() + "En la linea " + token.getLine() + ", columna " + token.getColumn());
+                    errorsList.add(String.format("No entiendo que hacer con '%s' en linea %d y columna %d. Intenta borrandolo.", token.getLexeme(), token.getLine(), token.getColumn()));
+                } else {
+                    System.out.println("No entiendo que hacer con " + token.getLexeme());
+                    errorsList.add(String.format("No entiendo que hacer con '%s'. Intenta de nuevo con una instruccion válida.", token.getLexeme()));
+                }
+            }
+        }
+
+        public void addSemanticError(String msg) {
+            this.errorsList.add(msg);
+        }
+
+        /*public Integer getIDValue(Token id) {
+            Integer value = this.symTable.get(id.getLexeme());
+            if (value == null) {
+                if (myLexer.isAnalyzingFile()) {
+                    errorsList.add(String.format("La variable '%s' no se ha creado en el archivo que estoy leyendo. Debe crear la variable antes de usarla.", id.getLexeme()));
+                } else {
+                    errorsList.add(String.format("La variable '%s' no se ha creado en el area de instrucciones. Ingrese una instrucción para crear la variable.", id.getLexeme()));
+                }
+                return 0;
+            }
+            return value;
+        }*/
+:}
+
+/* Terminals (tokens returned by the scanner). */
+terminal Token          LINE_TERMINATOR, INTEGER_LITERAL, HEXA_LITERAL, ID, COMMA;
+terminal Token          OPEN_BRACKET, CLOSE_BRACKET, OPEN_PAR, CLOSE_PAR, PLUS;
+terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
+terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
+terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
+terminal Token          TODRAW, REPEAT;
+
+/* Non-terminals */
+non terminal List<Instruction>          program, instructions, instructionsRepeat;
+non terminal Instruction                instruction, instructionRepeat;
+non terminal                            syncToken;
+non terminal Expr                       expr;
+
+/* precedence */
+precedence left     PLUS, MINUS;
+precedence left     MULT, DIV;
+
+/* The grammar */
+start with program;
+
+program ::= instructions:list
+                {: RESULT = list; :}
+            ;
+
+instructions ::= instructions:list instruction:ins
+                    {:  
+                        list.add(ins);
+                        RESULT = list;
+                    :}
+                | instruction:ins
+                    {:
+                        List<Instruction> instructions = new ArrayList<>();
+                        instructions.add(ins);
+                        RESULT = instructions;
+                    :}
+                ;
+
+instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un forward con n = " + e);
+                        RESULT = new ForwardInstruction(e);
+                    :}
+                | BACKWARD expr:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un backward con n = " + e);
+                        RESULT = new BackwardInstruction(e);
+                    :}
+                | RIGHT expr:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un RIGHT con n = " + e);
+                        RESULT = new RightInstruction(e);
+                    :}
+                | LEFT expr:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un LEFT con n = " + e);
+                        RESULT = new LeftInstruction(e);
+                    :}
+                | CLEARS  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un CLEAR ");
+                        RESULT = new ClearsInstruction();
+                    :}
+                | PENUP  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un PENUP ");
+                        RESULT = new TogglePenInstruction(true);
+                    :}
+                | PENDOWN  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un PENDOWN ");
+                        RESULT = new TogglePenInstruction(false);
+                    :}
+                | TOCENTER  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un TOCENTER ");
+                        RESULT = new ToCenterInstruction();
+                    :}
+                | COLOR:color expr:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un color ");
+                        RESULT = new ColorInstruction(e);
+                        /*if (e > 0 && e < 10) {
+                            RESULT = new ColorInstruction(e);
+                        } else {
+                            if (myLexer.isAnalyzingFile()) {
+                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                            } else {
+                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            }
+                            RESULT = new EmptyInstruction();
+                        }*/
+                    :}
+                | COLOR HEXA_LITERAL:e  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un color ");
+                        RESULT = new ColorInstruction(e.getLexeme());
+                    :}
+                | POSITIONXY expr:ex COMMA expr:ey  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un POSITIONXY ");
+                        RESULT = new PositionXYInstruction(ex, ey);
+                    :}
+                | POSITIONX expr:ex  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un POSITIONX ");
+                        RESULT = new PositionXInstruction(ex);
+                    :}
+                | POSITIONY expr:ey  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un POSITIONY ");
+                        RESULT = new PositionYInstruction(ey);
+                    :}
+                | HIDETURTLE  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un HIDETURTLE ");
+                        RESULT = new ToggleTurtleInstruction(false);
+                    :}
+                | SHOWTURTLE  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un SHOWTURTLE ");
+                        RESULT = new ToggleTurtleInstruction(true);
+                    :}
+                | TOERASE  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un TOERASE ");
+                        RESULT = new ToggleDrawInstruction(false);
+                    :}
+                | TODRAW  LINE_TERMINATOR
+                    {:  
+                        System.out.println("un TODRAW ");
+                        RESULT = new ToggleDrawInstruction(true);
+                    :}
+                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET LINE_TERMINATOR
+                    {:
+                        System.out.println("un REPEAT CON " + e);
+                        RESULT = new RepeatInstruction(e, inst);
+                    :}
+                | ID:e LINE_TERMINATOR
+                    {:
+                        symTable.addId(e, 0, myLexer.isAnalyzingFile());
+                        RESULT = new EmptyInstruction();
+                    :}
+                | ID:e EQ expr:ex LINE_TERMINATOR
+                    {:
+                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                    :}
+                | LINE_TERMINATOR
+                    {:  
+                        System.out.println("Vacio, no hago nada");
+                        RESULT = new EmptyInstruction();
+                    :}
+                /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "+ eleft + eright); RESULT = new EmptyInstruction(); :}*/
+                /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
+                | error:e syncToken {: System.out.println("--------Error nnn  " + eleft + eright); RESULT = new EmptyInstruction(); :}
+		;
+
+instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
+                            {:  
+                                list.add(ins);
+                                RESULT = list;
+                            :}
+                        | instructionRepeat:ins
+                            {:
+                                List<Instruction> instructions = new ArrayList<>();
+                                instructions.add(ins);
+                                RESULT = instructions;
+                            :}
+                        ;
+
+instructionRepeat ::=	 FORWARD expr:e
+                    {:  
+                        System.out.println("un forward con n = " + e);
+                        RESULT = new ForwardInstruction(e);
+                    :}
+                | BACKWARD expr:e
+                    {:  
+                        System.out.println("un backward con n = " + e);
+                        RESULT = new BackwardInstruction(e);
+                    :}
+                | RIGHT expr:e 
+                    {:  
+                        System.out.println("un RIGHT con n = " + e);
+                        RESULT = new RightInstruction(e);
+                    :}
+                | LEFT expr:e
+                    {:  
+                        System.out.println("un LEFT con n = " + e);
+                        RESULT = new LeftInstruction(e);
+                    :}
+                | CLEARS
+                    {:  
+                        System.out.println("un CLEAR ");
+                        RESULT = new ClearsInstruction();
+                    :}
+                | PENUP
+                    {:  
+                        System.out.println("un PENUP ");
+                        RESULT = new TogglePenInstruction(true);
+                    :}
+                | PENDOWN
+                    {:  
+                        System.out.println("un PENDOWN ");
+                        RESULT = new TogglePenInstruction(false);
+                    :}
+                | TOCENTER
+                    {:  
+                        System.out.println("un TOCENTER ");
+                        RESULT = new ToCenterInstruction();
+                    :}
+                | COLOR:color expr:e
+                    {:  
+                        System.out.println("un color ");
+                        RESULT = new ColorInstruction(e);
+                        /*if (e > 0 && e < 10) {
+                            RESULT = new ColorInstruction(e);
+                        } else {
+                            if (myLexer.isAnalyzingFile()) {
+                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                            } else {
+                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            }
+                            RESULT = new EmptyInstruction();
+                        }*/
+                    :}
+                | COLOR HEXA_LITERAL:e
+                    {:  
+                        System.out.println("un color ");
+                        RESULT = new ColorInstruction(e.getLexeme());
+                    :}
+                | POSITIONXY expr:ex COMMA expr:ey
+                    {:  
+                        System.out.println("un POSITIONXY ");
+                        RESULT = new PositionXYInstruction(ex, ey);
+                    :}
+                | POSITIONX expr:ex
+                    {:  
+                        System.out.println("un POSITIONX ");
+                        RESULT = new PositionXInstruction(ex);
+                    :}
+                | POSITIONY expr:ey
+                    {:  
+                        System.out.println("un POSITIONY ");
+                        RESULT = new PositionYInstruction(ey);
+                    :}
+                | HIDETURTLE
+                    {:  
+                        System.out.println("un HIDETURTLE ");
+                        RESULT = new ToggleTurtleInstruction(false);
+                    :}
+                | SHOWTURTLE
+                    {:  
+                        System.out.println("un SHOWTURTLE ");
+                        RESULT = new ToggleTurtleInstruction(true);
+                    :}
+                | TOERASE
+                    {:  
+                        System.out.println("un TOERASE ");
+                        RESULT = new ToggleDrawInstruction(false);
+                    :}
+                | TODRAW
+                    {:  
+                        System.out.println("un TODRAW ");
+                        RESULT = new ToggleDrawInstruction(true);
+                    :}
+                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET
+                    {:
+                        System.out.println("un REPEAT CON " + e);
+                        RESULT = new RepeatInstruction(e, inst);
+                    :}
+                | ID:e EQ expr:ex
+                    {:
+                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                    :}
+                /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "); RESULT = new EmptyInstruction(); :}*/
+                /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
+                | error:e CLOSE_BRACKET {: System.out.println("--------Error nnn  "); RESULT = new EmptyInstruction(); :}
+		;
+
+expr ::=    expr:e1 PLUS expr:e2
+                {:
+                    RESULT = new Expr(sym.PLUS, e1, e2);
+                :}
+            | expr:e1 MINUS expr:e2
+                {:
+                    RESULT = new Expr(sym.MINUS, e1, e2);
+                :}
+            | expr:e1 MULT expr:e2
+                {:
+                    RESULT = new Expr(sym.MULT, e1, e2);
+                :}
+            | expr:e1 DIV expr:e2
+                {:
+                    RESULT = new Expr(sym.DIV, e1, e2);
+                :}
+            | OPEN_PAR expr:e CLOSE_PAR
+                {:
+                    RESULT = e;
+                :}
+            | ID:e
+                {:
+                    if (symTable.exists(e, myLexer.isAnalyzingFile())) {
+                        RESULT = new Expr(e, symTable);
+                    } else {
+                        RESULT = null;
+                    }
+                :}
+            | INTEGER_LITERAL:e
+                {:
+                    RESULT = new Expr(e.getLexeme());
+                :}
+            ;
+
+syncToken ::=   FORWARD
+                | LINE_TERMINATOR 
+                ;
