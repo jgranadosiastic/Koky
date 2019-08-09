@@ -87,13 +87,13 @@ program ::= instructions:list
 
 instructions ::= instructions:list instruction:ins
                     {:  
-                        list.add(ins);
+                        list.add(ins); //esta lista viene de la primera instruccion encontrada, las demas instrucciones solo se agregan
                         RESULT = list;
                     :}
                 | instruction:ins
                     {:
                         List<Instruction> instructions = new ArrayList<>();
-                        instructions.add(ins);
+                        instructions.add(ins); //aquin se crea la lista de instrucciones y las demas solo se agregan
                         RESULT = instructions;
                     :}
                 ;
@@ -198,6 +198,14 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
                     :}
+                /*Aqui se tendria que agregar la instruccion para funciones y hacer algo similar al repeat
+                	la gramatica posiblemente quedaria asi:
+					ESTABLECER  NOMBRE:FUN PARENT_A parametros:params parametro:param PARENT_C LLAVE_A instrucciones:intrucs instruccion:instruc LLAVE_C
+					***algo interesante es ver lo del salto de linea, al analizar el codigo creo que al presionar la tecla enter se envia
+						como salto de linea acontinuacion de la instruccion, lo que se podria hacer es mandar esta estructura sin saltos de lineas
+						e ir concatenando la estructura hasta que se arme por completo, la otra situcion es no ejecutar las instrucciones
+						que vienen dentro de la funcion sino hasta que se llame a la misma.
+                */
                 | ID:e LINE_TERMINATOR
                     {:
                         symTable.addId(e, 0, myLexer.isAnalyzingFile());
