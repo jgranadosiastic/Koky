@@ -67,12 +67,14 @@ terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
 terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
 terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
 terminal Token          TODRAW, REPEAT;
+terminal Token          VOID, CALL; /*Se agregaron en los tokens terminales*/
 
 /* Non-terminals */
 non terminal List<Instruction>          program, instructions, instructionsRepeat;
 non terminal Instruction                instruction, instructionRepeat;
 non terminal                            syncToken;
 non terminal Expr                       expr;
+non terminal String                     parameters,parameter;
 
 /* precedence */
 precedence left     PLUS, MINUS;
@@ -215,7 +217,14 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "+ eleft + eright); RESULT = new EmptyInstruction(); :}*/
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e syncToken {: System.out.println("--------Error nnn  " + eleft + eright); RESULT = new EmptyInstruction(); :}
-		;
+                    
+                | VOID:e ID OPEN_PAR parameters CLOSE_PAR
+
+
+                ;
+
+parameters ::= paremeters:e parameter:ex; /* creando los parametros de la funcion*/
+parameter ::= ID:e {RESULT = e;};
 
 instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
                             {:  
