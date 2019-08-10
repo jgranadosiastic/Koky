@@ -32,7 +32,7 @@ public class Expr {
         this.id = id;
     }
 
-    public int operate() {
+    public int operate() {// metodo evaluador de expresiones
         switch (operator) {
             case sym.PLUS:
                 return left.operate() + right.operate();
@@ -61,7 +61,7 @@ public class Expr {
 
     private int getValue() {
         if (id != null) {
-            return table.getIdValue(id);
+            return table.getIdValue(id);//devolviendo el valor de id en la tabla de simbolos
         }
         return literalValue;
     }

@@ -11,9 +11,10 @@ import com.jgranados.koky.interpreter.token.Token;
  */
 public class VarAssignationInstruction extends Instruction implements Assignable {
     private SymbolsTable symTable;
-    private Token id;
-    private Expr expr;
+    private Token id; //identificador de variable asignada
+    private Expr expr; // valor de la variable 
 
+    //la instruccion asignacion ya trae la instancia de la tbla de simbolos para asignarla
     public VarAssignationInstruction(SymbolsTable symTable, Token id, Expr expr) {
         this.symTable = symTable;
         this.id = id;
@@ -22,7 +23,7 @@ public class VarAssignationInstruction extends Instruction implements Assignable
 
     @Override
     public void assign() {
-        symTable.assignValueToId(id, expr.operate());
+        symTable.assignValueToId(id, expr.operate()); //operando la expresion y retornando el valor para asignarla
     }
     
 }
