@@ -70,11 +70,11 @@ terminal Token          TODRAW, REPEAT;
 terminal Token          VOID, CALL; /*Se agregaron en los tokens terminales*/
 
 /* Non-terminals */
-non terminal List<Instruction>          program, instructions, instructionsRepeat;
-non terminal Instruction                instruction, instructionRepeat;
+non terminal List<Instruction>          program, instructions, instructionsVoid;
+non terminal Instruction                instruction, instructionVoid;
 non terminal                            syncToken;
 non terminal Expr                       expr;
-non terminal String                     parameters,parameter;
+non terminal List<Token>                     parameters,parameter;
 
 /* precedence */
 precedence left     PLUS, MINUS;
@@ -195,7 +195,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
                     :}
-                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET LINE_TERMINATOR
+                | REPEAT expr:e OPEN_BRACKET instructionsVoid:inst CLOSE_BRACKET LINE_TERMINATOR
                     {:
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
@@ -226,20 +226,58 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e syncToken {: System.out.println("--------Error nnn  " + eleft + eright); RESULT = new EmptyInstruction(); :}
                     
-                | VOID:e ID OPEN_PAR parameters CLOSE_PAR
+                | VOID ID:id OPEN_PAR parameters:parametersList CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
+                    {:
+                       
+                    
+                    
+                    
+                    :}
+                |VOID ID:id OPEN_PAR CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
+                    {:
+                       
+                    
+                    
+                    
+                    :}
+                
+                |CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
+                    {:
 
 
+                    :}
+                | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
+                    {:
+
+
+                    :}
                 ;
 
-parameters ::= paremeters:e parameter:ex; /* creando los parametros de la funcion*/
-parameter ::= ID:e {RESULT = e;};
+parameters ::= parameters:parameters parameter:parameter 
+                {: parameters.add(parameter);
+                   RESULT = parameters;
+                :}
+                
+                | parameter:parameter 
+                {:
+                    List<Token> parameters = new ArrayList<>()
+                    parameters.add(parameter);
+                    RESULT = parameters;
+                :};
 
-instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
+parameter ::= ID:parameter 
+                {:
+                RESULT = parameter;
+                :};         
+              
+/*Antes se llamaba instructionsRepeat ahora instructionsVoid, solo el nombre se cambio*/
+
+instructionsVoid ::=  instructionsVoid:list instructionVoid:ins
                             {:  
                                 list.add(ins);
                                 RESULT = list;
                             :}
-                        | instructionRepeat:ins
+                        | instructionVoid:ins
                             {:
                                 List<Instruction> instructions = new ArrayList<>();
                                 instructions.add(ins);
@@ -247,7 +285,7 @@ instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
                             :}
                         ;
 
-instructionRepeat ::=	 FORWARD expr:e
+instructionVoid ::=	 FORWARD expr:e
                     {:  
                         System.out.println("un forward con n = " + e);
                         RESULT = new ForwardInstruction(e);
@@ -342,7 +380,7 @@ instructionRepeat ::=	 FORWARD expr:e
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
                     :}
-                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET
+                | REPEAT expr:e OPEN_BRACKET instructionsVoid:inst CLOSE_BRACKET
                     {:
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
@@ -354,7 +392,21 @@ instructionRepeat ::=	 FORWARD expr:e
                 /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "); RESULT = new EmptyInstruction(); :}*/
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e CLOSE_BRACKET {: System.out.println("--------Error nnn  "); RESULT = new EmptyInstruction(); :}
-		;
+		
+                | CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
+                    {:
+
+
+                    :}
+                | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
+                    {:
+
+
+                    :}
+                ; 
+
+
+
 
 expr ::=    expr:e1 PLUS expr:e2
                 {:
@@ -394,4 +446,11 @@ syncToken ::=   FORWARD
                 | LINE_TERMINATOR 
                 ;
 
-/* PRUEBA DE GIT, VIENDO SI FUNCIONA EL COMMIT Y EL PUSH A MI RAMA JPMAZATE  */
+/*
+CAMBIOS del 12-09-2019 JP:
+-Se cambio el nombre de instructionsRepeat e instructionRepeat por instructionsVoid e instructionVoid respectivamente.
+-Se agregaron los no terminales parameters y parameter ya encapsulados en un List<Token> 
+-Se agrego parcialmente la regla de produccion de la funcion(VOID) y de la llamada de la funcion (CALL), sin atributos sintetizados 
+-Tocaria crear clases de voidInstruction y callInstruction para unirlas a las demas Instructions.
+-Se agrego la instruction al bloque de instructionVoid la instruction call.
+*/
