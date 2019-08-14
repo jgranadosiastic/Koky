@@ -79,6 +79,7 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
+        btnOpenEditor = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
@@ -172,12 +173,22 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
+        btnOpenEditor.setBackground(new java.awt.Color(255, 255, 255));
+        btnOpenEditor.setForeground(new java.awt.Color(0, 153, 0));
+        btnOpenEditor.setText("Editor de Texto");
+        btnOpenEditor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenEditorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnOpenEditor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +196,8 @@ public class KokyFrame extends javax.swing.JFrame {
                 .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(btnOpenEditor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -320,8 +332,12 @@ public class KokyFrame extends javax.swing.JFrame {
 
     private void bntOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOpenFileActionPerformed
         saveFileChooser.showOpenDialog(this);
-        // TODO open dialog frame 
+        
     }//GEN-LAST:event_bntOpenFileActionPerformed
+
+    private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
+        new EditorFrame();
+    }//GEN-LAST:event_btnOpenEditorActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -379,6 +395,11 @@ public class KokyFrame extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void openInstructionsFromFile() {
+        saveFileChooser.showOpenDialog(this);
+        File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
+    }
 
     private String normalizeFileName(String baseName) {
         if (!baseName.endsWith("." + KOK_EXTENSION)) {
@@ -392,6 +413,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
+    private javax.swing.JButton btnOpenEditor;
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
