@@ -4,6 +4,7 @@ import com.jgranados.koky.interpreter.lexer.Lexer;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +18,16 @@ parser code {:
         private Lexer myLexer;
         private List<String> errorsList;
         private SymbolsTable symTable;
+        private ProcedureTable procedureTable;
         
 
 	// Connect this parser to a scanner!
-	public Parser(Lexer lex, SymbolsTable symTable) {
+	public Parser(Lexer lex, SymbolsTable symTable, ProcedureTable procedureTable) {
             super(lex);
             myLexer = lex;
             this.errorsList = myLexer.getErrorsList();
             this.symTable = symTable;
+            this.procedureTable = procedureTable; 
 	}
 
         @Override
@@ -229,39 +232,59 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     
                 | VOID ID:id OPEN_PAR parameters:parametersList CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
                     {:
-                       
-                    
-                    
-                    
+                    boolean flag = procedureInstruction.addId(id, instructions, myLexer.isAnalyzingFile());
+                    if(flag){
+                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList , instructions,procedureTable);
+                    }else{
+                        RESULT = new EmptyInstruction();
+                    }
+
                     :}
                 |VOID ID:id OPEN_PAR CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
                     {:
-                       
-                    
-                    
-                    
+
+                    boolean flag = procedureInstruction.addId(id, instructions, myLexer.isAnalyzingFile());
+                    if(flag){
+                        RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>() , instructions,procedureTable);
+                    }else{
+                        RESULT = new EmptyInstruction();
+                    }
+
                     :}
                 
                 |CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
                     {:
-
+                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
+                     if(flag){
+                        RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                     }
+                     else{
+                        RESULT = new EmptyInstruction();
+                     }
 
                     :}
                 | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
                     {:
-
+                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
+                     if(flag){
+                        RESULT = new ProcedureCall(new ArrayList<Token>(), id.getLexeme());
+                     }
+                     else{
+                        RESULT = new EmptyInstruction();
+                     }
+                    
 
                     :}
                 ;
 
-parameters ::= parameters:parameters parameter:parameter 
+parameters ::= parameters:parameters COMMA parameter:parameter 
                 {: parameters.add(parameter);
                    RESULT = parameters;
                 :}
                 
                 | parameter:parameter 
                 {:
-                    List<Token> parameters = new ArrayList<>()
+                    List<Token> parameters = new ArrayList<>();
                     parameters.add(parameter);
                     RESULT = parameters;
                 :};
@@ -396,12 +419,26 @@ instructionVoid ::=	 FORWARD expr:e
 		
                 | CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
                     {:
-
+                    boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
+                     if(flag){
+                        RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                     }
+                     else{
+                        RESULT = new EmptyInstruction();
+                     }
+                    
 
                     :}
                 | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
                     {:
-
+                    boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
+                     if(flag){
+                        RESULT =  new ProcedureCall(new ArrayList<Token>(),id.getLexeme());
+                     }
+                     else{
+                        RESULT = new EmptyInstruction();
+                     }
+                    
 
                     :}
                 ; 
@@ -454,4 +491,15 @@ CAMBIOS del 12-09-2019 JP:
 -Se agrego parcialmente la regla de produccion de la funcion(VOID) y de la llamada de la funcion (CALL), sin atributos sintetizados 
 -Tocaria crear clases de voidInstruction y callInstruction para unirlas a las demas Instructions.
 -Se agrego la instruction al bloque de instructionVoid la instruction call.
+*/
+
+/*
+CAMBIOS del 14-09-2019 JP:
+-Se creo la clase ProcedureTable que servira como tabla de procedimientos para guardar la informacion de las funciones: parametros, id e instrucciones.
+-Se termino de generar los atributos sintetizados para la gramatica de void y call y estan listas para ser enviadas como instrucciones(implementan la interfaz Instruction)
+-Las clases ProcedureInstruction y ProcedureCall estan en el codigo de Bryan. Falta unirlas.
+-Ya se compilo los archivos Lexer.flex, y Parser.cup. Y se agregaron sus respectivas clases al proyecto.
+-Se agrego en el archivo KokyFrame.java el objeto de ProcedureTable y se agrego a los parametros del constructor del Parser.java
+-Tocaria unir ambos codigos y probar que este funcionando bien.
+-Luego tocaria a generar la accion como tal del momento de encontrar la instruccion ProcedureCall y generar las instrucciones pertinentes.
 */
