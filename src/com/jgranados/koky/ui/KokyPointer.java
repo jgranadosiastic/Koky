@@ -153,4 +153,7 @@ public class KokyPointer {
         this.accumulationY = accumulationY;
     }
 
+    public void setImage(String direccion) throws IOException {
+        this.image = ImageIO.read(getClass().getResource(direccion));
+    }
 }
