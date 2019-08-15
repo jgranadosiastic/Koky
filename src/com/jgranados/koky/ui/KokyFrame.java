@@ -79,6 +79,7 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
+        btnChangeImage = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
@@ -172,20 +173,32 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
+        btnChangeImage.setBackground(new java.awt.Color(255, 255, 255));
+        btnChangeImage.setForeground(new java.awt.Color(0, 153, 0));
+        btnChangeImage.setText("Cambiar icono");
+        btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeImageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -323,6 +336,11 @@ public class KokyFrame extends javax.swing.JFrame {
         // TODO open dialog frame 
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
+    private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
+        KokyImageDialog k = new KokyImageDialog(this, true, panelDraw);
+        k.setVisible(true);
+    }//GEN-LAST:event_btnChangeImageActionPerformed
+
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -390,6 +408,7 @@ public class KokyFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
     private javax.swing.JMenuItem btnAbout;
+    private javax.swing.JButton btnChangeImage;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
     private javax.swing.JMenu btnOpenFIle;
