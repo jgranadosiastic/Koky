@@ -39,7 +39,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
-    private ArrayList<String> historyInput=new ArrayList<>();
+    private ArrayList<String> historyInput = new ArrayList<>();
     private int history=0;
 
     /**
@@ -281,7 +281,7 @@ public class KokyFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtInstructionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtInstructionKeyReleased
-         String input = this.getCurrentLine();
+        String input = this.getCurrentLine();
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_ENTER:
                 parseInstruction(input);
@@ -289,29 +289,29 @@ public class KokyFrame extends javax.swing.JFrame {
                 this.txtInstruction.setText("");
                 addErrorMessages(this.myLexer.getErrorsList());                
                 historyInput.add(input);
-                history=historyInput.size();
-                lastInput="";
+                history = historyInput.size();
+                lastInput = "";
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
                 history--;
-                if (history>=0) {                    
+                if (history >= 0) {                    
                     this.txtInstruction.setText(historyInput.get(history));                    
-                }else {
-                    history=0;
+                } else {
+                    history = 0;
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 history++;
-                if(history<historyInput.size()){
+                if(history<historyInput.size()) {
                     this.txtInstruction.setText(historyInput.get(history));
-                }else{
+                } else {
                     this.txtInstruction.setText(lastInput);
-                    history=historyInput.size();
+                    history = historyInput.size();
                 }
                 break;
             default:
-                lastInput=this.txtInstruction.getText();
+                lastInput = this.txtInstruction.getText();
                 break;
         }
     }//GEN-LAST:event_txtInstructionKeyReleased
