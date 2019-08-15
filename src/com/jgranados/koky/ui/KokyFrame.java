@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -87,7 +88,7 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        saveImageButton = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
@@ -181,10 +182,10 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Generar Imagen");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        saveImageButton.setText("Generar Imagen");
+        saveImageButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                saveImageButtonActionPerformed(evt);
             }
         });
 
@@ -192,12 +193,12 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(saveImageButton)
+                .addGap(70, 70, 70))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +207,7 @@ public class KokyFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(saveImageButton)
                 .addGap(0, 15, Short.MAX_VALUE))
         );
 
@@ -280,8 +281,8 @@ public class KokyFrame extends javax.swing.JFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
+                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -345,15 +346,16 @@ public class KokyFrame extends javax.swing.JFrame {
         // TODO open dialog frame 
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        image = createImage(jPanel1);
-        f = new File("/home/jonycr/salida.jpg");
-        try {
-            ImageIO.write(image, "jpg", f);
-        } catch (IOException ex) {
-            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void saveImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveImageButtonActionPerformed
+        panelDraw.generateImage();
+//        image = createImage2(scrollpnl);
+//        f = new File("/home/jonycr/salida.jpg");
+//        try {
+//            ImageIO.write(image, "jpg", f);
+//        } catch (IOException ex) {
+//            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }//GEN-LAST:event_saveImageButtonActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -429,6 +431,17 @@ public class KokyFrame extends javax.swing.JFrame {
         return bi;
         
     }
+    
+    public BufferedImage createImage2(JScrollPane panel) {
+
+        int w = panel.getWidth();
+        int h = panel.getHeight();
+        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = bi.createGraphics();
+        panel.paint(g);
+        return bi;
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
@@ -439,7 +452,6 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JEditorPane helpPane;
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -452,6 +464,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JFileChooser saveFileChooser;
+    private javax.swing.JButton saveImageButton;
     private javax.swing.JScrollPane scrollpnl;
     private javax.swing.JTextField txtInstruction;
     private javax.swing.JTextArea txtInstructions;
