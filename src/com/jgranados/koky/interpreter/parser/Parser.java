@@ -964,7 +964,7 @@ class CUP$parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
-                    boolean flag = procedureInstruction.addId(id, instructions, myLexer.isAnalyzingFile());
+                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());
                     if(flag){
                         RESULT = new ProcedureInstruction(id.getLexeme(), parametersList , instructions,procedureTable);
                     }else{
@@ -988,7 +988,7 @@ class CUP$parser$actions {
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
 
-                    boolean flag = procedureInstruction.addId(id, instructions, myLexer.isAnalyzingFile());
+                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());
                     if(flag){
                         RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>() , instructions,procedureTable);
                     }else{
@@ -1013,7 +1013,7 @@ class CUP$parser$actions {
 		
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
-                        RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                        RESULT =  new ProcedureCall(parameters,id.getLexeme(),procedureTable);
                      }
                      else{
                         RESULT = new EmptyInstruction();
@@ -1034,7 +1034,7 @@ class CUP$parser$actions {
 		
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
-                        RESULT = new ProcedureCall(new ArrayList<Token>(), id.getLexeme());
+                        RESULT = new ProcedureCall(new ArrayList<Token>(), id.getLexeme(),procedureTable);
                      }
                      else{
                         RESULT = new EmptyInstruction();
@@ -1434,7 +1434,7 @@ class CUP$parser$actions {
 		
                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
-                        RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                        RESULT =  new ProcedureCall(parameters,id.getLexeme(),procedureTable);
                      }
                      else{
                         RESULT = new EmptyInstruction();
@@ -1456,7 +1456,7 @@ class CUP$parser$actions {
 		
                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
-                        RESULT =  new ProcedureCall(new ArrayList<Token>(),id.getLexeme());
+                        RESULT =  new ProcedureCall(new ArrayList<Token>(),id.getLexeme(),procedureTable);
                      }
                      else{
                         RESULT = new EmptyInstruction();

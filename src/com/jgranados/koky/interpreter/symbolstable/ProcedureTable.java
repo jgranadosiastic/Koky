@@ -74,6 +74,24 @@ public class ProcedureTable {
     public void cleanAll() {
         this.procedureTable.clear();
     }
+
+    public Map<String, List<Instruction>> getProcedureTable() {
+        return procedureTable;
+    }
+
+    public void setProcedureTable(Map<String, List<Instruction>> procedureTable) {
+        this.procedureTable = procedureTable;
+    }
+
+    public List<String> getErrorsList() {
+        return errorsList;
+    }
+
+    public void setErrorsList(List<String> errorsList) {
+        this.errorsList = errorsList;
+    }
+    
+    
 }
 
 
