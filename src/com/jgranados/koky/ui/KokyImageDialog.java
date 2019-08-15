@@ -7,6 +7,7 @@ package com.jgranados.koky.ui;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -18,8 +19,8 @@ import javax.swing.JOptionPane;
  */
 public class KokyImageDialog extends javax.swing.JDialog {
 
-    private final LinkedList<String> SMALL_IMAGES;
-    private final LinkedList<String> BIG_IMAGES;
+    private  List<String> SMALL_IMAGES;
+    private  List<String> BIG_IMAGES;
     private String imgUrl;
     private PanelDraw panel;
 
@@ -30,9 +31,9 @@ public class KokyImageDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.panel = panel;
-        BIG_IMAGES = loadLargeAddress();
-        SMALL_IMAGES = loadSmallAddress();
-        imgUrl = "/com/jgranados/koky/ui/images/kok_pointer_32.png";
+        loadLargeAddress();
+        loadSmallAddress();
+        imgUrl = "/com/jgranados/koky/ui/images/kokyG.png";
     }
 
     /**
@@ -54,11 +55,13 @@ public class KokyImageDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 153, 0));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 0));
         jPanel1.setForeground(new java.awt.Color(51, 255, 51));
 
-        imagenLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/kok_pointer_32.png"))); // NOI18N
+        imagenLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/kokyG.png"))); // NOI18N
+        imagenLabel.setBorder(null);
 
         siguienteButton.setBackground(new java.awt.Color(255, 255, 255));
         siguienteButton.setForeground(new java.awt.Color(0, 153, 0));
@@ -230,28 +233,26 @@ public class KokyImageDialog extends javax.swing.JDialog {
         this.imagenLabel.setIcon(new ImageIcon(getClass().getResource(BIG_IMAGES.get(imagePosition))));
     }
 
-    private LinkedList loadLargeAddress() {
-        LinkedList<String> addresses = new LinkedList<>();
-        addresses.add("/com/jgranados/koky/ui/images/kok_pointer_32.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga1G.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga2G.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga3G.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga4G.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga5G.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga6G.png");
-        return addresses;
+    private void loadLargeAddress() {
+        this.BIG_IMAGES = new LinkedList<>();
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/kokyG.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga1G.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga2G.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga3G.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga4G.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga5G.png");
+        BIG_IMAGES.add("/com/jgranados/koky/ui/images/tortuga6G.png");
     }
 
-    private LinkedList loadSmallAddress() {
-        LinkedList<String> addresses = new LinkedList<>();
-        addresses.add("/com/jgranados/koky/ui/images/kok_pointer_32.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga1.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga2.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga3.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga4.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga5.png");
-        addresses.add("/com/jgranados/koky/ui/images/tortuga6.png");
-        return addresses;
+    private void loadSmallAddress() {
+        SMALL_IMAGES = new LinkedList<>();
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/kok_pointer_32.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga1.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga2.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga3.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga4.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga5.png");
+        SMALL_IMAGES.add("/com/jgranados/koky/ui/images/tortuga6.png");
     }
 
 }
