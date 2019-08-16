@@ -17,7 +17,7 @@ public class KokyPointer {
     private static final String IMG_URL = "/com/jgranados/koky/ui/images/kok_pointer_32.png";
 
     public static final int IMG_SIZE = 32;
-    public static final int brushWidth = 2;
+    private final int brushWidth = 2;
     private int posX;
     private int posY;
     private int angle;
@@ -150,7 +150,7 @@ public class KokyPointer {
     }
     
     public void resetWidth() {
-        this.width = widthSize;
+        this.width = brushWidth;
     }
 
     public double getAccumulationX() {
