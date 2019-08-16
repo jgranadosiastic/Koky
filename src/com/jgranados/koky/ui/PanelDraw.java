@@ -105,23 +105,23 @@ public class PanelDraw extends javax.swing.JPanel {
         JFileChooser fileChooser = new JFileChooser();
         int seleccion = fileChooser.showSaveDialog(null);
         try {
-            if (seleccion == JFileChooser.APPROVE_OPTION) {//comprueba si ha presionado el boton de aceptar
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
                 File JFC = fileChooser.getSelectedFile();
-                String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
+                String PATH = JFC.getAbsolutePath();//Obtains the path to use
                 f = new File(PATH);
                 try {
                     ImageIO.write(imageWithPointer, "jpg", f);
                 } catch (IOException ex) {
                     Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
+                //Checks if the user puts the file extension in the name
                 if (!(PATH.endsWith(".jpg"))) {
                     File temp = new File(PATH + ".jpg");
-                    JFC.renameTo(temp);//renombramos el archivo con su extension
+                    JFC.renameTo(temp);//If not, we add it manually
                 }
                 JOptionPane.showMessageDialog(null, "¡Imagen guardada exitosamente!", "Guardado correcto", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (Exception e) {//por alguna excepcion salta un mensaje de error
+        } catch (Exception e) {//In case of any problem, the program sends an error message
             JOptionPane.showMessageDialog(null, "Ups! Hubo un error al guardar el archivo.", "Oops! Error", JOptionPane.ERROR_MESSAGE);
         }
 

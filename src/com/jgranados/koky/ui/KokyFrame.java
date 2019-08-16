@@ -348,13 +348,6 @@ public class KokyFrame extends javax.swing.JFrame {
 
     private void saveImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveImageButtonActionPerformed
         panelDraw.generateImage();
-//        image = createImage2(scrollpnl);
-//        f = new File("/home/jonycr/salida.jpg");
-//        try {
-//            ImageIO.write(image, "jpg", f);
-//        } catch (IOException ex) {
-//            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }//GEN-LAST:event_saveImageButtonActionPerformed
 
     public String getCurrentLine() {
@@ -419,28 +412,6 @@ public class KokyFrame extends javax.swing.JFrame {
             return baseName + "." + KOK_EXTENSION;
         }
         return baseName;
-    }
-
-    public BufferedImage createImage(JPanel panel) {
-
-        int w = panel.getWidth();
-        int h = panel.getHeight();
-        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bi.createGraphics();
-        panel.paint(g);
-        return bi;
-        
-    }
-    
-    public BufferedImage createImage2(JScrollPane panel) {
-
-        int w = panel.getWidth();
-        int h = panel.getHeight();
-        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bi.createGraphics();
-        panel.paint(g);
-        return bi;
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
