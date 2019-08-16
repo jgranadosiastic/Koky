@@ -136,6 +136,7 @@ public class KokyPointer {
     public void resetPosition() {
         resetLocation();
         resetAngle();
+        resetWidth();
     }
 
     public void resetAngle() {
@@ -145,6 +146,10 @@ public class KokyPointer {
     public void resetLocation() {
         this.posX = this.getPanelDrawWidth() / 2;
         this.posY = this.getPanelDrawHeight() / 2;
+    }
+    
+    public void resetWidth() {
+        this.width = 2;
     }
 
     public double getAccumulationX() {
