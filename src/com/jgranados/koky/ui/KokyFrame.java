@@ -2,7 +2,7 @@ package com.jgranados.koky.ui;
 
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.lexer.Lexer;
-import com.jgranados.koky.interpreter.parser.Parser;
+import com.jgranados.koky.interpreter.parser.parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -35,7 +35,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String LINE = "\n";
     private static final String BR = "<br>";
     private Lexer myLexer;
-    private Parser myParser;
+    private parser myParser;
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
@@ -50,7 +50,7 @@ public class KokyFrame extends javax.swing.JFrame {
         initComponents();
         myLexer = new Lexer(new StringReader(""));
         instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-        myParser = new Parser(myLexer, instructionsSymTable);
+        myParser = new parser(myLexer, instructionsSymTable);
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
