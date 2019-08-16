@@ -303,7 +303,7 @@ public class KokyFrame extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_DOWN:
                 history++;
-                if(history<historyInput.size()) {
+                if(history < historyInput.size()) {
                     this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     this.txtInstruction.setText(lastInput);
