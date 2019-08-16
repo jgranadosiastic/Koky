@@ -48,9 +48,19 @@ public class SymbolsTable {
         symTable.put(id.getLexeme(), value);
         return true;
     }
+    
+    public boolean verifyParameter(Token id) {
+        if (!this.symTable.containsKey(id.getLexeme())) {
+            return false;
+        }
+        return true;
+    }
 
     public void assignValueToId(Token id, int value) {
         this.symTable.put(id.getLexeme(), value);
+    }
+    public void removeParameter(Token id) {
+        this.symTable.remove(id.getLexeme());
     }
     
     public void cleanAll() {

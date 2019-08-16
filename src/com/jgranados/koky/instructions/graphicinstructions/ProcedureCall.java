@@ -7,6 +7,7 @@ import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.varinstructions.Assignable;
 import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
+import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
@@ -18,37 +19,69 @@ import java.util.List;
  */
 public class ProcedureCall extends GraphicsInstruction implements ExecutionDescribable{
     
-    private List<Token> parameters; //lista de parametros a enviar para que se ejecute el procedimiento
-    private String procedureName;   //nombre del procedimiento
-    private ProcedureTable proceduresTable;  // tabla de procedimientos para llamar al procedimiento especifico
-
-    public ProcedureCall(List<Token> parameters, String procedureName, ProcedureTable proceduresTable) {
+    private List<Token> parameters;
+    private String procedureName;
+    private ProcedureTable proceduresTable;
+    private SymbolsTable symbolsTable;
+    private String executionDescription;
+    
+    public ProcedureCall(List<Token> parameters, String procedureName, ProcedureTable proceduresTable, SymbolsTable symbolsTable) {
         this.parameters = parameters;
         this.procedureName = procedureName;
         this.proceduresTable = proceduresTable;
+        this.symbolsTable = symbolsTable;
+        this.executionDescription = "";
     }
     
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
-       
-        //ejecucion de las instrucciones que ya trae 
-        //verificando si el nombre del procedimiento esta guardado en la tabla
+        
+        //checking if the procedure name exists
         if (this.proceduresTable.getProcedureTable().containsKey(procedureName)) {
-                //obteniendo la lista de instrucciones guardada en el procedimiento 
+            boolean flag = true;
+            //I compare if the number of parameters to send is equal to the number of parameters to receive in the procedure 
+            if (parameters.size()==this.proceduresTable.getParametersTable().get(procedureName).size()) {
+                for(Token param:parameters){
+                    if (symbolsTable.getIdValue(param)==null || symbolsTable.getIdValue(param).intValue()==0) {
+                        flag = false;
+                        executionDescription = "X_Los Parametros que esta enviando en ->"+procedureName+ " No fueron declarados o no se les ha asignado valor.";
+                        break;
+                    }
+                }    
+            } else {
+                executionDescription = "El Procedimiento ->"+procedureName+ " No se puede ejecutar por inconcistencias en los parametros";
+                flag =false;
+
+            } 
+            if (flag) {
+                //assignment of temporary parameters
+                for (int i = 0; i < parameters.size(); i++) {
+                        if (!symbolsTable.verifyParameter(this.proceduresTable.getParametersTable().get(procedureName).get(i))) {
+                            symbolsTable.assignValueToId(this.proceduresTable.getParametersTable().get(procedureName).get(i), 
+                                symbolsTable.getIdValue(parameters.get(i)));
+                        }
+                }
+                //executing instructions
                 for(Instruction instruction: this.proceduresTable.getProcedureTable().get(procedureName)){
                     if (instruction instanceof Graphicable) {
                         graphicsNoPointer = ((Graphicable) instruction).execute(graphicsNoPointer, currentPointer);
-                        System.out.println("**** SE EJECUTARA UNA INSTRUCCION GRAFICABLE QUE TRAE EL PROCEDIMIENTO ->"+procedureName);
                     } else if (instruction instanceof Assignable) {
                         ((Assignable) instruction).assign();
-                        System.out.println("**** SE EJECUTARA UNA INSTRUCCION ASIGNABLE QUE TRAE EL PROCEDIMIENTO ->"+procedureName);
                     }
                 }
+                executionDescription = "Se a Llamado al Procedimiento ->"+procedureName+" y Se ha ejecutado";
+
+                //Elimination of temporary parameters
+                for (int i = 0; i < parameters.size(); i++) {
+                    symbolsTable.removeParameter(this.proceduresTable.getParametersTable().get(procedureName).get(i));
+                }
             
+            }
+
         } else {
-            System.out.println("**** EL PROCEDIMIENTO QUE SE TRATA DE LLAMAR NUNCA SE DECLARO :(");
-        }
+                executionDescription = "El Procedimiento ->"+procedureName+" que trata de llamar No existe";
+            }
         
         // Do nothing
         return graphicsNoPointer;
@@ -57,7 +90,7 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
 
     @Override
     public String getExecutionDescription() {
-        return "Se a Llamado al Procedimiento ->"+procedureName+" y Se a ejecutado";
+        return executionDescription;
     }
         
         

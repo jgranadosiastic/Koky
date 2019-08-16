@@ -30,11 +30,12 @@ public class ProcedureTable {
 
     private Map<String, List<Instruction>> procedureTable;
     private List<String> errorsList;
-    //private Map<String, List<Token>> parametersTable;
+    private Map<String, List<Token>> parametersTable;
 
     public ProcedureTable(List<String> errorsList) {
         this.errorsList = errorsList;
-        procedureTable = new HashMap<>();
+        this.procedureTable = new HashMap<>();
+        this.parametersTable = new HashMap<>();
     }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
@@ -66,10 +67,15 @@ public class ProcedureTable {
         procedureTable.put(id.getLexeme(), value);
         return true;
     }
-
-    public void assignValueToId(Token id, List<Instruction> value) {
-        this.procedureTable.put(id.getLexeme(), value);
+    
+    public void addParameters(Token id, List<Token> value) {
+        //save parameters of Procedure
+        parametersTable.put(id.getLexeme(), value);
     }
+
+    //public void assignValueToId(Token id, List<Instruction> value) {
+    //    this.procedureTable.put(id.getLexeme(), value);
+    //}
     
     public void cleanAll() {
         this.procedureTable.clear();
@@ -82,6 +88,16 @@ public class ProcedureTable {
     public void setProcedureTable(Map<String, List<Instruction>> procedureTable) {
         this.procedureTable = procedureTable;
     }
+
+    public Map<String, List<Token>> getParametersTable() {
+        return parametersTable;
+    }
+
+    public void setParametersTable(Map<String, List<Token>> parametersTable) {
+        this.parametersTable = parametersTable;
+    }
+    
+    
 
     public List<String> getErrorsList() {
         return errorsList;

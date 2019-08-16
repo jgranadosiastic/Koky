@@ -5,7 +5,6 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.instructions.Instruction;
-import com.jgranados.koky.instructions.varinstructions.Assignable;
 import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.token.Token;
@@ -21,31 +20,28 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
     
     
     private String processName; 
-    //private SymbolsTable table;           //tabla de parametros podrian ser solo referencias hacia los verdaderos se supone que ya fueron declarados
-    private List<Token> parameters;     //lista de parametros es una opcion a la tabla anterior para manejar parametros temporales
-    private List<Instruction> instructions; //instruccion que vienen en la funcion
-    private ProcedureTable proceduresTable;  // tabla de procedimientos
+    private List<Token> parameters;
+    private List<Instruction> instructions;
+    private ProcedureTable proceduresTable;
+    private SymbolsTable symTable;
 
-    public ProcedureInstruction(String processName, List<Token> parameters, List<Instruction> instructions, ProcedureTable proceduresTable) {
+    public ProcedureInstruction(String processName, List<Token> parameters, List<Instruction> instructions, ProcedureTable proceduresTable, SymbolsTable symTable) {
         this.processName = processName;
         this.parameters = parameters;
         this.instructions = instructions;
         this.proceduresTable = proceduresTable;
+        this.symTable = symTable;
     }
     
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
-        //Ejecutando instrucciones, hasta que se llame al procedimiento, cuando se declara no se deben ejecutar.
-        
-        /*
-        for (Instruction instruction : instructions) {
-            if (instruction instanceof Graphicable) {
-                graphicsNoPointer = ((Graphicable) instruction).execute(graphicsNoPointer, currentPointer);
-            } else if (instruction instanceof Assignable) {
-                ((Assignable) instruction).assign();
+        //Elimination of temporary parameters
+        for(Token parameter: parameters){
+            if (symTable.getIdValue(parameter)==null || symTable.getIdValue(parameter).intValue()==0) {
+                symTable.removeParameter(parameter);
             }
+            
         }
-        */
         System.out.println("****** SI TODO VA BIEN DIGAMOS QUE ESTE PROCEDIMIENTO YA ESTA GUARDADO");
         
         return graphicsNoPointer;
@@ -53,9 +49,18 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
 
     @Override
     public String getExecutionDescription() {
-        
         return "Se a guardado el procedimiento ->"+processName+" en espera de ser ejecutado";
     }
+
+    public List<Token> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<Token> parameters) {
+        this.parameters = parameters;
+    }
+    
+    
     
     
 }
