@@ -1,12 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.jgranados.koky.ui;
 
-import com.jgranados.koky.components.Tab;
+import com.jgranados.koky.components.InputTab;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.UndoManager;
 
 /**
  *
@@ -14,24 +18,41 @@ import javax.swing.JOptionPane;
  */
 public class EditorFrame extends javax.swing.JFrame {
     
+    private static final String KOK_EXTENSION = "kok";
+    private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    private UndoManager undoManager;
+    private KokyFrame kokyFrame;
     private int unnamedTabs;
     
-    public EditorFrame() {
+    
+    public EditorFrame(KokyFrame kokyFrame) {
         initComponents();
+        this.kokyFrame = kokyFrame;
         this.setVisible(true);
         this.unnamedTabs = 0;
+        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.addTab();
+        this.undoFile.setEnabled(true);
+        this.redoFile.setEnabled(true);
     }
     
-    public EditorFrame(String text) {
+    public EditorFrame(String text,String name,KokyFrame kokyFrame) {
         initComponents();
         this.setVisible(true);
+        this.kokyFrame = kokyFrame;
         this.unnamedTabs = 0;
+        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.addTab(text,name);
+        this.undoFile.setEnabled(true);
+        this.redoFile.setEnabled(true);
+        
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        saveFileChooser = new javax.swing.JFileChooser();
         jToolBar1 = new javax.swing.JToolBar();
         newFile = new javax.swing.JButton();
         closeTab = new javax.swing.JButton();
@@ -41,7 +62,6 @@ public class EditorFrame extends javax.swing.JFrame {
         redoFile = new javax.swing.JButton();
         executeFile = new javax.swing.JButton();
         Inputs = new javax.swing.JTabbedPane();
-        Outputs = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
@@ -50,7 +70,8 @@ public class EditorFrame extends javax.swing.JFrame {
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Editor de Texto");
 
         jToolBar1.setRollover(true);
 
@@ -83,6 +104,11 @@ public class EditorFrame extends javax.swing.JFrame {
         saveFile.setFocusable(false);
         saveFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         saveFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        saveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFileActionPerformed(evt);
+            }
+        });
         jToolBar1.add(saveFile);
 
         loadFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/open.png"))); // NOI18N
@@ -90,6 +116,11 @@ public class EditorFrame extends javax.swing.JFrame {
         loadFile.setFocusable(false);
         loadFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         loadFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        loadFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadFileActionPerformed(evt);
+            }
+        });
         jToolBar1.add(loadFile);
 
         undoFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/undo.png"))); // NOI18N
@@ -97,6 +128,11 @@ public class EditorFrame extends javax.swing.JFrame {
         undoFile.setFocusable(false);
         undoFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         undoFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        undoFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                undoFileActionPerformed(evt);
+            }
+        });
         jToolBar1.add(undoFile);
 
         redoFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/redo.png"))); // NOI18N
@@ -104,6 +140,11 @@ public class EditorFrame extends javax.swing.JFrame {
         redoFile.setFocusable(false);
         redoFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         redoFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        redoFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                redoFileActionPerformed(evt);
+            }
+        });
         jToolBar1.add(redoFile);
 
         executeFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/play.png"))); // NOI18N
@@ -117,6 +158,12 @@ public class EditorFrame extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(executeFile);
+
+        Inputs.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                InputsStateChanged(evt);
+            }
+        });
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
@@ -165,12 +212,10 @@ public class EditorFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Inputs, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Outputs, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addComponent(Inputs)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,9 +223,7 @@ public class EditorFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Inputs, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
-                    .addComponent(Outputs))
+                .addComponent(Inputs, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -188,12 +231,16 @@ public class EditorFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveInstructionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsMenuItemActionPerformed
-        
+        String name = kokyFrame.saveInstructionsToFile();
+        int index = Inputs.getSelectedIndex();
+        Inputs.setTitleAt(index, name);
+        unnamedTabs--;
+        JOptionPane.showMessageDialog(null, "Archivo Guardado");
+        this.setVisible(true);
     }//GEN-LAST:event_btnSaveInstructionsMenuItemActionPerformed
 
     private void bntOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOpenFileActionPerformed
-        
-
+        openFile();
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
     private void btnAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAboutActionPerformed
@@ -201,30 +248,101 @@ public class EditorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAboutActionPerformed
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        unnamedTabs++;
-        Tab newTab = new Tab("Pestaña "+unnamedTabs);
-        Inputs.addTab("*"+newTab.getName(), newTab);
+        addTab();
     }//GEN-LAST:event_newFileActionPerformed
 
     private void executeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeFileActionPerformed
-        Tab tab = (Tab)Inputs.getSelectedComponent();
-        JOptionPane.showMessageDialog(null,tab.getText());
+        InputTab in = (InputTab)Inputs.getSelectedComponent();
+        this.kokyFrame.run(in.getText());
+        this.kokyFrame.setVisible(true);
     }//GEN-LAST:event_executeFileActionPerformed
 
     private void closeTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeTabActionPerformed
         int index = Inputs.getSelectedIndex();
+        unnamedTabs--;
         try{
             Inputs.remove(index);
-        }catch(Exception ex){
+        } catch(Exception ex){
             System.out.println("Controlada");
         }
     }//GEN-LAST:event_closeTabActionPerformed
 
-   
+    private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
+        InputTab tab = (InputTab)Inputs.getSelectedComponent();
+        String name = kokyFrame.saveInstructionsToFile(tab.getText());
+        int index = Inputs.getSelectedIndex();
+        Inputs.setTitleAt(index, name);
+        unnamedTabs--;
+        JOptionPane.showMessageDialog(null, "Archivo Guardado");
+        this.setVisible(true);
+    }//GEN-LAST:event_saveFileActionPerformed
+
+    private void InputsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_InputsStateChanged
+        InputTab tab = (InputTab)Inputs.getSelectedComponent();
+        this.undoManager = tab.getManager();
+        this.undoFile.setEnabled(true);
+        this.redoFile.setEnabled(true);
+    }//GEN-LAST:event_InputsStateChanged
+
+    private void undoFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoFileActionPerformed
+        try {
+            undoManager.undo();
+        } catch (CannotRedoException ex) {
+            
+        }
+    }//GEN-LAST:event_undoFileActionPerformed
+
+    private void redoFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoFileActionPerformed
+        try {
+            undoManager.redo();
+        } catch (CannotRedoException cre) {
+            
+        }
+    }//GEN-LAST:event_redoFileActionPerformed
+
+    private void loadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadFileActionPerformed
+        openFile();
+    }//GEN-LAST:event_loadFileActionPerformed
+
+    public void addTab() {
+        unnamedTabs++;
+        InputTab newTab = new InputTab("Pestaña "+unnamedTabs);
+        Inputs.addTab("*"+newTab.getName(), newTab);
+        this.undoManager = newTab.getManager();
+        Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
+    }
+    
+    public void addTab(String input,String name) {
+        InputTab newTab = new InputTab(name);
+        newTab.setText(input);
+        Inputs.addTab(name, newTab);
+        this.undoManager = newTab.getManager();
+        Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
+    }
+    
+    public void openFile(){
+        File file = kokyFrame.openFile();
+        String name = file.getName();
+        String buffer = "";
+        try {
+            Scanner scan = new Scanner(new FileInputStream(file));
+            while (scan.hasNext()) {
+                buffer += scan.nextLine() + "\n";
+            }
+            System.out.println(buffer);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        addTab(buffer,name);
+        
+        
+        this.setVisible(true);
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Inputs;
-    private javax.swing.JTabbedPane Outputs;
     private javax.swing.JMenuItem bntOpenFile;
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JMenuItem btnInstructions;
@@ -239,6 +357,7 @@ public class EditorFrame extends javax.swing.JFrame {
     private javax.swing.JButton newFile;
     private javax.swing.JButton redoFile;
     private javax.swing.JButton saveFile;
+    private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JButton undoFile;
     // End of variables declaration//GEN-END:variables
 }

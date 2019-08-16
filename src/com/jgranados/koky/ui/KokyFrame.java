@@ -8,14 +8,19 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -84,7 +89,6 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
-        bntOpenFile = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
@@ -108,6 +112,11 @@ public class KokyFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(txtInstructions);
 
         txtInstruction.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        txtInstruction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtInstructionActionPerformed(evt);
+            }
+        });
         txtInstruction.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtInstructionKeyReleased(evt);
@@ -215,14 +224,6 @@ public class KokyFrame extends javax.swing.JFrame {
         });
         btnOpenFIle.add(btnSaveInstructionsMenuItem);
 
-        bntOpenFile.setText("Abrir archivo");
-        bntOpenFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntOpenFileActionPerformed(evt);
-            }
-        });
-        btnOpenFIle.add(bntOpenFile);
-
         jMenuBar1.add(btnOpenFIle);
 
         jMenu2.setForeground(new java.awt.Color(255, 255, 255));
@@ -293,11 +294,7 @@ public class KokyFrame extends javax.swing.JFrame {
         String input = this.getCurrentLine();
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                parseInstruction(input);
-                this.txtInstructions.append(input + LINE);
-                this.txtInstruction.setText("");
-                addErrorMessages(this.myLexer.getErrorsList());
-                lastInput = input;
+                this.run(input);
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
@@ -330,15 +327,24 @@ public class KokyFrame extends javax.swing.JFrame {
         saveInstructionsToFile();
     }//GEN-LAST:event_btnSaveInstructionsMenuItemActionPerformed
 
-    private void bntOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOpenFileActionPerformed
-        saveFileChooser.showOpenDialog(this);
-        
-    }//GEN-LAST:event_bntOpenFileActionPerformed
-
     private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
-        new EditorFrame();
+        new EditorFrame(this);
     }//GEN-LAST:event_btnOpenEditorActionPerformed
 
+    private void txtInstructionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInstructionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtInstructionActionPerformed
+    
+    //Metodo para parsear
+    public void run(String input) {
+        parseInstruction("clears\n");
+        parseInstruction(input);
+        this.txtInstructions.append(input + LINE);
+        this.txtInstruction.setText("");
+        addErrorMessages(this.myLexer.getErrorsList());
+        lastInput = input;
+    }
+    
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -368,7 +374,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
     }
 
-    private void parseInstruction(String instruction) {
+    public void parseInstruction(String instruction) {
         this.myLexer.yyreset(new StringReader(instruction + LINE));
         try {
             List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
@@ -381,7 +387,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
     }
 
-    private void saveInstructionsToFile() {
+    public String saveInstructionsToFile() {
         saveFileChooser.showSaveDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
         try (PrintWriter printer = new PrintWriter(file);) {
@@ -394,9 +400,25 @@ public class KokyFrame extends javax.swing.JFrame {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+        return file.getName();
+    }
+    public String saveInstructionsToFile(String input) {
+        saveFileChooser.showSaveDialog(this);
+        File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
+        try (PrintWriter printer = new PrintWriter(file);) {
+            printer.print(input);
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error guardando instrucciones en el archivo\n" + file.getAbsolutePath(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return file.getName();
     }
     
-    private void openInstructionsFromFile() {
+    public void openInstructionsFromFile() {
         saveFileChooser.showOpenDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
     }
@@ -407,9 +429,17 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
+    
+    public File openFile() {
+        int status = saveFileChooser.showOpenDialog(this);
+        if (status == JFileChooser.APPROVE_OPTION) {
+            File file = saveFileChooser.getSelectedFile();
+            return file;
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem bntOpenFile;
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
