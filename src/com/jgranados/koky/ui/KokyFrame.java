@@ -347,7 +347,7 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
     private void saveImageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveImageButtonActionPerformed
-        panelDraw.generateImage();
+        panelDraw.generateImg();
     }//GEN-LAST:event_saveImageButtonActionPerformed
 
     public String getCurrentLine() {

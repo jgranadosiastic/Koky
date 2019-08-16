@@ -100,11 +100,12 @@ public class PanelDraw extends javax.swing.JPanel {
         }).collect(Collectors.toList());
     }
 
-    public void generateImage() {
+    public void generateImg() {
 
         JFileChooser fileChooser = new JFileChooser();
         int seleccion = fileChooser.showSaveDialog(null);
         try {
+            
             if (seleccion == JFileChooser.APPROVE_OPTION) {
                 File JFC = fileChooser.getSelectedFile();
                 String PATH = JFC.getAbsolutePath();//Obtains the path to use
