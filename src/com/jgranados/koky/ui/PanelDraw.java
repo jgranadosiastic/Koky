@@ -38,7 +38,7 @@ public class PanelDraw extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imageWithPointer == null) {
-            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this);
+            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this,2);
             initImages();
         }
         g.drawImage(imageWithPointer, 0, 0, null);

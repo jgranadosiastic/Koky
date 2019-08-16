@@ -28,8 +28,9 @@ public class KokyPointer {
     private PanelDraw panelToDraw;
     private double accumulationX;
     private double accumulationY;
+    private int width;
 
-    public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw) {
+    public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw,int width) {
         this.posX = posX;
         this.posY = posY;
         this.angle = angle;
@@ -40,6 +41,7 @@ public class KokyPointer {
         }
         this.penColor = Color.BLACK;
         this.panelToDraw = panelToDraw;
+        this.width = width;
     }
 
     public int getPosX() {
@@ -108,6 +110,14 @@ public class KokyPointer {
 
     public int getPanelDrawHeight() {
         return this.panelToDraw.getHeight();
+    }
+    
+    public int getWidth() {
+        return this.width;
+    }
+    
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public void drawPointer(Graphics2D graphicsWithPointer) {
