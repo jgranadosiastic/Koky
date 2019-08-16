@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,8 @@ public class KokyFrame extends javax.swing.JFrame {
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
+    private ArrayList<String> historyInput = new ArrayList<>();
+    private int history=0;
 
     /**
      * Creates new form KokFrame
@@ -297,16 +300,31 @@ public class KokyFrame extends javax.swing.JFrame {
                 parseInstruction(input);
                 this.txtInstructions.append(input + LINE);
                 this.txtInstruction.setText("");
-                addErrorMessages(this.myLexer.getErrorsList());
-                lastInput = input;
+                addErrorMessages(this.myLexer.getErrorsList());                
+                historyInput.add(input);
+                history = historyInput.size();
+                lastInput = "";
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
-                if (!input.endsWith(this.lastInput)) {
+                history--;
+                if (history >= 0) {                    
+                    this.txtInstruction.setText(historyInput.get(history));                    
+                } else {
+                    history = 0;
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                history++;
+                if(history < historyInput.size()) {
+                    this.txtInstruction.setText(historyInput.get(history));
+                } else {
                     this.txtInstruction.setText(lastInput);
+                    history = historyInput.size();
                 }
                 break;
             default:
+                lastInput = this.txtInstruction.getText();
                 break;
         }
     }//GEN-LAST:event_txtInstructionKeyReleased
