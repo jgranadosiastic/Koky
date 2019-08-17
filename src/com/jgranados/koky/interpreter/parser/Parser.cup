@@ -233,20 +233,20 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     
                 | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
-                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
+                    boolean flag = procedureTable.addProcedure(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
                     if(flag){
                         procedureTable.addParameters(id, parametersList);//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList , instructions,procedureTable,symTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList, symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
                     :}
                 |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
                     {:
-                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
+                    boolean flag = procedureTable.addProcedure(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
                     if(flag){
                         procedureTable.addParameters(id, new ArrayList<Token>());//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>() , instructions,procedureTable,symTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>(), symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }

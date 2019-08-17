@@ -4,8 +4,6 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
-import com.jgranados.koky.instructions.Instruction;
-import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
@@ -21,15 +19,11 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
     
     private String processName; 
     private List<Token> parameters;
-    private List<Instruction> instructions;
-    private ProcedureTable proceduresTable;
     private SymbolsTable symTable;
 
-    public ProcedureInstruction(String processName, List<Token> parameters, List<Instruction> instructions, ProcedureTable proceduresTable, SymbolsTable symTable) {
+    public ProcedureInstruction(String processName, List<Token> parameters, SymbolsTable symTable) {
         this.processName = processName;
         this.parameters = parameters;
-        this.instructions = instructions;
-        this.proceduresTable = proceduresTable;
         this.symTable = symTable;
     }
     
@@ -49,16 +43,5 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
     public String getExecutionDescription() {
         return "Se a guardado el procedimiento ->"+processName+" en espera de ser ejecutado";
     }
-
-    public List<Token> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<Token> parameters) {
-        this.parameters = parameters;
-    }
-    
-    
-    
     
 }

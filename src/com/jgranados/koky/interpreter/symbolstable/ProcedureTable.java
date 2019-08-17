@@ -41,7 +41,7 @@ public class ProcedureTable {
         return this.procedureTable.get(id.getLexeme());
     }
 
-    public boolean addId(Token id, List<Instruction> value, boolean isAnalyzingFile) {
+    public boolean addProcedure(Token id, List<Instruction> value, boolean isAnalyzingFile) {
         if (this.procedureTable.containsKey(id.getLexeme())) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("La variable '%s' que intenta declarar para la funcion  en el archivo que estoy leyendo, linea %d columna %d ya fue declarada anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
@@ -62,6 +62,19 @@ public class ProcedureTable {
     public void cleanAll() {
         this.procedureTable.clear();
     }
+    public boolean sameParameters(Token id, List<Token> list,boolean isAnalyzingFile) {
+        List<Token> parameters = parametersTable.get(id.getLexeme());
+        if (parameters.size() == list.size()) {
+            return true;
+        } else {
+            if (isAnalyzingFile) {
+                errorsList.add(String.format("El numero de los parametros de la funcion '%s' no son los mismos que los que se le estan tratando de asignar  en el archivo que estoy leyendo, linea %d columna %d.", id.getLexeme(), id.getLine(), id.getColumn()));
+            } else {
+                errorsList.add(String.format("El numero de los parametros de la funcion '%s' no son los mismos que los que se le estan tratando de asignar en el area de instrucciones en otra funcion.", id.getLexeme()));
+            }
+            return false;
+        }
+    }
 
     public Map<String, List<Instruction>> getProcedureTable() {
         return procedureTable;
@@ -78,14 +91,6 @@ public class ProcedureTable {
     public void setParametersTable(Map<String, List<Token>> parametersTable) {
         this.parametersTable = parametersTable;
     }
-    
-    public List<String> getErrorsList() {
-        return errorsList;
-    }
-
-    public void setErrorsList(List<String> errorsList) {
-        this.errorsList = errorsList;
-    }
 
     public SymbolsTable getTemporarySymbolTable() {
         return temporarySymbolTable;
@@ -94,8 +99,6 @@ public class ProcedureTable {
     public void setTemporarySymbolTable(SymbolsTable temporarySymbolTable) {
         this.temporarySymbolTable = temporarySymbolTable;
     }
-    
-    
     
     
 }

@@ -1015,10 +1015,10 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
+                    boolean flag = procedureTable.addProcedure(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
                     if(flag){
                         procedureTable.addParameters(id, parametersList);//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList , instructions,procedureTable,symTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList ,symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
@@ -1038,10 +1038,10 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    boolean flag = procedureTable.addId(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
+                    boolean flag = procedureTable.addProcedure(id, instructions, myLexer.isAnalyzingFile());//cambiar a addProcedure
                     if(flag){
                         procedureTable.addParameters(id, new ArrayList<Token>());//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>() , instructions,procedureTable,symTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), new ArrayList<Token>() , symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
