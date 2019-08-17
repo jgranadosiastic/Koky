@@ -62,9 +62,9 @@ public class PanelDraw extends javax.swing.JPanel {
 
     public void runInstruction(Instruction instruction) {
         if (instruction instanceof Graphicable) {
-            drawInstruction((Graphicable) instruction);//casteo hacia una instruccion graficable
+            drawInstruction((Graphicable) instruction);
         } else if (instruction instanceof Assignable) {
-            ((Assignable) instruction).assign();//casteo hacia una instruccion asignable
+            ((Assignable) instruction).assign();
         }
     }
 

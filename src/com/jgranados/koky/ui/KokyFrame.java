@@ -49,8 +49,8 @@ public class KokyFrame extends javax.swing.JFrame {
         initComponents();
         myLexer = new Lexer(new StringReader(""));
         instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-        procedureTable = new ProcedureTable(myLexer.getErrorsList());// se agrego esta tabla
-        myParser = new Parser(myLexer, instructionsSymTable,procedureTable);// y se agrego el parametro al parser
+        procedureTable = new ProcedureTable(myLexer.getErrorsList());
+        myParser = new Parser(myLexer, instructionsSymTable,procedureTable);
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
