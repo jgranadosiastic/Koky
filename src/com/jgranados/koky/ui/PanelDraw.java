@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import java.io.IOException;
 
+
 /**
  *
  * @author jose
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class PanelDraw extends javax.swing.JPanel {
 
     private static final int PANEL_WIDTH = 1000;
-    private static final int PANEL_HEIGHT = 460;
+    private static final int PANEL_HEIGHT = 460;     
     private KokyPointer kokyPointer;
     private BufferedImage imageWithPointer;
     private BufferedImage imageNoPointer;
@@ -39,7 +40,7 @@ public class PanelDraw extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imageWithPointer == null) {
-            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this);
+            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this, KokyPointer.BRUSH_WIDTH);
             initImages();
         }
         g.drawImage(imageWithPointer, 0, 0, null);
