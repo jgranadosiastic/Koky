@@ -61,7 +61,10 @@ public class ProcedureTable {
     
     public void cleanAll() {
         this.procedureTable.clear();
+        this.parametersTable.clear();
     }
+    
+    
     public boolean sameParameters(Token id, List<Token> list,boolean isAnalyzingFile) {
         List<Token> parameters = parametersTable.get(id.getLexeme());
         if (parameters.size() == list.size()) {
@@ -90,7 +93,19 @@ public class ProcedureTable {
 
     public void setParametersTable(Map<String, List<Token>> parametersTable) {
         this.parametersTable = parametersTable;
+        
+        
+        
+        
     }
+    
+    
+    
+    
+    
+    
+    
+    
 
     public SymbolsTable getTemporarySymbolTable() {
         return temporarySymbolTable;
