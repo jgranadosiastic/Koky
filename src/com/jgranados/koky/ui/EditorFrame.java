@@ -12,14 +12,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
-/**
- *
- * @author anclenius
- */
 public class EditorFrame extends javax.swing.JFrame {
     
-    private static final String KOK_EXTENSION = "kok";
-    private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    private static String KOK_EXTENSION;
+    private static String KOK_EXTENSION_DESC;
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
     private int unnamedTabs;
@@ -28,6 +24,8 @@ public class EditorFrame extends javax.swing.JFrame {
     public EditorFrame(KokyFrame kokyFrame) {
         initComponents();
         this.kokyFrame = kokyFrame;
+        KOK_EXTENSION = KokyFrame.KOK_EXTENSION;
+        KOK_EXTENSION_DESC = KokyFrame.KOK_EXTENSION_DESC;
         this.setVisible(true);
         this.unnamedTabs = 0;
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));

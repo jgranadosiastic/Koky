@@ -32,12 +32,12 @@ import javax.swing.text.html.HTMLDocument;
 public class KokyFrame extends javax.swing.JFrame {
 
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
-    private static final String KOK_EXTENSION = "kok";
-    private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    public static final String KOK_EXTENSION = "kok";
+    public static final String KOK_EXTENSION_DESC = "Archivos Kok";
 
-    private static final String CLEARS = "clears";
-    private static final String LINE = "\n";
-    private static final String BR = "<br>";
+    public static final String CLEARS = "clears";
+    public static final String LINE = "\n";
+    public static final String BR = "<br>";
     private Lexer myLexer;
     private Parser myParser;
     private PanelDraw panelDraw;
