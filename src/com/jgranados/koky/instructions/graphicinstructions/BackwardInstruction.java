@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 
 /**
  *
@@ -11,7 +12,9 @@ import com.jgranados.koky.ui.KokyPointer;
 public class BackwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-
+    private Languages all = Languages.ALL, spanish = Languages.SPANISH,
+            english = Languages.ENGLISH, kiche = Languages.KICHE;
+    
     public BackwardInstruction(Expr steps) {
         this.steps = steps;
     }
@@ -52,6 +55,15 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     public String getExecutionDescription() {
+        if (all.getTypeLanguage()==true) {
+           return "Retrocedí " + steps.operate() + " pasos.";
+        }else if (english.getTypeLanguage()==true) {
+            return "Backed off " + steps.operate() + " steps.";
+        }else if (spanish.getTypeLanguage()==true) {
+           return "Retrocedí " + steps.operate() + " pasos.";
+        }else if (kiche.getTypeLanguage()==true) {
+            return "KICHE " + steps.operate() + " KICHE.";
+        }
         return "Retrocedí " + steps.operate() + " pasos.";
     }
 }

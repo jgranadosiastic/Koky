@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 
 /**
  *
@@ -10,7 +11,7 @@ import com.jgranados.koky.ui.KokyPointer;
 public class PositionXInstruction extends PositionInstruction {
 
     private Expr posX;
-
+  
     public PositionXInstruction(Expr posX) {
         this.posX = posX;
     }

@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 import java.awt.Graphics2D;
 
 /**
@@ -11,7 +12,9 @@ import java.awt.Graphics2D;
  */
 public class RightInstruction extends GraphicsInstruction implements ExecutionDescribable {
     private Expr angle;
-
+    private Languages all = Languages.ALL, spanish = Languages.SPANISH,
+            english = Languages.ENGLISH, kiche = Languages.KICHE;
+    
     public RightInstruction(Expr angle) {
         this.angle = angle;
     }
@@ -24,6 +27,15 @@ public class RightInstruction extends GraphicsInstruction implements ExecutionDe
 
     @Override
     public String getExecutionDescription() {
+        if (all.getTypeLanguage()==true) {
+           return "Giré " + angle.operate() + " grados a la derecha.";
+        }else if (english.getTypeLanguage()==true) {
+            return "Turn " + angle.operate() + " degrees to the right.";
+        }else if (spanish.getTypeLanguage()==true) {
+           return "Giré " + angle.operate() + " grados a la derecha.";
+        }else if (kiche.getTypeLanguage()==true) {
+            return "KICHE " + angle.operate() + " KICHE KICHE KICHE.";
+        }
         return "Giré " + angle.operate() + " grados a la derecha.";
     }
     

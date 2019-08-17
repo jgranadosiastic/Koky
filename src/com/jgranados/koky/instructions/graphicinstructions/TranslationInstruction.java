@@ -1,7 +1,6 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.ui.KokyPointer;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -25,7 +24,6 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
         if (!currentPointer.isPenUp()) {
             graphics.setColor(currentPointer.getPenColor());
             graphics.setColor(currentPointer.getPenColor());
-            graphics.setStroke(new BasicStroke(currentPointer.getWidth()));
             if (currentPointer.isErasing()) {
                 graphics.setColor(Color.WHITE);
             }

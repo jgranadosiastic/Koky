@@ -4,6 +4,10 @@ import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.lexer.Lexer;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import com.rmendez.koky.instructions.Languages;
+import com.rmendez.koky.interpreter.lexer.LexerAll;
+import com.rmendez.koky.interpreter.lexer.LexerEs;
+import com.rmendez.koky.interpreter.lexer.LexerKiche;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -11,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,23 +37,27 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String CLEARS = "clears";
     private static final String LINE = "\n";
     private static final String BR = "<br>";
-    private Lexer myLexer;
+    private Lexer lexerEn;
+    private LexerAll lexerAll;
+    private LexerEs lexerSp;
+    private LexerKiche lexerKi;
     private Parser myParser;
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
-    private ArrayList<String> historyInput = new ArrayList<>();
-    private int history=0;
+    private Languages all, spanish, english, kiche;
 
     /**
      * Creates new form KokFrame
      */
     public KokyFrame() {
         panelDraw = new PanelDraw();
+        all = Languages.ALL;
+        spanish = Languages.SPANISH;
+        english = Languages.ENGLISH;
+        kiche = Languages.KICHE;
         initComponents();
-        myLexer = new Lexer(new StringReader(""));
-        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-        myParser = new Parser(myLexer, instructionsSymTable);
+        typeLanguage();
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
@@ -82,7 +89,6 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
-        btnChangeImage = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
@@ -91,6 +97,11 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
+        lenguagesMenu = new javax.swing.JMenu();
+        lenguagesAll = new javax.swing.JMenuItem();
+        lenguageEnglish = new javax.swing.JMenuItem();
+        lenguageSpanish = new javax.swing.JMenuItem();
+        lenguageKiche = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -176,32 +187,20 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
-        btnChangeImage.setBackground(new java.awt.Color(255, 255, 255));
-        btnChangeImage.setForeground(new java.awt.Color(0, 153, 0));
-        btnChangeImage.setText("Cambiar icono");
-        btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChangeImageActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 64, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -244,6 +243,42 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenu2.add(btnAbout);
 
         jMenuBar1.add(jMenu2);
+
+        lenguagesMenu.setText("Idiomas");
+
+        lenguagesAll.setText("Todos");
+        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguagesAllActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguagesAll);
+
+        lenguageEnglish.setText("Ingles");
+        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageEnglishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageEnglish);
+
+        lenguageSpanish.setText("Español");
+        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageSpanishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageSpanish);
+
+        lenguageKiche.setText("Kiche");
+        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageKicheActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageKiche);
+
+        jMenuBar1.add(lenguagesMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -300,31 +335,16 @@ public class KokyFrame extends javax.swing.JFrame {
                 parseInstruction(input);
                 this.txtInstructions.append(input + LINE);
                 this.txtInstruction.setText("");
-                addErrorMessages(this.myLexer.getErrorsList());                
-                historyInput.add(input);
-                history = historyInput.size();
-                lastInput = "";
+                errorLanguage();
+                lastInput = input;
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
-                history--;
-                if (history >= 0) {                    
-                    this.txtInstruction.setText(historyInput.get(history));                    
-                } else {
-                    history = 0;
-                }
-                break;
-            case KeyEvent.VK_DOWN:
-                history++;
-                if(history < historyInput.size()) {
-                    this.txtInstruction.setText(historyInput.get(history));
-                } else {
+                if (!input.endsWith(this.lastInput)) {
                     this.txtInstruction.setText(lastInput);
-                    history = historyInput.size();
                 }
                 break;
             default:
-                lastInput = this.txtInstruction.getText();
                 break;
         }
     }//GEN-LAST:event_txtInstructionKeyReleased
@@ -354,10 +374,41 @@ public class KokyFrame extends javax.swing.JFrame {
         // TODO open dialog frame 
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
-    private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
-        KokyImageDialog k = new KokyImageDialog(this, true, panelDraw);
-        k.setVisible(true);
-    }//GEN-LAST:event_btnChangeImageActionPerformed
+    private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
+
+       all.setTypeLanguage(true);
+       english.setTypeLanguage(false);
+       spanish.setTypeLanguage(false);
+       kiche.setTypeLanguage(false);
+       typeLanguage();
+    }//GEN-LAST:event_lenguagesAllActionPerformed
+
+    private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
+ 
+       all.setTypeLanguage(false);
+       english.setTypeLanguage(true);
+       spanish.setTypeLanguage(false);
+       kiche.setTypeLanguage(false);
+       typeLanguage();
+    }//GEN-LAST:event_lenguageEnglishActionPerformed
+
+    private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
+      
+       all.setTypeLanguage(false);
+       english.setTypeLanguage(false);
+       spanish.setTypeLanguage(false);
+       kiche.setTypeLanguage(true);
+       typeLanguage();
+    }//GEN-LAST:event_lenguageKicheActionPerformed
+
+    private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
+       
+       all.setTypeLanguage(false);
+       english.setTypeLanguage(false);
+       spanish.setTypeLanguage(true);
+       kiche.setTypeLanguage(false);
+       typeLanguage();
+    }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -389,16 +440,16 @@ public class KokyFrame extends javax.swing.JFrame {
     }
 
     private void parseInstruction(String instruction) {
-        this.myLexer.yyreset(new StringReader(instruction + LINE));
-        try {
-            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-            if (this.myLexer.getErrorsList().isEmpty()) {
-                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                addSuccessMessages(executionDescriptions);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        if (all.getTypeLanguage()==true) {
+            lexerAll(lexerAll, instruction);
+        }else if (spanish.getTypeLanguage()==true) {
+            lexerSpanish(lexerSp, instruction);
+        }else if (english.getTypeLanguage()==true) {
+            lexerEnglish(lexerEn, instruction);
+        }else if (kiche.getTypeLanguage()==true) {
+            lexerKiche(lexerKi, instruction);
         }
+        
     }
 
     private void saveInstructionsToFile() {
@@ -423,10 +474,98 @@ public class KokyFrame extends javax.swing.JFrame {
         return baseName;
     }
 
+    private void typeLanguage(){
+        if(all.getTypeLanguage() == true){
+            lexerAll = new LexerAll(new StringReader(""));
+            instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
+            myParser = new Parser(lexerAll, instructionsSymTable);
+    
+        }else if (spanish.getTypeLanguage() == true) {
+            lexerSp = new LexerEs(new StringReader(""));
+            instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
+            myParser = new Parser(lexerSp, instructionsSymTable);
+         
+        }else if (english.getTypeLanguage()==true) {
+            lexerEn = new Lexer(new StringReader(""));
+            instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
+            myParser = new Parser(lexerEn, instructionsSymTable);
+         
+        }else if (kiche.getTypeLanguage()==true) {
+            lexerKi = new LexerKiche(new StringReader(""));
+            instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
+            myParser = new Parser(lexerKi, instructionsSymTable);
+           
+            
+        }
+        
+    }
+    
+    //type of lexer to execute
+    private void lexerAll(LexerAll lexer, String instruction){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerSpanish(LexerEs lexer, String instruction){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerEnglish(Lexer lexer, String instruction){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerKiche(LexerKiche lexer, String instruction){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    //return error according to language
+    private void errorLanguage(){
+        if (all.getTypeLanguage()==true) {
+            addErrorMessages(this.lexerAll.getErrorsList());
+        }else if (english.getTypeLanguage()==true) {
+            addErrorMessages(this.lexerEn.getErrorsList());
+        }else if (spanish.getTypeLanguage()==true) {
+            addErrorMessages(this.lexerSp.getErrorsList());
+        }else if (kiche.getTypeLanguage()==true) {
+            addErrorMessages(this.lexerKi.getErrorsList());
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
     private javax.swing.JMenuItem btnAbout;
-    private javax.swing.JButton btnChangeImage;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
     private javax.swing.JMenu btnOpenFIle;
@@ -444,6 +583,11 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JMenuItem lenguageEnglish;
+    private javax.swing.JMenuItem lenguageKiche;
+    private javax.swing.JMenuItem lenguageSpanish;
+    private javax.swing.JMenuItem lenguagesAll;
+    private javax.swing.JMenu lenguagesMenu;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
     private javax.swing.JTextField txtInstruction;

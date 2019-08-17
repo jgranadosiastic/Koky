@@ -1,6 +1,10 @@
 package com.jgranados.koky.interpreter.parser;
 
 import com.jgranados.koky.interpreter.lexer.Lexer;
+import com.rmendez.koky.interpreter.lexer.LexerEs;
+import com.rmendez.koky.interpreter.lexer.LexerKiche;
+import com.rmendez.koky.interpreter.lexer.LexerAll;
+import com.rmendez.koky.instructions.Languages;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
@@ -15,31 +19,117 @@ import java_cup.runtime.*;
 
 parser code {:
         private Lexer myLexer;
+        private LexerEs lexerEs;
+        private LexerKiche lexerKi;
+        private LexerAll lexerAll;
         private List<String> errorsList;
         private SymbolsTable symTable;
-        
+        private Languages all, spanish, english, kiche;
 
 	// Connect this parser to a scanner!
+       
 	public Parser(Lexer lex, SymbolsTable symTable) {
             super(lex);
             myLexer = lex;
             this.errorsList = myLexer.getErrorsList();
             this.symTable = symTable;
+            all = Languages.ALL;
+            spanish = Languages.SPANISH;
+            english = Languages.ENGLISH;
+            kiche = Languages.KICHE;
+	}
+        
+        public Parser(LexerAll lex, SymbolsTable symTable) {
+            super(lex);
+            lexerAll = lex;
+            this.errorsList = lexerAll.getErrorsList();
+            this.symTable = symTable;
+            all = Languages.ALL;
+            spanish = Languages.SPANISH;
+            english = Languages.ENGLISH;
+            kiche = Languages.KICHE;
+	}
+
+        public Parser(LexerEs lex, SymbolsTable symTable) {
+            super(lex);
+            lexerEs = lex;
+            this.errorsList = lexerEs.getErrorsList();
+            this.symTable = symTable;
+            all = Languages.ALL;
+            spanish = Languages.SPANISH;
+            english = Languages.ENGLISH;
+            kiche = Languages.KICHE;
+	}
+        
+        public Parser(LexerKiche lex, SymbolsTable symTable) {
+            super(lex);
+            lexerKi = lex;
+            this.errorsList = lexerKi.getErrorsList();
+            this.symTable = symTable;
+            all = Languages.ALL;
+            spanish = Languages.SPANISH;
+            english = Languages.ENGLISH;
+            kiche = Languages.KICHE;
 	}
 
         @Override
         public void syntax_error(Symbol st) {
-            if (st.sym != sym.LINE_TERMINATOR) {
-                Token token = (Token) st.value;
-                report_error("Error Sintactico:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
-                if (myLexer.isAnalyzingFile()) {
-                    System.out.println("No entiendo que hacer con " + token.getLexeme() + "En la linea " + token.getLine() + ", columna " + token.getColumn());
-                    errorsList.add(String.format("No entiendo que hacer con '%s' en linea %d y columna %d. Intenta borrandolo.", token.getLexeme(), token.getLine(), token.getColumn()));
-                } else {
-                    System.out.println("No entiendo que hacer con " + token.getLexeme());
-                    errorsList.add(String.format("No entiendo que hacer con '%s'. Intenta de nuevo con una instruccion válida.", token.getLexeme()));
+            //validation to respond according to language
+            
+            if (all.getTypeLanguage()==true) {
+                if (st.sym != sym.LINE_TERMINATOR) {
+                    Token token = (Token) st.value;
+                    report_error("Syntactic Error:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
+                    if (lexerAll.isAnalyzingFile()) {
+                        System.out.println("I don't understand what to do with " + token.getLexeme() + "In the line " + token.getLine() + ", column " + token.getColumn());
+                        errorsList.add(String.format("I don't understand what to do with '%s' in line %d and column %d. Try deleting.", token.getLexeme(), token.getLine(), token.getColumn()));
+                    } else {
+                        System.out.println("I don't understand what to do with " + token.getLexeme());
+                        errorsList.add(String.format("I don't understand what to do with '%s'. Try again with a valid instruction. ", token.getLexeme()));
+                    }
                 }
-            }
+            }else if (english.getTypeLanguage()==true) {
+                if (st.sym != sym.LINE_TERMINATOR) {
+                    Token token = (Token) st.value;
+                    report_error("Syntactic Error:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
+                    if (myLexer.isAnalyzingFile()) {
+                        System.out.println("I don't understand what to do with " + token.getLexeme() + "In the line " + token.getLine() + ", column " + token.getColumn());
+                        errorsList.add(String.format("I don't understand what to do with '%s' in line %d and column %d. Try deleting.", token.getLexeme(), token.getLine(), token.getColumn()));
+                    } else {
+                        System.out.println("I don't understand what to do with " + token.getLexeme());
+                        errorsList.add(String.format("I don't understand what to do with '%s'. Try again with a valid instruction. ", token.getLexeme()));
+                    }
+                }
+            }else if (spanish.getTypeLanguage()==true) {
+                if (st.sym != sym.LINE_TERMINATOR) {
+                    Token token = (Token) st.value;
+                    report_error("Error Sintactico:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
+                    if (lexerEs.isAnalyzingFile()) {
+                        System.out.println("No entiendo que hacer con " + token.getLexeme() + "En la linea " + token.getLine() + ", columna " + token.getColumn());
+                        errorsList.add(String.format("No entiendo que hacer con '%s' en linea %d y columna %d. Intenta borrandolo.", token.getLexeme(), token.getLine(), token.getColumn()));
+                    } else {
+                        System.out.println("No entiendo que hacer con " + token.getLexeme());
+                        errorsList.add(String.format("No entiendo que hacer con '%s'. Intenta de nuevo con una instruccion válida.", token.getLexeme()));
+                    }
+                }
+            }else if (kiche.getTypeLanguage()==true) {
+                if (st.sym != sym.LINE_TERMINATOR) {
+                    Token token = (Token) st.value;
+                    System.out.println("KICHE");
+                    report_error("Error Sintactico:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
+                    if (lexerKi.isAnalyzingFile()) {
+                                            //no entiendo que hacer con                        en la linea                            columna
+                        System.out.println("KICHE KICHE KICHE KICHE" + token.getLexeme() + "KICHE KICHE " + token.getLine() + ", KICHE " + token.getColumn());
+                        //                            no entiendo que hacer con    en linea y columna      Intenta borrandolo
+                        errorsList.add(String.format("KICHE KICHE KICHE KICHE '%s' KICHE %d KICHE KICHE %d. KICHE KICHE.", token.getLexeme(), token.getLine(), token.getColumn()));
+                    } else {
+                        //                  no entiendo que hacer con
+                        System.out.println("KICHE KICHE KICHE KICHE KICHE " + token.getLexeme());
+                        //                            no entiendo que hacer con     intenta de nuevo con una instruccion valida.
+                        errorsList.add(String.format("KICHE KICHE KICHE KICHE '%s'. KICHE KICHE KICHE KICHE KICHE KICHE KICHE KICHE.", token.getLexeme()));
+                    }
+                }
+            }  
         }
 
         public void addSemanticError(String msg) {
@@ -66,7 +156,7 @@ terminal Token          OPEN_BRACKET, CLOSE_BRACKET, OPEN_PAR, CLOSE_PAR, PLUS;
 terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
 terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
 terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
-terminal Token          TODRAW, REPEAT,WIDTH;
+terminal Token          TODRAW, REPEAT;
 
 /* Non-terminals */
 non terminal List<Instruction>          program, instructions, instructionsRepeat;
@@ -145,11 +235,33 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                         /*if (e > 0 && e < 10) {
                             RESULT = new ColorInstruction(e);
                         } else {
-                            if (myLexer.isAnalyzingFile()) {
-                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
-                            } else {
-                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            if (all.getTypeLanguage()==true) {
+                                if (lexerAll.isAnalyzingFile()) {
+                                    errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
+                            }else if (english.getTypeLanguage()==true) {
+                                if (myLexer.isAnalyzingFile()) {
+                                    errorsList.add(String.format("The color '%d' definite in the line %d is not correct. Try one in between 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("The color '%d' is not correct. Try one in between 0 y 9.", e));
+                                }
+
+                            }else if (spanish.getTypeLanguage()==true) {
+                                if (lexerEs.isAnalyzingFile()) {
+                                    errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
+                            }else if (kiche.getTypeLanguage()==true) {
+                                if (lexerKi.isAnalyzingFile()) {
+                                    errorsList.add(String.format("KICHE El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("KICHE El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
                             }
+                            
                             RESULT = new EmptyInstruction();
                         }*/
                     :}
@@ -192,14 +304,6 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     {:  
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
-                    :}
-                | WIDTH expr:e LINE_TERMINATOR
-                    {:
-                        if(e.operate() > 0 && e.operate() < 16) {
-                            RESULT = new WidthInstruction(e);
-                        } else {
-                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
-                        }
                     :}
                 | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET LINE_TERMINATOR
                     {:
@@ -285,10 +389,31 @@ instructionRepeat ::=	 FORWARD expr:e
                         /*if (e > 0 && e < 10) {
                             RESULT = new ColorInstruction(e);
                         } else {
-                            if (myLexer.isAnalyzingFile()) {
-                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
-                            } else {
-                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            if (all.getTypeLanguage()==true) {
+                                if (lexerAll.isAnalyzingFile()) {
+                                    errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
+                            }else if (english.getTypeLanguage()==true) {
+                                if (myLexer.isAnalyzingFile()) {
+                                    errorsList.add(String.format("The color '%d' definite in the line %d is not correct. Try one in between 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("The color '%d' is not correct. Try one in between 0 y 9.", e));
+                                }
+
+                            }else if (spanish.getTypeLanguage()==true) {
+                                if (lexerEs.isAnalyzingFile()) {
+                                    errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
+                            }else if (kiche.getTypeLanguage()==true) {
+                                if (lexerKi.isAnalyzingFile()) {
+                                    errorsList.add(String.format("KICHE El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
+                                } else {
+                                     errorsList.add(String.format("KICHE El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                                }
                             }
                             RESULT = new EmptyInstruction();
                         }*/
@@ -332,14 +457,6 @@ instructionRepeat ::=	 FORWARD expr:e
                     {:  
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
-                    :}
-                | WIDTH expr:e 
-                    {:
-                        if(e.operate() > 0 && e.operate() < 16) {
-                            RESULT = new WidthInstruction(e);
-                        } else {
-                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
-                        }
                     :}
                 | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET
                     {:

@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 import java.awt.Graphics2D;
 
 /**
@@ -9,7 +10,10 @@ import java.awt.Graphics2D;
  * @author jose
  */
 public class ToCenterInstruction extends TranslationInstruction implements ExecutionDescribable {
-
+    
+    private Languages all = Languages.ALL, spanish = Languages.SPANISH,
+            english = Languages.ENGLISH, kiche = Languages.KICHE;
+    
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         currentPointer.resetAngle();
@@ -38,6 +42,15 @@ public class ToCenterInstruction extends TranslationInstruction implements Execu
 
     @Override
     public String getExecutionDescription() {
+        if (all.getTypeLanguage()==true) {
+           return "Me moví al centro.";
+        }else if (english.getTypeLanguage()==true) {
+            return "I moved downtown.";
+        }else if (spanish.getTypeLanguage()==true) {
+           return "Me moví al centro.";
+        }else if (kiche.getTypeLanguage()==true) {
+           return "KICHE KICHE KICHE.";
+        }
         return "Me moví al centro.";
     }
     

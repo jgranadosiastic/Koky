@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 
 /**
  *
@@ -11,7 +12,9 @@ import com.jgranados.koky.ui.KokyPointer;
 public class ForwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-
+    private Languages all = Languages.ALL, spanish = Languages.SPANISH,
+            english = Languages.ENGLISH, kiche = Languages.KICHE;
+    
     public ForwardInstruction(Expr steps) {
         this.steps = steps;
     }
@@ -52,6 +55,15 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
 
     @Override
     public String getExecutionDescription() {
+        if (all.getTypeLanguage()==true) {
+            return "Avancé " + steps.operate() + " pasos.";
+        }else if (english.getTypeLanguage()==true) {
+            return "Advance " + steps.operate() + " steps.";
+        }else if (spanish.getTypeLanguage()==true) {
+            return "Avancé " + steps.operate() + " pasos.";
+        }else if (kiche.getTypeLanguage()==true) {
+            return "KICHE " + steps.operate() + " KICHE.";
+        }
         return "Avancé " + steps.operate() + " pasos.";
     }
 

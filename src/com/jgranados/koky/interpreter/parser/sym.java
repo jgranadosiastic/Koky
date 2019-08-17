@@ -12,7 +12,6 @@ public class sym {
   public static final int CLOSE_BRACKET = 8;
   public static final int PLUS = 11;
   public static final int POSITIONXY = 25;
-  public static final int WIDTH = 33;
   public static final int COLOR = 24;
   public static final int TOCENTER = 23;
   public static final int POSITIONY = 27;
@@ -75,8 +74,7 @@ public class sym {
   "SHOWTURTLE",
   "TOERASE",
   "TODRAW",
-  "REPEAT",
-  "WIDTH"
+  "REPEAT"
   };
 }
 

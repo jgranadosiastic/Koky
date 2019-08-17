@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.ui.KokyPointer;
+import com.rmendez.koky.instructions.Languages;
 
 /**
  *
@@ -10,6 +11,9 @@ import com.jgranados.koky.ui.KokyPointer;
 public abstract class PositionInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private KokyPointer currentPointer;
+    private Languages all = Languages.ALL, spanish = Languages.SPANISH,
+            english = Languages.ENGLISH, kiche = Languages.KICHE;
+    
     @Override
     protected Integer calculateEndX(KokyPointer currentPointer) {
         this.currentPointer = currentPointer;
@@ -53,6 +57,15 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
 
     @Override
     public String getExecutionDescription() {
+        if (all.getTypeLanguage()==true) {
+           return "Me moví a la posición (" + denormalizePosX() + ", " + denormalizePosY() + ").";
+        }else if (english.getTypeLanguage()==true) {
+            return "I moved to the position (" + denormalizePosX() + ", " + denormalizePosY() + ").";
+        }else if (spanish.getTypeLanguage()==true) {
+           return "Me moví a la posición (" + denormalizePosX() + ", " + denormalizePosY() + ").";
+        }else if (kiche.getTypeLanguage()==true) {
+            return "KICHE KICHE KICHE (" + denormalizePosX() + ", " + denormalizePosY() + ").";
+        }
         return "Me moví a la posición (" + denormalizePosX() + ", " + denormalizePosY() + ").";
     }
 }

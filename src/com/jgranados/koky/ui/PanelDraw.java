@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
-import java.io.IOException;
-
 
 /**
  *
@@ -21,7 +19,7 @@ import java.io.IOException;
 public class PanelDraw extends javax.swing.JPanel {
 
     private static final int PANEL_WIDTH = 1000;
-    private static final int PANEL_HEIGHT = 460;     
+    private static final int PANEL_HEIGHT = 460;
     private KokyPointer kokyPointer;
     private BufferedImage imageWithPointer;
     private BufferedImage imageNoPointer;
@@ -40,7 +38,7 @@ public class PanelDraw extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imageWithPointer == null) {
-            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this, KokyPointer.BRUSH_WIDTH);
+            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this);
             initImages();
         }
         g.drawImage(imageWithPointer, 0, 0, null);
@@ -73,7 +71,13 @@ public class PanelDraw extends javax.swing.JPanel {
     private void drawInstruction(Graphicable instruction) {
         // using the no pointer graphic to draw the instruction
         graphicsNoPointer = instruction.execute(graphicsNoPointer, kokyPointer);
-        cleanAndDraw();
+        // cleanning the graphics with the pointer
+        graphicsWithPointer.clearRect(0, 0, this.getWidth(), this.getHeight());
+        // redrawing the graphics without the pointer
+        graphicsWithPointer.drawImage(imageNoPointer, 0, 0, null);
+        // adding the pointer to the draw
+        kokyPointer.drawPointer(graphicsWithPointer);
+        this.repaint();
     }
 
     public List<String> runInstructions(List<Instruction> instructions) {
@@ -86,20 +90,5 @@ public class PanelDraw extends javax.swing.JPanel {
         }).collect(Collectors.toList());
     }
 
-    public void changeImage(String url) throws IOException {
-        this.kokyPointer.setImage(url);
-        kokyPointer.drawPointer(graphicsWithPointer);
-        cleanAndDraw();
-    }
-
-    public void cleanAndDraw() {
-        // cleanning the graphics with the pointer
-        graphicsWithPointer.clearRect(0, 0, this.getWidth(), this.getHeight());
-        // redrawing the graphics without the pointer
-        graphicsWithPointer.drawImage(imageNoPointer, 0, 0, null);
-        // adding the pointer to the draw
-        kokyPointer.drawPointer(graphicsWithPointer);
-        this.repaint();
-    }
-
+   
 }
