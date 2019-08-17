@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
@@ -41,6 +43,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
+    File f = null;
 
     /**
      * Creates new form KokFrame
@@ -375,11 +378,39 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        panelDraw.generateImg();
+       generateImg();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
+    }
+    
+    public void generateImg() {
+
+        JFileChooser fileChooser = new JFileChooser();
+        int seleccion = fileChooser.showSaveDialog(null);
+        try {
+            
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                File JFC = fileChooser.getSelectedFile();
+                String PATH = JFC.getAbsolutePath();//Obtains the path to use
+                f = new File(PATH);
+                try {
+                    ImageIO.write(panelDraw.returnDraw(), "jpg", f);
+                } catch (IOException ex) {
+                    Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //Checks if the user puts the file extension in the name
+                if (!(PATH.endsWith(".jpg"))) {
+                    File temp = new File(PATH + ".jpg");
+                    JFC.renameTo(temp);//If not, we add it manually
+                }
+                JOptionPane.showMessageDialog(null, "¡Imagen guardada exitosamente!", "Guardado correcto", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {//In case of any problem, the program sends an error message
+            JOptionPane.showMessageDialog(null, "Ups! Hubo un error al guardar el archivo.", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void addErrorMessages(List<String> messages) {
