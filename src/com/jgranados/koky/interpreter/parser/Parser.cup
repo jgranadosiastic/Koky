@@ -79,6 +79,7 @@ non terminal                            syncToken;
 non terminal Expr                       expr;
 non terminal List<Token>                parameters;
 non terminal Token                      parameter;
+non terminal                            break;
 
 /* precedence */
 precedence left     PLUS, MINUS;
@@ -222,7 +223,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e syncToken {: System.out.println("--------Error nnn  " + eleft + eright); RESULT = new EmptyInstruction(); :}
                     
-                | VOID ID:id OPEN_PAR parameters:parametersList CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
+                | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
                     boolean flag = procedureTable.addProcedure(id, instructions,parametersList ,myLexer.isAnalyzingFile());
                     if(flag){
@@ -232,7 +233,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     }
 
                     :}
-                |VOID ID:id OPEN_PAR CLOSE_PAR OPEN_BRACKET instructionsVoid:instructions CLOSE_BRACKET
+                |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
                     {:
                     List<Token> parameters = new ArrayList<>();
                     boolean flag = procedureTable.addProcedure(id, instructions,parameters,myLexer.isAnalyzingFile());
@@ -244,7 +245,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
 
                     :}
                 
-                |CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
+                |CALL break ID:id break OPEN_BRACKET break parameters:parameters break CLOSE_BRACKET
                     {:
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
@@ -255,7 +256,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                      }
                         RESULT = new EmptyInstruction();
                     :}
-                | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
+                | CALL break ID:id  break OPEN_BRACKET break CLOSE_BRACKET 
                     {:
                      List<Token> parameters = new ArrayList<>();
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
@@ -271,7 +272,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     :}
                 ;
 
-parameters ::= parameters:parameters COMMA parameter:parameter 
+parameters ::= parameters:parameters break COMMA break parameter:parameter 
                 {: parameters.add(parameter);
                    RESULT = parameters;
                 :}
@@ -290,7 +291,7 @@ parameter ::= ID:parameter
               
 /*Antes se llamaba instructionsRepeat ahora instructionsVoid, solo el nombre se cambio*/
 
-instructionsVoid ::=  instructionsVoid:list instructionVoid:ins
+instructionsVoid ::=  instructionsVoid:list break instructionVoid:ins
                             {:  
                                 list.add(ins);
                                 RESULT = list;
@@ -302,6 +303,8 @@ instructionsVoid ::=  instructionsVoid:list instructionVoid:ins
                                 RESULT = instructions;
                             :}
                         ;
+
+break ::=  break  LINE_TERMINATOR | ;
 
 instructionVoid ::=	 FORWARD expr:e
                     {:  
@@ -411,7 +414,7 @@ instructionVoid ::=	 FORWARD expr:e
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e CLOSE_BRACKET {: System.out.println("--------Error nnn  "); RESULT = new EmptyInstruction(); :}
 		
-                | CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
+                | CALL break ID:id  break OPEN_BRACKET break  parameters:parameters break CLOSE_BRACKET 
                     {:
 
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
@@ -423,7 +426,7 @@ instructionVoid ::=	 FORWARD expr:e
                      }
                         RESULT = new EmptyInstruction();
                     :}
-                | CALL ID:id OPEN_BRACKET CLOSE_BRACKET 
+                | CALL break ID:id break OPEN_BRACKET break CLOSE_BRACKET
                     {:
                      List<Token> parameters = new ArrayList<>();
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());

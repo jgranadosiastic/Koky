@@ -88,7 +88,7 @@ public class ProcedureTable {
             }else{
                 errorsList.add(String.format("La variable del parametro '%s' ya esta declarada. No pueden existir dos parametros con el mismo nombre, linea %d columna %d.", parameter.getLexeme(), parameter.getLine(), parameter.getColumn()));
                 symTable.cleanAll();
-                return symTable;
+                return null;
             }
                 
             
