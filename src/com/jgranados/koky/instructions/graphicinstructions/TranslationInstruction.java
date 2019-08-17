@@ -1,5 +1,6 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
+import com.jgranados.koky.ui.EndPosition;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,6 +16,11 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
+        if (TranslationUtils.isOutOfRange(endPosX, endPosY)) {
+            EndPosition ep = TranslationUtils.getEndPosition(new EndPosition(endPosX, endPosY), currentPointer);
+            endPosX = ep.getEndPosX();
+            endPosY = ep.getEndPosY();
+        }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));
         drawLine(graphicsNoPointer, currentPointer, endPosX, endPosY);

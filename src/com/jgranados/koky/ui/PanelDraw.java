@@ -20,8 +20,8 @@ import java.io.IOException;
  */
 public class PanelDraw extends javax.swing.JPanel {
 
-    private static final int PANEL_WIDTH = 1000;
-    private static final int PANEL_HEIGHT = 460;     
+    public static final int PANEL_WIDTH = 1000;
+    public static final int PANEL_HEIGHT = 460;     
     private KokyPointer kokyPointer;
     private BufferedImage imageWithPointer;
     private BufferedImage imageNoPointer;
