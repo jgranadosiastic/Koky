@@ -226,7 +226,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     {:
                     boolean flag = procedureTable.addProcedure(id, instructions,parametersList ,myLexer.isAnalyzingFile());
                     if(flag){
-                        RESULT = new ProcedureInstruction(id.getLexeme(),procedureTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(),procedureTable,symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
@@ -237,7 +237,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     List<Token> parameters = new ArrayList<>();
                     boolean flag = procedureTable.addProcedure(id, instructions,parameters,myLexer.isAnalyzingFile());
                     if(flag){
-                        RESULT = new ProcedureInstruction(id.getLexeme(),procedureTable);
+                        RESULT = new ProcedureInstruction(id.getLexeme(),procedureTable,symTable);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
@@ -250,7 +250,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                      if(flag){
                         boolean parametersFlag = procedureTable.sameParameters(id, parameters,myLexer.isAnalyzingFile());
                         if(parametersFlag){
-                            RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                            RESULT =  new ProcedureCall(parameters,id.getLexeme(),procedureTable,symTable);
                         } 
                      }
                         RESULT = new EmptyInstruction();
@@ -262,7 +262,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                      if(flag){
                         boolean parametersFlag = procedureTable.sameParameters(id, parameters,myLexer.isAnalyzingFile());
                         if(parametersFlag){
-                            RESULT = new ProcedureCall(parameters, id.getLexeme());
+                            RESULT = new ProcedureCall(parameters, id.getLexeme(),procedureTable,symTable);
                         }
 
                      }
@@ -413,11 +413,12 @@ instructionVoid ::=	 FORWARD expr:e
 		
                 | CALL ID:id OPEN_BRACKET parameters:parameters CLOSE_BRACKET 
                     {:
+
                      boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
                      if(flag){
                         boolean parametersFlag = procedureTable.sameParameters(id, parameters,myLexer.isAnalyzingFile());
                         if(parametersFlag){
-                            RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                            RESULT =  new ProcedureCall(parameters,id.getLexeme(),procedureTable,symTable);
                         } 
                      }
                         RESULT = new EmptyInstruction();
@@ -429,7 +430,7 @@ instructionVoid ::=	 FORWARD expr:e
                      if(flag){
                         boolean parametersFlag = procedureTable.sameParameters(id, parameters,myLexer.isAnalyzingFile());
                         if(parametersFlag){
-                            RESULT =  new ProcedureCall(parameters,id.getLexeme());
+                            RESULT =  new ProcedureCall(parameters,id.getLexeme(),procedureTable,symTable);
                         } 
                      }
                         RESULT = new EmptyInstruction();

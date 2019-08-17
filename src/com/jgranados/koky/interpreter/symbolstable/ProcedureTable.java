@@ -26,15 +26,19 @@ public class ProcedureTable {
     private Map<String, List<Instruction>> procedureTable;
     private List<String> errorsList;
     private Map<String, List<Token>> parametersTable;
+    private Map<String, SymbolsTable> localSymTable;
+    
 
     public ProcedureTable(List<String> errorsList) {
         this.errorsList = errorsList;
         procedureTable = new HashMap<>();
         parametersTable = new HashMap<>();
+        localSymTable = new HashMap<>();
     }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
         List<Instruction> list = this.procedureTable.get(id.getLexeme());
+        
         if (list == null) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("La variable '%s' para la funcion no se ha creado en el archivo que estoy leyendo, linea %d columna %d. Debe crear la variable antes de usarla.", id.getLexeme(), id.getLine(), id.getColumn()));
@@ -53,6 +57,10 @@ public class ProcedureTable {
     public List<Token> getParameterList(Token id) {
         return this.parametersTable.get(id.getLexeme());
     }
+    
+    public SymbolsTable getLocalSymbolsTable(Token id){
+        return this.localSymTable.get(id.getLexeme());
+    }
 
     public boolean addProcedure(Token id, List<Instruction> value, List<Token> parameters, boolean isAnalyzingFile) {
         if (this.procedureTable.containsKey(id.getLexeme())) {
@@ -63,9 +71,30 @@ public class ProcedureTable {
             }
             return false;
         }
+        SymbolsTable symTable = createLocalSymTable( parameters, isAnalyzingFile);
+        
         procedureTable.put(id.getLexeme(), value);
         parametersTable.put(id.getLexeme(), parameters);
+        localSymTable.put(id.getLexeme(), symTable);
         return true;
+    }
+    
+    public SymbolsTable createLocalSymTable(List<Token> parameters,boolean isAnalyzingFile){
+        SymbolsTable symTable = new SymbolsTable(errorsList);
+        for (Token parameter : parameters) {   
+            Integer value = symTable.getIdValue(parameter);
+            if(value==null){
+                symTable.addId(parameter, 0, isAnalyzingFile);
+            }else{
+                errorsList.add(String.format("La variable del parametro '%s' ya esta declarada. No pueden existir dos parametros con el mismo nombre, linea %d columna %d.", parameter.getLexeme(), parameter.getLine(), parameter.getColumn()));
+                symTable.cleanAll();
+                return symTable;
+            }
+                
+            
+            
+        }
+        return symTable;
     }
 
     public void assignInstructionToId(Token id, List<Instruction> value) {
@@ -94,4 +123,6 @@ public class ProcedureTable {
             return false;
         }
     }
+    
+    
 }
