@@ -4,8 +4,11 @@ import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.lexer.Lexer;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
@@ -30,6 +34,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String KOK_EXTENSION = "kok";
     private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    private static final int NUM_SUBSTRING = 2;
 
     private static final String CLEARS = "clears";
     private static final String LINE = "\n";
@@ -90,6 +95,7 @@ public class KokyFrame extends javax.swing.JFrame {
         bntOpenFile = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
+        colorItem = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
@@ -235,6 +241,14 @@ public class KokyFrame extends javax.swing.JFrame {
         btnInstructions.setText("Instrucciones");
         jMenu2.add(btnInstructions);
 
+        colorItem.setText("Consultar color");
+        colorItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(colorItem);
+
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -359,6 +373,17 @@ public class KokyFrame extends javax.swing.JFrame {
         k.setVisible(true);
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
+    private void colorItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorItemActionPerformed
+        Color c = JColorChooser.showDialog(null, "Seleccione un color", Color.YELLOW);
+        String color = null;
+        if (c != null) {
+            color = "#" + Integer.toHexString(c.getRGB()).substring(NUM_SUBSTRING).toUpperCase();
+            Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection ss = new StringSelection(color);
+            cb.setContents(ss, ss);
+        }
+    }//GEN-LAST:event_colorItemActionPerformed
+
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -432,6 +457,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
+    private javax.swing.JMenuItem colorItem;
     private javax.swing.JEditorPane helpPane;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
