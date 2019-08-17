@@ -47,17 +47,6 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
 
             }
             if (flag) {
-                //clean temporary table and copy of the persistent temporary table of symbols so that the variables are not lost
-//                 proceduresTable.getTemporarySymbolTable().cleanAll();
-//                for (String key: symbolsTable.getSymTable().keySet()){
-//                        proceduresTable.getTemporarySymbolTable().assignValueToId(new Token(key, 0, 0), symbolsTable.getSymTable().get(key));
-//                }
-
-                //assignment of temporary parameters
-//                for (int i = 0; i < parameters.size(); i++) {
-//                              symbolsTable.assignValueToId(this.proceduresTable.getParametersTable().get(procedureName).get(i), 
-//                                parameters.get(i).operate());
-//                }
                 //executing instructions
                 for (Instruction instruction : this.proceduresTable.getProcedureTable().get(procedureName.getLexeme())) {
                     instruction.assignAmbitToExpresions();
@@ -70,16 +59,6 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
                 }
                 executionDescription = "Se ha Llamado al Procedimiento ->" + procedureName.getLexeme() + " y se ha ejecutado";
 
-                //Elimination of temporary parameters
-//                for (int i = 0; i < parameters.size(); i++) {
-//                    symbolsTable.removeParameter(this.proceduresTable.getParametersTable().get(procedureName).get(i));
-//                }
-                //backup of variables to the persistent symbol table
-//                for (String key: proceduresTable.getTemporarySymbolTable().getSymTable().keySet()){
-//                        symbolsTable.assignValueToId(new Token(key, 0, 0), proceduresTable.getTemporarySymbolTable().getSymTable().get(key));
-//                }
-                //clean temporary symbol table
-                //proceduresTable.getTemporarySymbolTable().cleanAll();
             }
 
         } else {

@@ -67,11 +67,16 @@ public class Expr {
     private int getValue() {
         if (id != null) {
             if (this.getAmbit()==null || this.getAmbit().equals(AmbitEnum.GLOBAL.name())) {
+                System.out.println("Entro a la tabla global: "+table.getIdValue(id));
                 return (Integer) table.getIdValue(id);
             } else if (this.getAmbit().equals(AmbitEnum.LOCAL.name())) {
                 if (tableToken != null) {
                     SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
-                    return (Integer) sym.getIdValue(id);
+                    if (sym.getIdValue(id)==null) {
+                        return (Integer) table.getIdValue(id);
+                    } else {
+                        return (Integer) sym.getIdValue(id);
+                    }
                 } else {
                     return literalValue;
                 }

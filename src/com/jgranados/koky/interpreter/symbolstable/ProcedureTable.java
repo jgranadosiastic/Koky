@@ -106,14 +106,6 @@ public class ProcedureTable {
         
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
     public SymbolsTable getTemporarySymbolTable() {
         return temporarySymbolTable;

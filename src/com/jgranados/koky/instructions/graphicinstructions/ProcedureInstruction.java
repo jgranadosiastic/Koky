@@ -40,8 +40,6 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
     
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
-        //Elimination of temporary parameters
-        
         return graphicsNoPointer;
     }
 
