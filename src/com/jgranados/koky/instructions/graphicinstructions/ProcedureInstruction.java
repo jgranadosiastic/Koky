@@ -1,5 +1,5 @@
 /*
- * Instruccion para manejar el procedimiento
+ * Instruction to handle the procedure
  */
 package com.jgranados.koky.instructions.graphicinstructions;
 
@@ -42,8 +42,6 @@ public class ProcedureInstruction extends GraphicsInstruction implements Executi
             }
             
         }
-        System.out.println("****** SI TODO VA BIEN DIGAMOS QUE ESTE PROCEDIMIENTO YA ESTA GUARDADO");
-        
         return graphicsNoPointer;
     }
 

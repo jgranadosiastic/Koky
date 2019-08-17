@@ -18,6 +18,9 @@ public class SymbolsTable {
         this.errorsList = errorsList;
         symTable = new HashMap<>();
     }
+    public SymbolsTable() {
+        symTable = new HashMap<>();
+    }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
         Integer value = this.symTable.get(id.getLexeme());
@@ -66,4 +69,14 @@ public class SymbolsTable {
     public void cleanAll() {
         this.symTable.clear();
     }
+
+    public Map<String, Integer> getSymTable() {
+        return symTable;
+    }
+
+    public void setSymTable(Map<String, Integer> symTable) {
+        this.symTable = symTable;
+    }
+    
+    
 }

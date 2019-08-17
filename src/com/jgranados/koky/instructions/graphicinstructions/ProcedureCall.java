@@ -32,11 +32,9 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
         this.symbolsTable = symbolsTable;
         this.executionDescription = "";
     }
-    
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
-        
         //checking if the procedure name exists
         if (this.proceduresTable.getProcedureTable().containsKey(procedureName)) {
             boolean flag = true;
@@ -55,12 +53,16 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
 
             } 
             if (flag) {
+                //clean temporary table and copy of the persistent temporary table of symbols so that the variables are not lost
+                 proceduresTable.getTemporarySymbolTable().cleanAll();
+                for (String key: symbolsTable.getSymTable().keySet()){
+                        proceduresTable.getTemporarySymbolTable().assignValueToId(new Token(key, 0, 0), symbolsTable.getSymTable().get(key));
+                }
+                
                 //assignment of temporary parameters
                 for (int i = 0; i < parameters.size(); i++) {
-                        if (!symbolsTable.verifyParameter(this.proceduresTable.getParametersTable().get(procedureName).get(i))) {
-                            symbolsTable.assignValueToId(this.proceduresTable.getParametersTable().get(procedureName).get(i), 
+                              symbolsTable.assignValueToId(this.proceduresTable.getParametersTable().get(procedureName).get(i), 
                                 symbolsTable.getIdValue(parameters.get(i)));
-                        }
                 }
                 //executing instructions
                 for(Instruction instruction: this.proceduresTable.getProcedureTable().get(procedureName)){
@@ -76,7 +78,13 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
                 for (int i = 0; i < parameters.size(); i++) {
                     symbolsTable.removeParameter(this.proceduresTable.getParametersTable().get(procedureName).get(i));
                 }
-            
+                
+                //backup of variables to the persistent symbol table
+                for (String key: proceduresTable.getTemporarySymbolTable().getSymTable().keySet()){
+                        symbolsTable.assignValueToId(new Token(key, 0, 0), proceduresTable.getTemporarySymbolTable().getSymTable().get(key));
+                }
+                //clean temporary symbol table
+                proceduresTable.getTemporarySymbolTable().cleanAll();
             }
 
         } else {

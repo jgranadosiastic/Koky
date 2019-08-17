@@ -1,19 +1,6 @@
 
 package com.jgranados.koky.interpreter.symbolstable;
-
 import com.jgranados.koky.instructions.Instruction;
-import com.jgranados.koky.interpreter.token.Token;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-/**
- *
- * @author jcsr
- */
-
-
-
 import com.jgranados.koky.interpreter.token.Token;
 import java.util.HashMap;
 import java.util.List;
@@ -24,18 +11,17 @@ import java.util.Map;
  * @author jose
  */
 public class ProcedureTable {
-    
-// clase creada con el fin de tener una tabla de procesos, y llevar el control de los parametros de cada funcion
-    // aqui se guardara toda la informacion de una funcion: sus parametros, sus instrucciones, y el id que identifica a la funcion.
 
     private Map<String, List<Instruction>> procedureTable;
     private List<String> errorsList;
     private Map<String, List<Token>> parametersTable;
-
+    private SymbolsTable temporarySymbolTable;
     public ProcedureTable(List<String> errorsList) {
         this.errorsList = errorsList;
         this.procedureTable = new HashMap<>();
         this.parametersTable = new HashMap<>();
+        this.temporarySymbolTable = new SymbolsTable();
+        
     }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
@@ -72,10 +58,6 @@ public class ProcedureTable {
         //save parameters of Procedure
         parametersTable.put(id.getLexeme(), value);
     }
-
-    //public void assignValueToId(Token id, List<Instruction> value) {
-    //    this.procedureTable.put(id.getLexeme(), value);
-    //}
     
     public void cleanAll() {
         this.procedureTable.clear();
@@ -97,8 +79,6 @@ public class ProcedureTable {
         this.parametersTable = parametersTable;
     }
     
-    
-
     public List<String> getErrorsList() {
         return errorsList;
     }
@@ -106,6 +86,16 @@ public class ProcedureTable {
     public void setErrorsList(List<String> errorsList) {
         this.errorsList = errorsList;
     }
+
+    public SymbolsTable getTemporarySymbolTable() {
+        return temporarySymbolTable;
+    }
+
+    public void setTemporarySymbolTable(SymbolsTable temporarySymbolTable) {
+        this.temporarySymbolTable = temporarySymbolTable;
+    }
+    
+    
     
     
 }
