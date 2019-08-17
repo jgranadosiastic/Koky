@@ -1,7 +1,9 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 
 /**
@@ -54,5 +56,23 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
     public String getExecutionDescription() {
         return "Avancé " + steps.operate() + " pasos.";
     }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        if(this.getAmbit()!=null){
+            steps.setAmbit(this.getAmbit());
+        }else{
+            steps.setAmbit(AmbitEnum.GLOBAL.name());
+        }
+        
+        
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        steps.setTableToken(token);
+    }
+    
+    
 
 }

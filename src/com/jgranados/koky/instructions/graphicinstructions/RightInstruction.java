@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -25,6 +26,17 @@ public class RightInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public String getExecutionDescription() {
         return "Giré " + angle.operate() + " grados a la derecha.";
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        angle.setAmbit(this.getAmbit());
+       
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        angle.setTableToken(token);
     }
     
 }

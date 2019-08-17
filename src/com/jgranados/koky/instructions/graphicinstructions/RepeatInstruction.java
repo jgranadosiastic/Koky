@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.varinstructions.Assignable;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 import java.util.List;
@@ -33,5 +34,15 @@ public class RepeatInstruction extends GraphicsInstruction {
             }
         }
         return graphicsNoPointer;
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        loops.setAmbit(this.getAmbit());
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        loops.setTableToken(token);
     }
 }

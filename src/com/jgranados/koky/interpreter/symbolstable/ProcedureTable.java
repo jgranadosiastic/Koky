@@ -41,7 +41,7 @@ public class ProcedureTable {
         return this.procedureTable.get(id.getLexeme());
     }
 
-    public boolean addProcedure(Token id, List<Instruction> value, boolean isAnalyzingFile) {
+    public boolean addProcedure(Token id,SymbolsTable localTable, boolean isAnalyzingFile, SymbolsTable symTable,List<Instruction> instructions,List<Token> parametersList) {
         if (this.procedureTable.containsKey(id.getLexeme())) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("La variable '%s' que intenta declarar para la funcion  en el archivo que estoy leyendo, linea %d columna %d ya fue declarada anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
@@ -50,7 +50,11 @@ public class ProcedureTable {
             }
             return false;
         }
-        procedureTable.put(id.getLexeme(), value);
+        procedureTable.put(id.getLexeme(), instructions);
+        this.parametersTable.put(id.getLexeme(), parametersList);
+        symTable.addSymTable(id, localTable, isAnalyzingFile);
+        symTable.getErrorsList().clear();
+        localTable.getErrorsList().clear();
         return true;
     }
     
@@ -89,6 +93,10 @@ public class ProcedureTable {
 
     public Map<String, List<Token>> getParametersTable() {
         return parametersTable;
+    }
+    
+    public List<Token> getParameters(String id){
+        return this.parametersTable.get(id);
     }
 
     public void setParametersTable(Map<String, List<Token>> parametersTable) {

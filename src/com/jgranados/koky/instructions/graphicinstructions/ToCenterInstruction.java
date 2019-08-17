@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -39,6 +40,16 @@ public class ToCenterInstruction extends TranslationInstruction implements Execu
     @Override
     public String getExecutionDescription() {
         return "Me moví al centro.";
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        //Nothing this class don't have Expr
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        //Nothing this class don't have Expr
     }
     
 }

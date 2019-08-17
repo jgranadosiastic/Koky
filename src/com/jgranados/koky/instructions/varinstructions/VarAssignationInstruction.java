@@ -24,5 +24,15 @@ public class VarAssignationInstruction extends Instruction implements Assignable
     public void assign() {
         symTable.assignValueToId(id, expr.operate());
     }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        expr.setAmbit(this.getAmbit());
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        expr.setTableToken(token);
+    }
     
 }

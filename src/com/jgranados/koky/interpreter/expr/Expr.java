@@ -16,20 +16,25 @@ public class Expr {
     private SymbolsTable table;
     private Token id;
     private int literalValue;
+    private String ambit;
+    private Token tableToken;
 
     public Expr(int operator, Expr left, Expr right) {
         this.operator = operator;
         this.left = left;
         this.right = right;
+        this.ambit = AmbitEnum.GLOBAL.name();
     }
-    
+
     public Expr(String literalValue) {
         this.literalValue = Integer.valueOf(literalValue);
+        this.ambit = AmbitEnum.GLOBAL.name();
     }
-    
+
     public Expr(Token id, SymbolsTable table) {
         this.table = table;
         this.id = id;
+        this.ambit = AmbitEnum.GLOBAL.name();
     }
 
     public int operate() {
@@ -61,9 +66,36 @@ public class Expr {
 
     private int getValue() {
         if (id != null) {
-            return table.getIdValue(id);
+            if (this.getAmbit()==null || this.getAmbit().equals(AmbitEnum.GLOBAL.name())) {
+                return (Integer) table.getIdValue(id);
+            } else if (this.getAmbit().equals(AmbitEnum.LOCAL.name())) {
+                if (tableToken != null) {
+                    SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
+                    return (Integer) sym.getIdValue(id);
+                } else {
+                    return literalValue;
+                }
+            }
         }
         return literalValue;
     }
 
+    public String getAmbit() {
+        return ambit;
+    }
+
+    public void setAmbit(String ambit) {
+        this.ambit = ambit;
+    }
+
+    public Token getTableToken() {
+        return tableToken;
+    }
+
+    public void setTableToken(Token tableToken) {
+        this.tableToken = tableToken;
+    }
+
+    
+    
 }

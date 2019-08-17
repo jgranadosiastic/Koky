@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class SymbolsTable {
 
-    private Map<String, Integer> symTable;
+    private Map<String, Object> symTable;
     private List<String> errorsList;
 
     public SymbolsTable(List<String> errorsList) {
@@ -23,7 +23,7 @@ public class SymbolsTable {
     }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
-        Integer value = this.symTable.get(id.getLexeme());
+        Object value = this.symTable.get(id.getLexeme());
         if (value == null) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("La variable '%s' no se ha creado en el archivo que estoy leyendo, linea %d columna %d. Debe crear la variable antes de usarla.", id.getLexeme(), id.getLine(), id.getColumn()));
@@ -35,7 +35,7 @@ public class SymbolsTable {
         return true;
     }
 
-    public Integer getIdValue(Token id) {
+    public Object getIdValue(Token id) {
         return this.symTable.get(id.getLexeme());
     }
 
@@ -49,6 +49,29 @@ public class SymbolsTable {
             return false;
         }
         symTable.put(id.getLexeme(), value);
+        return true;
+    }
+    
+    public SymbolsTable createSymTable(List<Token> parameters,boolean isAnalyzingFile){
+        SymbolsTable sym = new SymbolsTable(this.errorsList);
+        for (Token parameter : parameters) {
+            sym.addId(parameter, 0, isAnalyzingFile);
+        }
+        
+        return sym;
+    }
+    
+    public boolean addSymTable(Token id, SymbolsTable sym, boolean isAnalyzingFile) {
+        if (this.symTable.containsKey(id.getLexeme())) {
+            if (isAnalyzingFile) {
+                errorsList.add(String.format("La variable '%s' que intenta declar en el archivo que estoy leyendo, linea %d columna %d ya fue declarada anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
+            } else {
+                errorsList.add(String.format("La variable '%s' que intenta declar ya fue declarada anteriormente en el area de instrucciones.", id.getLexeme()));
+            }
+            return false;
+        }
+        
+        this.symTable.put(id.getLexeme(), sym);
         return true;
     }
     
@@ -70,12 +93,20 @@ public class SymbolsTable {
         this.symTable.clear();
     }
 
-    public Map<String, Integer> getSymTable() {
+    public Map<String, Object> getSymTable() {
         return symTable;
     }
 
-    public void setSymTable(Map<String, Integer> symTable) {
+    public void setSymTable(Map<String, Object> symTable) {
         this.symTable = symTable;
+    }
+
+    public List<String> getErrorsList() {
+        return errorsList;
+    }
+
+    public void setErrorsList(List<String> errorsList) {
+        this.errorsList = errorsList;
     }
     
     

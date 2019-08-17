@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 
 /**
@@ -25,6 +26,18 @@ public class PositionXYInstruction extends PositionInstruction {
     @Override
     protected Integer getPositionY(KokyPointer currentPointer) {
         return posY.operate();
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        posX.setAmbit(this.getAmbit());
+        posY.setAmbit(this.getAmbit());
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        posX.setTableToken(token);
+        posY.setTableToken(token);
     }
 
 }
