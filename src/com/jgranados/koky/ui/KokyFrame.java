@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -43,6 +44,8 @@ public class KokyFrame extends javax.swing.JFrame {
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
+    private ArrayList<String> historyInput = new ArrayList<>();
+    private int history=0;
 
     /**
      * Creates new form KokFrame
@@ -298,11 +301,24 @@ public class KokyFrame extends javax.swing.JFrame {
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
-                if (!input.endsWith(this.lastInput)) {
+                history--;
+                if (history >= 0) {                    
+                    this.txtInstruction.setText(historyInput.get(history));                    
+                } else {
+                    history = 0;
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                history++;
+                if(history < historyInput.size()) {
+                    this.txtInstruction.setText(historyInput.get(history));
+                } else {
                     this.txtInstruction.setText(lastInput);
+                    history = historyInput.size();
                 }
                 break;
             default:
+                lastInput = this.txtInstruction.getText();
                 break;
         }
     }//GEN-LAST:event_txtInstructionKeyReleased

@@ -17,6 +17,7 @@ public class KokyPointer {
     private static final String IMG_URL = "/com/jgranados/koky/ui/images/kok_pointer_32.png";
 
     public static final int IMG_SIZE = 32;
+    public static final int BRUSH_WIDTH = 2;
     private int posX;
     private int posY;
     private int angle;
@@ -28,8 +29,9 @@ public class KokyPointer {
     private PanelDraw panelToDraw;
     private double accumulationX;
     private double accumulationY;
+    private int width;
 
-    public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw) {
+    public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw,int width) {
         this.posX = posX;
         this.posY = posY;
         this.angle = angle;
@@ -40,6 +42,7 @@ public class KokyPointer {
         }
         this.penColor = Color.BLACK;
         this.panelToDraw = panelToDraw;
+        this.width = width;
     }
 
     public int getPosX() {
@@ -109,6 +112,14 @@ public class KokyPointer {
     public int getPanelDrawHeight() {
         return this.panelToDraw.getHeight();
     }
+    
+    public int getWidth() {
+        return this.width;
+    }
+    
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
     public void drawPointer(Graphics2D graphicsWithPointer) {
         if (!isHidden()) {
@@ -126,6 +137,7 @@ public class KokyPointer {
     public void resetPosition() {
         resetLocation();
         resetAngle();
+        resetWidth();
     }
 
     public void resetAngle() {
@@ -135,6 +147,10 @@ public class KokyPointer {
     public void resetLocation() {
         this.posX = this.getPanelDrawWidth() / 2;
         this.posY = this.getPanelDrawHeight() / 2;
+    }
+    
+    public void resetWidth() {
+        this.width = BRUSH_WIDTH;
     }
 
     public double getAccumulationX() {
