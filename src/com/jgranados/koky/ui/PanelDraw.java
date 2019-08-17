@@ -11,7 +11,13 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -27,6 +33,7 @@ public class PanelDraw extends javax.swing.JPanel {
     private BufferedImage imageNoPointer;
     private Graphics2D graphicsWithPointer;
     private Graphics2D graphicsNoPointer;
+    File f = null;
 
     /**
      * Creates new form PanelDraw
@@ -100,6 +107,34 @@ public class PanelDraw extends javax.swing.JPanel {
         // adding the pointer to the draw
         kokyPointer.drawPointer(graphicsWithPointer);
         this.repaint();
+    }
+    
+    public void generateImg() {
+
+        JFileChooser fileChooser = new JFileChooser();
+        int seleccion = fileChooser.showSaveDialog(null);
+        try {
+            
+            if (seleccion == JFileChooser.APPROVE_OPTION) {
+                File JFC = fileChooser.getSelectedFile();
+                String PATH = JFC.getAbsolutePath();//Obtains the path to use
+                f = new File(PATH);
+                try {
+                    ImageIO.write(imageWithPointer, "jpg", f);
+                } catch (IOException ex) {
+                    Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //Checks if the user puts the file extension in the name
+                if (!(PATH.endsWith(".jpg"))) {
+                    File temp = new File(PATH + ".jpg");
+                    JFC.renameTo(temp);//If not, we add it manually
+                }
+                JOptionPane.showMessageDialog(null, "¡Imagen guardada exitosamente!", "Guardado correcto", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {//In case of any problem, the program sends an error message
+            JOptionPane.showMessageDialog(null, "Ups! Hubo un error al guardar el archivo.", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 }

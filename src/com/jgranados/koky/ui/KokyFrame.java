@@ -40,7 +40,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private SymbolsTable instructionsSymTable;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
-    private int history=0;
+    private int history = 0;
 
     /**
      * Creates new form KokFrame
@@ -91,6 +91,8 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -245,6 +247,19 @@ public class KokyFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu1.setText("Exportar");
+
+        jMenuItem1.setText("Guardar Imagen");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,7 +315,7 @@ public class KokyFrame extends javax.swing.JFrame {
                 parseInstruction(input);
                 this.txtInstructions.append(input + LINE);
                 this.txtInstruction.setText("");
-                addErrorMessages(this.myLexer.getErrorsList());                
+                addErrorMessages(this.myLexer.getErrorsList());
                 historyInput.add(input);
                 history = historyInput.size();
                 lastInput = "";
@@ -308,15 +323,15 @@ public class KokyFrame extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 // remember the last command
                 history--;
-                if (history >= 0) {                    
-                    this.txtInstruction.setText(historyInput.get(history));                    
+                if (history >= 0) {
+                    this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     history = 0;
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 history++;
-                if(history < historyInput.size()) {
+                if (history < historyInput.size()) {
                     this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     this.txtInstruction.setText(lastInput);
@@ -358,6 +373,10 @@ public class KokyFrame extends javax.swing.JFrame {
         KokyImageDialog k = new KokyImageDialog(this, true, panelDraw);
         k.setVisible(true);
     }//GEN-LAST:event_btnChangeImageActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        panelDraw.generateImg();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -433,8 +452,10 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JEditorPane helpPane;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
