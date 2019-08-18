@@ -19,6 +19,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -35,17 +36,18 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     public static final String KOK_EXTENSION = "kok";
     public static final String KOK_EXTENSION_DESC = "Archivos Kok";
-
-    public static final String CLEARS = "clears";
-    public static final String LINE = "\n";
-    public static final String BR = "<br>";
+    private static final String JPG_FILE_EXTENSION = "jpg";
+    private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
+    private static final String CLEARS = "clears";
+    private static final String LINE = "\n";
+    private static final String BR = "<br>";
     private Lexer myLexer;
     private Parser myParser;
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
-    private int history=0;
+    private int history = 0;
 
     /**
      * Creates new form KokFrame
@@ -92,9 +94,12 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        bntOpenFile = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
+        exportMenu = new javax.swing.JMenu();
+        changeVarNameMenu = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -229,11 +234,11 @@ public class KokyFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(btnOpenFIle);
 
-        jMenu2.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu2.setText("Ayuda");
+        helpMenu.setForeground(new java.awt.Color(255, 255, 255));
+        helpMenu.setText("Ayuda");
 
         btnInstructions.setText("Instrucciones");
-        jMenu2.add(btnInstructions);
+        helpMenu.add(btnInstructions);
 
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -241,9 +246,22 @@ public class KokyFrame extends javax.swing.JFrame {
                 btnAboutActionPerformed(evt);
             }
         });
-        jMenu2.add(btnAbout);
+        helpMenu.add(btnAbout);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(helpMenu);
+
+        exportMenu.setForeground(new java.awt.Color(255, 255, 255));
+        exportMenu.setText("Exportar");
+
+        changeVarNameMenu.setText("Guardar Imagen");
+        changeVarNameMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeVarNameMenuActionPerformed(evt);
+            }
+        });
+        exportMenu.add(changeVarNameMenu);
+
+        jMenuBar1.add(exportMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -302,15 +320,15 @@ public class KokyFrame extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 // remember the last command
                 history--;
-                if (history >= 0) {                    
-                    this.txtInstruction.setText(historyInput.get(history));                    
+                if (history >= 0) {
+                    this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     history = 0;
                 }
                 break;
             case KeyEvent.VK_DOWN:
                 history++;
-                if(history < historyInput.size()) {
+                if (history < historyInput.size()) {
                     this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     this.txtInstruction.setText(lastInput);
@@ -343,15 +361,20 @@ public class KokyFrame extends javax.swing.JFrame {
         saveInstructionsToFile();
     }//GEN-LAST:event_btnSaveInstructionsMenuItemActionPerformed
 
-    private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
-        new EditorFrame(this);
-    }//GEN-LAST:event_btnOpenEditorActionPerformed
+    private void bntOpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntOpenFileActionPerformed
+        saveFileChooser.showOpenDialog(this);
+        // TODO open dialog frame
+    }//GEN-LAST:event_bntOpenFileActionPerformed
 
-    private void txtInstructionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInstructionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtInstructionActionPerformed
-    
-    //Metodo para parsear
+    private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
+        KokyImageDialog k = new KokyImageDialog(this, true, panelDraw);
+        k.setVisible(true);
+    }//GEN-LAST:event_btnChangeImageActionPerformed
+
+    private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
+       generateImage();
+    }//GEN-LAST:event_changeVarNameMenuActionPerformed
+
     public void run(String input) {
         parseInstruction("clears\n");
         parseInstruction(input);
@@ -363,6 +386,30 @@ public class KokyFrame extends javax.swing.JFrame {
     
     public String getCurrentLine() {
         return txtInstruction.getText();
+    }
+
+    public void generateImage() {
+        JFileChooser locationFileChooser = new JFileChooser();
+        int selection = locationFileChooser.showSaveDialog(null);
+        try {
+            if (selection == JFileChooser.APPROVE_OPTION) {
+                File fileToExport = locationFileChooser.getSelectedFile();
+                String filePath = fileToExport.getAbsolutePath();//Obtains the path to use
+                try {
+                    ImageIO.write(panelDraw.returnDraw(), JPG_FILE_EXTENSION, fileToExport);
+                } catch (IOException ex) {
+                    Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //Checks if the user puts the file extension in the end of the file name
+                if (!(filePath.endsWith(JPG__DOT_FILE_EXTENSION))) {
+                    File temp = new File(filePath + JPG__DOT_FILE_EXTENSION);
+                    fileToExport.renameTo(temp);//If not, we add it manually
+                }
+                JOptionPane.showMessageDialog(null, "¡Imagen guardada exitosamente!", "Guardado correcto", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {//In case of any problem, the program sends an error message
+            JOptionPane.showMessageDialog(null, "¡Ups! Hubo un error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void addErrorMessages(List<String> messages) {
@@ -433,7 +480,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return file.getName();
     }
-    
+
     public void openInstructionsFromFile() {
         saveFileChooser.showOpenDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
@@ -445,7 +492,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
-    
+
     public File openFile() {
         int status = saveFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
@@ -463,8 +510,10 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
+    private javax.swing.JMenuItem changeVarNameMenu;
+    private javax.swing.JMenu exportMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
