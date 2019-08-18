@@ -26,9 +26,9 @@ public class SymbolsTable {
         Object value = this.symTable.get(id.getLexeme());
         if (value == null) {
             if (isAnalyzingFile) {
-                errorsList.add(String.format("La variable '%s' no se ha creado en el archivo que estoy leyendo, linea %d columna %d. Debe crear la variable antes de usarla.", id.getLexeme(), id.getLine(), id.getColumn()));
+                errorsList.add(String.format("El Procedimiento '%s' no se ha declarado en el archivo que estoy leyendo, linea %d columna %d. Debe Declararlo para poder llamarlo.", id.getLexeme(), id.getLine(), id.getColumn()));
             } else {
-                errorsList.add(String.format("La variable '%s' no se ha creado en el area de instrucciones. Ingrese una instrucción para crear la variable.", id.getLexeme()));
+                errorsList.add(String.format("El Procedimiento '%s' no se ha declarado en el area de instrucciones. Debe declararlo para poder llamarlo.", id.getLexeme()));
             }
             return false;
         }
@@ -55,7 +55,7 @@ public class SymbolsTable {
     public SymbolsTable createSymTable(List<Token> parameters,boolean isAnalyzingFile){
         SymbolsTable sym = new SymbolsTable(this.errorsList);
         for (Token parameter : parameters) {
-            sym.addId(parameter, 0, isAnalyzingFile);
+            sym.addId(parameter, 0, isAnalyzingFile);      
         }
         
         return sym;

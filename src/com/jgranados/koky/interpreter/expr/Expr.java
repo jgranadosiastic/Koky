@@ -48,7 +48,15 @@ public class Expr {
             case sym.DIV:
                 return left.operate() / right.operate();
             default:
-                return getValue();
+                if (getValue()!=-1) {
+                    return getValue();
+                } else {
+                    if (table.getErrorsList().isEmpty()) {
+                       table.getErrorsList().add(String.format("La variable '%s' no ha sido declarada en ningun momento, linea %d columna %d.", id.getLexeme(), id.getLine(), id.getColumn())); 
+                    }
+                    return 0;
+                }
+                
         }
     }
 
@@ -67,13 +75,21 @@ public class Expr {
     private int getValue() {
         if (id != null) {
             if (this.getAmbit()==null || this.getAmbit().equals(AmbitEnum.GLOBAL.name())) {
-                System.out.println("Entro a la tabla global: "+table.getIdValue(id));
-                return (Integer) table.getIdValue(id);
+                if ((Integer) table.getIdValue(id)!=null) {
+                    return (Integer) table.getIdValue(id);
+                } else {
+                    return -1;
+                }
+                
             } else if (this.getAmbit().equals(AmbitEnum.LOCAL.name())) {
                 if (tableToken != null) {
                     SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
                     if (sym.getIdValue(id)==null) {
-                        return (Integer) table.getIdValue(id);
+                        if ((Integer) table.getIdValue(id)!=null) {
+                            return (Integer) table.getIdValue(id);
+                        } else {
+                            return -1;
+                        }      
                     } else {
                         return (Integer) sym.getIdValue(id);
                     }

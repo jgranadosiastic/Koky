@@ -41,10 +41,9 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
         if (this.symbolsTable.exists(procedureName, true)) {
             boolean flag = true;
             //I compare if the number of parameters to send is equal to the number of parameters to receive in the procedure 
-            if (parameters.size() != this.proceduresTable.getParametersTable().get(procedureName.getLexeme()).size()) {
-                executionDescription = "El Procedimiento ->" + procedureName.getLexeme() + " No se puede ejecutar por inconcistencias en los parametros";
+            if (this.proceduresTable.compareSentParameters(parameters, procedureName.getLexeme())==false) {
+                //executionDescription = "El Procedimiento ->" + procedureName.getLexeme() + " No se puede ejecutar por inconcistencias en los parametros";
                 flag = false;
-
             }
             if (flag) {
                 //executing instructions

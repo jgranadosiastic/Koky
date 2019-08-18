@@ -1,6 +1,7 @@
 
 package com.jgranados.koky.interpreter.symbolstable;
 import com.jgranados.koky.instructions.Instruction;
+import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import java.util.HashMap;
 import java.util.List;
@@ -23,14 +24,23 @@ public class ProcedureTable {
         this.temporarySymbolTable = new SymbolsTable();
         
     }
+    public boolean compareSentParameters(List<Expr> list, String procedureName){
+        if (list.size()!=parametersTable.get(procedureName).size()) {
+            errorsList.add(String.format("El procedimiento '%s' no se puede ejecutar por inconsistencias en los parametros", procedureName));
+            return false;
+        } else {
+            return true;
+        }
+    
+    }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
         List<Instruction> list = this.procedureTable.get(id.getLexeme());
         if (list == null) {
             if (isAnalyzingFile) {
-                errorsList.add(String.format("La variable '%s' para la funcion no se ha creado en el archivo que estoy leyendo, linea %d columna %d. Debe crear la variable antes de usarla.", id.getLexeme(), id.getLine(), id.getColumn()));
+                errorsList.add(String.format("El Procedimiento '%s' no se ha declarado en el archivo que estoy leyendo, linea %d columna %d. Debe Declararlo para poder llamarlo.", id.getLexeme(), id.getLine(), id.getColumn()));
             } else {
-                errorsList.add(String.format("La variable '%s' para la funcion no se ha creado en el area de instrucciones. Ingrese una instrucción para crear la variable.", id.getLexeme()));
+                errorsList.add(String.format("El Procedimiento '%s' no se ha declarado en el area de instrucciones. Debe declararlo para poder llamarlo.", id.getLexeme()));
             }
             return false;
         }
@@ -67,21 +77,6 @@ public class ProcedureTable {
         this.procedureTable.clear();
         this.parametersTable.clear();
     }
-    
-    
-    public boolean sameParameters(Token id, List<Token> list,boolean isAnalyzingFile) {
-        List<Token> parameters = parametersTable.get(id.getLexeme());
-        if (parameters.size() == list.size()) {
-            return true;
-        } else {
-            if (isAnalyzingFile) {
-                errorsList.add(String.format("El numero de los parametros de la funcion '%s' no son los mismos que los que se le estan tratando de asignar  en el archivo que estoy leyendo, linea %d columna %d.", id.getLexeme(), id.getLine(), id.getColumn()));
-            } else {
-                errorsList.add(String.format("El numero de los parametros de la funcion '%s' no son los mismos que los que se le estan tratando de asignar en el area de instrucciones en otra funcion.", id.getLexeme()));
-            }
-            return false;
-        }
-    }
 
     public Map<String, List<Instruction>> getProcedureTable() {
         return procedureTable;
@@ -101,9 +96,6 @@ public class ProcedureTable {
 
     public void setParametersTable(Map<String, List<Token>> parametersTable) {
         this.parametersTable = parametersTable;
-        
-        
-        
         
     }
 
