@@ -13,12 +13,12 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 
 public class EditorFrame extends javax.swing.JFrame {
-    
+
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
     private int unnamedTabs;
-    
-    
+
+
     public EditorFrame(KokyFrame kokyFrame) {
         initComponents();
         this.kokyFrame = kokyFrame;
@@ -29,7 +29,7 @@ public class EditorFrame extends javax.swing.JFrame {
         this.undoFile.setEnabled(true);
         this.redoFile.setEnabled(true);
     }
-    
+
     public EditorFrame(String text,String name,KokyFrame kokyFrame) {
         initComponents();
         this.setVisible(true);
@@ -39,11 +39,11 @@ public class EditorFrame extends javax.swing.JFrame {
         this.addTab(text,name);
         this.undoFile.setEnabled(true);
         this.redoFile.setEnabled(true);
-        
+
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    //GEN-BEGIN:initComponents
     private void initComponents() {
 
         saveFileChooser = new javax.swing.JFileChooser();
@@ -222,7 +222,7 @@ public class EditorFrame extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
     private void btnSaveInstructionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsMenuItemActionPerformed
         String name = kokyFrame.saveInstructionsToFile();
@@ -282,7 +282,7 @@ public class EditorFrame extends javax.swing.JFrame {
         try {
             undoManager.undo();
         } catch (CannotRedoException ex) {
-            
+
         }
     }//GEN-LAST:event_undoFileActionPerformed
 
@@ -290,7 +290,7 @@ public class EditorFrame extends javax.swing.JFrame {
         try {
             undoManager.redo();
         } catch (CannotRedoException cre) {
-            
+
         }
     }//GEN-LAST:event_redoFileActionPerformed
 
@@ -305,7 +305,7 @@ public class EditorFrame extends javax.swing.JFrame {
         this.undoManager = newTab.getManager();
         Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
     }
-    
+
     public void addTab(String input,String name) {
         InputTab newTab = new InputTab(name);
         newTab.setText(input);
@@ -313,7 +313,7 @@ public class EditorFrame extends javax.swing.JFrame {
         this.undoManager = newTab.getManager();
         Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
     }
-    
+
     public void openFile(){
         File file = kokyFrame.openFile();
         String name = file.getName();
@@ -328,12 +328,12 @@ public class EditorFrame extends javax.swing.JFrame {
             Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         addTab(buffer,name);
-        
-        
+
+
         this.setVisible(true);
     }
-    
-    
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Inputs;
