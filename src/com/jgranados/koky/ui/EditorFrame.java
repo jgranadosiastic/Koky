@@ -18,8 +18,6 @@ import javax.swing.undo.UndoManager;
  */
 public class EditorFrame extends javax.swing.JFrame {
     
-    private static final String KOK_EXTENSION = "kok";
-    private static final String KOK_EXTENSION_DESC = "Archivos Kok";
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
     private int unnamedTabs;
@@ -30,7 +28,7 @@ public class EditorFrame extends javax.swing.JFrame {
         this.kokyFrame = kokyFrame;
         this.setVisible(true);
         this.unnamedTabs = 0;
-        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KokyFrame.KOK_EXTENSION_DESC, KokyFrame.KOK_EXTENSION));
         this.addTab();
         this.undoFile.setEnabled(true);
         this.redoFile.setEnabled(true);
@@ -41,7 +39,7 @@ public class EditorFrame extends javax.swing.JFrame {
         this.setVisible(true);
         this.kokyFrame = kokyFrame;
         this.unnamedTabs = 0;
-        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KokyFrame.KOK_EXTENSION_DESC, KokyFrame.KOK_EXTENSION));
         this.addTab(text,name);
         this.undoFile.setEnabled(true);
         this.redoFile.setEnabled(true);

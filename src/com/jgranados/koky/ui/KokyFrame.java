@@ -32,8 +32,8 @@ import javax.swing.text.html.HTMLDocument;
 public class KokyFrame extends javax.swing.JFrame {
 
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
-    private static final String KOK_EXTENSION = "kok";
-    private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    public static final String KOK_EXTENSION = "kok";
+    public static final String KOK_EXTENSION_DESC = "Archivos Kok";
 
     private static final String CLEARS = "clears";
     private static final String LINE = "\n";
@@ -84,11 +84,11 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
-        btnOpenEditor = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
@@ -112,11 +112,6 @@ public class KokyFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(txtInstructions);
 
         txtInstruction.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        txtInstruction.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtInstructionActionPerformed(evt);
-            }
-        });
         txtInstruction.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtInstructionKeyReleased(evt);
@@ -182,22 +177,12 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
-        btnOpenEditor.setBackground(new java.awt.Color(255, 255, 255));
-        btnOpenEditor.setForeground(new java.awt.Color(0, 153, 0));
-        btnOpenEditor.setText("Editor de Texto");
-        btnOpenEditor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOpenEditorActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnOpenEditor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,8 +190,7 @@ public class KokyFrame extends javax.swing.JFrame {
                 .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(btnOpenEditor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -223,6 +207,15 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
         btnOpenFIle.add(btnSaveInstructionsMenuItem);
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("Abrir el Editor de Texto");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        btnOpenFIle.add(jCheckBoxMenuItem1);
 
         jMenuBar1.add(btnOpenFIle);
 
@@ -327,14 +320,10 @@ public class KokyFrame extends javax.swing.JFrame {
         saveInstructionsToFile();
     }//GEN-LAST:event_btnSaveInstructionsMenuItemActionPerformed
 
-    private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
         new EditorFrame(this);
-    }//GEN-LAST:event_btnOpenEditorActionPerformed
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
 
-    private void txtInstructionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInstructionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtInstructionActionPerformed
-    
     //Metodo para parsear
     public void run(String input) {
         parseInstruction("clears\n");
@@ -344,7 +333,7 @@ public class KokyFrame extends javax.swing.JFrame {
         addErrorMessages(this.myLexer.getErrorsList());
         lastInput = input;
     }
-    
+
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -417,7 +406,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return file.getName();
     }
-    
+
     public void openInstructionsFromFile() {
         saveFileChooser.showOpenDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
@@ -429,7 +418,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
-    
+
     public File openFile() {
         int status = saveFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
@@ -443,11 +432,11 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
-    private javax.swing.JButton btnOpenEditor;
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JEditorPane helpPane;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
