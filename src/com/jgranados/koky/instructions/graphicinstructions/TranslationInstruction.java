@@ -17,9 +17,9 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
         if (TranslationUtils.isOutOfRange(endPosX, endPosY)) {
-            EndPosition ep = TranslationUtils.getEndPosition(new EndPosition(endPosX, endPosY), currentPointer);
-            endPosX = ep.getEndPosX();
-            endPosY = ep.getEndPosY();
+            EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(endPosX, endPosY), currentPointer);
+            endPosX = endPosition.getEndPosX();
+            endPosY = endPosition.getEndPosY();
         }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));

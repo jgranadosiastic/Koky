@@ -11,7 +11,13 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -27,6 +33,7 @@ public class PanelDraw extends javax.swing.JPanel {
     private BufferedImage imageNoPointer;
     private Graphics2D graphicsWithPointer;
     private Graphics2D graphicsNoPointer;
+    
 
     /**
      * Creates new form PanelDraw
@@ -100,6 +107,10 @@ public class PanelDraw extends javax.swing.JPanel {
         // adding the pointer to the draw
         kokyPointer.drawPointer(graphicsWithPointer);
         this.repaint();
+    }
+    
+    public BufferedImage returnDraw(){
+    return imageWithPointer;
     }
 
 }
