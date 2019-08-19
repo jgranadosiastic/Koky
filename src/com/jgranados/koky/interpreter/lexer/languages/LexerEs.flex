@@ -1,4 +1,4 @@
-package com.jgranados.koky.interpreter.lexer;
+package com.jgranados.koky.interpreter.lexer.languages;
 
 import java_cup.runtime.*;
 import com.jgranados.koky.interpreter.token.Token;
@@ -10,7 +10,7 @@ import com.jgranados.koky.instructions.logic.Messages;
 
 %%
 
-%class Lexer
+%class LexerEs
 %public
 %cup
 %line
@@ -43,18 +43,23 @@ F_ = [fF]
 G_ = [gG]
 H_ = [hH]
 I_ = [iI]
+J_ = [jJ]
 K_ = [kK]
 L_ = [lL]
+M_ = [mM]
 N_ = [nN]
 O_ = [oO]
 P_ = [pP]
+Q_ = [qQ]
 R_ = [rR]
 S_ = [sS]
 T_ = [tT]
 U_ = [uU]
+V_ = [vV]
 W_ = [wW]
 X_ = [xX]
 Y_ = [yY]
+Z_ = [zZ]
 
 /* comments */
 Comment     = "#" [^\r\n]*
@@ -78,8 +83,10 @@ Comment     = "#" [^\r\n]*
 
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
+            System.out.printf("No entiendo el texto %s en la linea %d, columna %d. Borralo e intenta de nuevo.\n", lexeme, yyline + 1, yycolumn + 1);
             errorsList.add(message.errorLexer(lexeme));
         } else {
+            System.out.printf("No entiendo el texto %s en la instruccion. Borralo e intenta de nuevo.\n", lexeme);
             errorsList.add(message.errorLexer(lexeme));
         }
     }
@@ -122,42 +129,40 @@ Comment     = "#" [^\r\n]*
     "="                             {   return symbol(EQ);                          }
 
     /* Reserved words */
-    {F_}{O_}{R_}{W_}{A_}{R_}{D_}        {   return symbol(FORWARD);                     }
-    {F_}{D_}                            {   return symbol(FORWARD);                     }
-    {B_}{A_}{C_}{K_}{W_}{A_}{R_}{D_}    {   return symbol(BACKWARD);                    }
-    {B_}{K_}                            {   return symbol(BACKWARD);                    }
-    {R_}{I_}{G_}{H_}{T_}                {   return symbol(RIGHT);                       }
-    {R_}{T_}                            {   return symbol(RIGHT);                       }
-    {L_}{E_}{F_}{T_}                    {   return symbol(LEFT);                        }
-    {L_}{T_}                            {   return symbol(LEFT);                        }
-    {C_}{L_}{E_}{A_}{R_}{S_}            {   return symbol(CLEARS);                      }
-    {C_}{S_}                            {   return symbol(CLEARS);                      }
-    {P_}{E_}{N_}{U_}{P_}                {   return symbol(PENUP);                       }
-    {P_}{U_}                            {   return symbol(PENUP);                       }
-    {P_}{E_}{N_}{D_}{O_}{W_}{N_}        {   return symbol(PENDOWN);                     }
-    {P_}{D_}                            {   return symbol(PENDOWN);                     }
-    {T_}{O_}{C_}{E_}{N_}{T_}{E_}{R_}    {   return symbol(TOCENTER);                    }
+    {A_}{V_}{A_}{N_}{Z_}{A_}{R_}        {   return symbol(FORWARD);                     }
+    {A_}{R_}                            {   return symbol(FORWARD);                     }
+    {R_}{E_}{T_}{R_}{O_}{C_}{E_}{D_}{E_}{R_} {   return symbol(BACKWARD);                    }
+    {R_}{R_}                            {   return symbol(BACKWARD);                    }
+    {D_}{E_}{R_}{E_}{C_}{H_}{A_}        {   return symbol(RIGHT);                       }
+    {D_}{A_}                            {   return symbol(RIGHT);                       }
+    {I_}{Z_}{Q_}{U_}{I_}{E_}{R_}{D_}{A_} {   return symbol(LEFT);                        }
+    {I_}{A_}                            {   return symbol(LEFT);                        }
+    {L_}{I_}{M_}{P_}{I_}{A_}{R_}        {   return symbol(CLEARS);                      }
+    {L_}{R_}                            {   return symbol(CLEARS);                      }
+    {L_}{E_}{V_}{A_}{N_}{T_}{A_}{R_}    {   return symbol(PENUP);                       }
+    {L_}{V_}                            {   return symbol(PENUP);                       }
+    {B_}{A_}{J_}{A_}{R_}                {   return symbol(PENDOWN);                     }
+    {B_}{R_}                            {   return symbol(PENDOWN);                     }
+    {A_}{L_}{C_}{E_}{N_}{T_}{R_}{O_}    {   return symbol(TOCENTER);                    }
     {C_}{R_}                            {   return symbol(TOCENTER);                    }
     {C_}{O_}{L_}{O_}{R_}                {   return symbol(COLOR);                       }
-    {P_}{O_}{S_}{I_}{T_}{I_}{O_}{N_}{X_}{Y_}    {   return symbol(POSITIONXY);          }
+    {P_}{O_}{S_}{I_}{C_}{I_}{O_}{N_}{X_}{Y_}    {   return symbol(POSITIONXY);          }
     {P_}{O_}{S_}{X_}{Y_}                        {   return symbol(POSITIONXY);          }
-    {P_}{O_}{S_}{I_}{T_}{I_}{O_}{N_}{X_}        {   return symbol(POSITIONX);           }
+    {P_}{O_}{S_}{I_}{C_}{I_}{O_}{N_}{X_}        {   return symbol(POSITIONX);           }
     {P_}{O_}{S_}{X_}                            {   return symbol(POSITIONX);           }
-    {P_}{O_}{S_}{I_}{T_}{I_}{O_}{N_}{Y_}        {   return symbol(POSITIONY);           }
+    {P_}{O_}{S_}{I_}{C_}{I_}{O_}{N_}{Y_}        {   return symbol(POSITIONY);           }
     {P_}{O_}{S_}{Y_}                            {   return symbol(POSITIONY);           }
-    {H_}{I_}{D_}{E_}{T_}{U_}{R_}{T_}{L_}{E_}    {   return symbol(HIDETURTLE);         }
-    {H_}{T_}                                    {   return symbol(HIDETURTLE);         }
-    {S_}{H_}{O_}{W_}{T_}{U_}{R_}{T_}{L_}{E_}    {   return symbol(SHOWTURTLE);          }
-    {S_}{T_}                                    {   return symbol(SHOWTURTLE);          }
-    {T_}{O_}{E_}{R_}{A_}{S_}{E_}                {   return symbol(TOERASE);             }
-    {T_}{E_}                                    {   return symbol(TOERASE);             }
-    {T_}{O_}{D_}{R_}{A_}{W_}                    {   return symbol(TODRAW);              }
-    {T_}{D_}                                    {   return symbol(TODRAW);              }
-    {R_}{E_}{P_}{E_}{A_}{T_}                    {   return symbol(REPEAT);              }
-    {W_}{I_}{D_}{T_}{H_}                        {   return symbol(WIDTH);               }
-    {W_}{D_}                                    {   return symbol(WIDTH);               }
-    
-
+    {T_}{A_}{P_}{A_}{R_}{T_}{O_}{R_}{T_}{U_}{G_}{A_}    {   return symbol(HIDETURTLE);         }
+    {T_}{T_}                                    {   return symbol(HIDETURTLE);         }
+    {V_}{E_}{R_}{T_}{O_}{R_}{T_}{U_}{G_}{A_}    {   return symbol(SHOWTURTLE);          }
+    {V_}{T_}                                    {   return symbol(SHOWTURTLE);          }
+    {B_}{O_}{R_}{R_}{A_}{D_}{O_}{R_}            {   return symbol(TOERASE);             }
+    {B_}{O_}                                    {   return symbol(TOERASE);             }
+    {D_}{I_}{B_}{U_}{J_}{A_}{R_}                {   return symbol(TODRAW);              }
+    {D_}{I_}                                    {   return symbol(TODRAW);              }
+    {R_}{E_}{P_}{E_}{T_}{I_}{R_}                {   return symbol(REPEAT);              }
+    {A_}{N_}{C_}{H_}{O_}                        {   return symbol(WIDTH);               }
+    {A_}{N_}                                    {   return symbol(WIDTH);               }
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
     {Comment}           {   /* ignoring */  }

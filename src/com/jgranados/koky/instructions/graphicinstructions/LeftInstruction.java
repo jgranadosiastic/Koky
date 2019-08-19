@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.jgranados.koky.instructions.logic.Messages;
 import java.awt.Graphics2D;
 
 /**
@@ -12,9 +13,10 @@ import java.awt.Graphics2D;
 public class LeftInstruction extends GraphicsInstruction implements ExecutionDescribable {
 
     private Expr angle;
-
+    private Messages message;
     public LeftInstruction(Expr angle) {
         this.angle = angle;
+        message = new Messages();
     }
     
     @Override
@@ -25,7 +27,7 @@ public class LeftInstruction extends GraphicsInstruction implements ExecutionDes
 
     @Override
     public String getExecutionDescription() {
-        return "Giré " + angle.operate() + " grados a la izquierda.";
+       return message.leftMessage(angle);
     }
     
 }

@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.ui.KokyPointer;
+import com.jgranados.koky.instructions.logic.Messages;
 
 /**
  *
@@ -10,6 +11,7 @@ import com.jgranados.koky.ui.KokyPointer;
 public abstract class PositionInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private KokyPointer currentPointer;
+    private Messages message = new Messages();    
     @Override
     protected Integer calculateEndX(KokyPointer currentPointer) {
         this.currentPointer = currentPointer;
@@ -53,6 +55,6 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
 
     @Override
     public String getExecutionDescription() {
-        return "Me moví a la posición (" + denormalizePosX() + ", " + denormalizePosY() + ").";
+        return message.positionMessage(denormalizePosX(), denormalizePosY());
     }
 }

@@ -6,6 +6,8 @@ import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
+
 
 /**
  *
@@ -16,7 +18,8 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     private Expr intColor;
     private String hexaColor;
     private boolean isIntColor;
-
+    private Messages message = new Messages();
+    
     public ColorInstruction(Expr color) {
         this.intColor = color;
         this.isIntColor = true;
@@ -40,6 +43,6 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public String getExecutionDescription() {
         ColorEnum color = ColorEnum.fromValue(intColor.operate());
-        return "Dibujaré con color " + color.toString();
+        return message.colorMessage(color);
     }
 }

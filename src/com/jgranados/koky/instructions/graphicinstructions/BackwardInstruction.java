@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
 
@@ -11,9 +12,11 @@ import com.jgranados.koky.ui.KokyPointer;
 public class BackwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-
+    private Messages message;
+    
     public BackwardInstruction(Expr steps) {
         this.steps = steps;
+        message = new Messages();
     }
 
     @Override
@@ -52,6 +55,6 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     public String getExecutionDescription() {
-        return "Retrocedí " + steps.operate() + " pasos.";
+        return message.bkMessage(steps);
     }
 }
