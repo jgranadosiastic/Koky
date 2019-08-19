@@ -115,11 +115,6 @@ public class KokyFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(txtInstructions);
 
         txtInstruction.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        txtInstruction.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtInstructionActionPerformed(evt);
-            }
-        });
         txtInstruction.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtInstructionKeyReleased(evt);
@@ -302,8 +297,8 @@ public class KokyFrame extends javax.swing.JFrame {
             case KeyEvent.VK_UP:
                 // remember the last command
                 history--;
-                if (history >= 0) {                    
-                    this.txtInstruction.setText(historyInput.get(history));                    
+                if (history >= 0) {
+                    this.txtInstruction.setText(historyInput.get(history));
                 } else {
                     history = 0;
                 }
@@ -347,10 +342,6 @@ public class KokyFrame extends javax.swing.JFrame {
         new EditorFrame(this);
     }//GEN-LAST:event_btnOpenEditorActionPerformed
 
-    private void txtInstructionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInstructionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtInstructionActionPerformed
-    
     //Metodo para parsear
     public void run(String input) {
         parseInstruction("clears\n");
@@ -360,7 +351,7 @@ public class KokyFrame extends javax.swing.JFrame {
         addErrorMessages(this.myLexer.getErrorsList());
         lastInput = input;
     }
-    
+
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -433,7 +424,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return file.getName();
     }
-    
+
     public void openInstructionsFromFile() {
         saveFileChooser.showOpenDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
@@ -445,7 +436,7 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
-    
+
     public File openFile() {
         int status = saveFileChooser.showOpenDialog(this);
         if (status == JFileChooser.APPROVE_OPTION) {
