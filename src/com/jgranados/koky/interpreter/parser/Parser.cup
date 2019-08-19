@@ -66,7 +66,7 @@ terminal Token          OPEN_BRACKET, CLOSE_BRACKET, OPEN_PAR, CLOSE_PAR, PLUS;
 terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
 terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
 terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
-terminal Token          TODRAW, REPEAT;
+terminal Token          TODRAW, REPEAT,WIDTH;
 
 /* Non-terminals */
 non terminal List<Instruction>          program, instructions, instructionsRepeat;
@@ -192,6 +192,14 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     {:  
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
+                    :}
+                | WIDTH expr:e LINE_TERMINATOR
+                    {:
+                        if(e.operate() > 0 && e.operate() < 16) {
+                            RESULT = new WidthInstruction(e);
+                        } else {
+                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
+                        }
                     :}
                 | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET LINE_TERMINATOR
                     {:
@@ -324,6 +332,14 @@ instructionRepeat ::=	 FORWARD expr:e
                     {:  
                         System.out.println("un TODRAW ");
                         RESULT = new ToggleDrawInstruction(true);
+                    :}
+                | WIDTH expr:e 
+                    {:
+                        if(e.operate() > 0 && e.operate() < 16) {
+                            RESULT = new WidthInstruction(e);
+                        } else {
+                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
+                        }
                     :}
                 | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET
                     {:

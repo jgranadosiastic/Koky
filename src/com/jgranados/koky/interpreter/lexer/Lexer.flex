@@ -146,8 +146,8 @@ Comment     = "#" [^\r\n]*
     {P_}{O_}{S_}{X_}                            {   return symbol(POSITIONX);           }
     {P_}{O_}{S_}{I_}{T_}{I_}{O_}{N_}{Y_}        {   return symbol(POSITIONY);           }
     {P_}{O_}{S_}{Y_}                            {   return symbol(POSITIONY);           }
-    {H_}{I_}{D_}{E_}{T_}{U_}{R_}{T_}{L_}{E_}    {   return symbol(HIDETURTLE);         }
-    {H_}{T_}                                    {   return symbol(HIDETURTLE);         }
+    {H_}{I_}{D_}{E_}{T_}{U_}{R_}{T_}{L_}{E_}    {   return symbol(HIDETURTLE);          }
+    {H_}{T_}                                    {   return symbol(HIDETURTLE);          }
     {S_}{H_}{O_}{W_}{T_}{U_}{R_}{T_}{L_}{E_}    {   return symbol(SHOWTURTLE);          }
     {S_}{T_}                                    {   return symbol(SHOWTURTLE);          }
     {T_}{O_}{E_}{R_}{A_}{S_}{E_}                {   return symbol(TOERASE);             }
@@ -155,6 +155,9 @@ Comment     = "#" [^\r\n]*
     {T_}{O_}{D_}{R_}{A_}{W_}                    {   return symbol(TODRAW);              }
     {T_}{D_}                                    {   return symbol(TODRAW);              }
     {R_}{E_}{P_}{E_}{A_}{T_}                    {   return symbol(REPEAT);              }
+    {W_}{I_}{D_}{T_}{H_}                        {   return symbol(WIDTH);               }
+    {W_}{D_}                                    {   return symbol(WIDTH);               }
+
 
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
