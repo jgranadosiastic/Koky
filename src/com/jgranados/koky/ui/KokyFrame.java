@@ -4,6 +4,7 @@ import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.lexer.Lexer;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -17,6 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -44,6 +47,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
+    
 
     /**
      * Creates new form KokFrame
@@ -96,6 +100,8 @@ public class KokyFrame extends javax.swing.JFrame {
         btnAbout = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         changeVarNameMenu = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -263,6 +269,19 @@ public class KokyFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(exportMenu);
 
+        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
+        jMenu1.setText("Interactivo");
+
+        jMenuItem1.setText("¡Tomar un reto!");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -381,6 +400,13 @@ public class KokyFrame extends javax.swing.JFrame {
        generateImage();
     }//GEN-LAST:event_changeVarNameMenuActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        Icon icono = new ImageIcon(getClass().getResource(ICON_URL));
+        String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
+        ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName);
+        challengesFrame.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
@@ -482,7 +508,9 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

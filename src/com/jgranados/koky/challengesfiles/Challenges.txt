@@ -1,0 +1,7 @@
+Crea un triangulo isósceles, escaleno y equilátero.
+Crea una flor utilizando circulos.
+Deberás dibujar una casa que tenga una puerta y una ventana.
+Esta es una opcion.
+Esta es la opcion 2.
+Esta es la opcion 3.
+Esta es la opcion 4.
