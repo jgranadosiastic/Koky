@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
@@ -60,7 +61,11 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     public void assignAmbitToExpresions() {
-        steps.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            steps.setAmbit(this.getAmbit());
+        }else{
+            steps.setAmbit(AmbitEnum.GLOBAL);
+        }
     }
 
     @Override

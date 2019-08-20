@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.varinstructions.Assignable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
@@ -38,7 +39,11 @@ public class RepeatInstruction extends GraphicsInstruction {
 
     @Override
     public void assignAmbitToExpresions() {
-        loops.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            loops.setAmbit(this.getAmbit());
+        }else{
+            loops.setAmbit(AmbitEnum.GLOBAL);
+        }
     }
 
     @Override

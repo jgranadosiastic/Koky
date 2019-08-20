@@ -1,6 +1,3 @@
-/*
- * Procedure call for execute
- */
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
@@ -39,13 +36,8 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
         addValueToParameters();
         //checking if the procedure name exists
         if (this.symbolsTable.exists(procedureName, true)) {
-            boolean flag = true;
             //I compare if the number of parameters to send is equal to the number of parameters to receive in the procedure 
-            if (this.proceduresTable.compareSentParameters(parameters, procedureName.getLexeme())==false) {
-                //executionDescription = "El Procedimiento ->" + procedureName.getLexeme() + " No se puede ejecutar por inconcistencias en los parametros";
-                flag = false;
-            }
-            if (flag) {
+            if (this.proceduresTable.compareSentParameters(parameters, procedureName.getLexeme())) {
                 //executing instructions
                 for (Instruction instruction : this.proceduresTable.getProcedureTable().get(procedureName.getLexeme())) {
                     instruction.assignAmbitToExpresions();
@@ -56,7 +48,7 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
                         ((Assignable) instruction).assign();
                     }
                 }
-                executionDescription = "Se ha Llamado al Procedimiento ->" + procedureName.getLexeme() + " y se ha ejecutado";
+                executionDescription = "Se llamo al Procedimiento ->" + procedureName.getLexeme();
 
             }
 
@@ -64,20 +56,17 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
             executionDescription = "El Procedimiento ->" + procedureName.getLexeme() + " que trata de llamar No existe";
         }
 
-        // Do nothing
         return graphicsNoPointer;
 
     }
 
     public void addValueToParameters() {
-        try {
-            SymbolsTable sym = (SymbolsTable) symbolsTable.getIdValue(procedureName);
-            List<Token> parameters = proceduresTable.getParameters(procedureName.getLexeme());
-            for (int i = 0; i < parameters.size(); i++) {
-                sym.assignValueToId(parameters.get(i), this.parameters.get(i).operate());
-            }
-        } catch (Exception e) {
+        SymbolsTable sym = (SymbolsTable) symbolsTable.getIdValue(procedureName);
+        List<Token> parameters = proceduresTable.getParameters(procedureName.getLexeme());
+        for (int i = 0; i < parameters.size(); i++) {
+            sym.assignValueToId(parameters.get(i), this.parameters.get(i).operate());
         }
+       
     }
     
     public void addTableTokenExpr(){

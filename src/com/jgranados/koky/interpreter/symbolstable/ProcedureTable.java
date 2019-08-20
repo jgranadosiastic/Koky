@@ -1,4 +1,3 @@
-
 package com.jgranados.koky.interpreter.symbolstable;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.expr.Expr;

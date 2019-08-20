@@ -96,13 +96,13 @@ program ::= instructions:list
 
 instructions ::= instructions:list instruction:ins
                     {:  
-                        list.add(ins); //esta lista viene de la primera instruccion encontrada, las demas instrucciones solo se agregan
+                        list.add(ins);
                         RESULT = list;
                     :}
                 | instruction:ins
                     {:
                         List<Instruction> instructions = new ArrayList<>();
-                        instructions.add(ins); //aquin se crea la lista de instrucciones y las demas solo se agregan
+                        instructions.add(ins);
                         RESULT = instructions;
                     :}
                 ;
@@ -207,14 +207,6 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
                     :}
-                /*Aqui se tendria que agregar la instruccion para funciones y hacer algo similar al repeat
-                	la gramatica posiblemente quedaria asi:
-					ESTABLECER  NOMBRE:FUN PARENT_A parametros:params parametro:param PARENT_C LLAVE_A instrucciones:intrucs instruccion:instruc LLAVE_C
-					***algo interesante es ver lo del salto de linea, al analizar el codigo creo que al presionar la tecla enter se envia
-						como salto de linea acontinuacion de la instruccion, lo que se podria hacer es mandar esta estructura sin saltos de lineas
-						e ir concatenando la estructura hasta que se arme por completo, la otra situcion es no ejecutar las instrucciones
-						que vienen dentro de la funcion sino hasta que se llame a la misma.
-                */
                 | ID:e LINE_TERMINATOR
                     {:
                         symTable.addId(e, 0, myLexer.isAnalyzingFile()); //clave
@@ -236,10 +228,9 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
                     SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    boolean flag = procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList);
-                    if(flag){
-                        procedureTable.addParameters(id, parametersList);//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(), parametersList,instructions, symTable);
+                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
+                        procedureTable.addParameters(id, parametersList);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
@@ -248,10 +239,9 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     {:
                     List<Token> parametersList = new ArrayList<>();
                     SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    boolean flag = procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList);
-                    if(flag){
-                        procedureTable.addParameters(id, parametersList);//guardando parametros
-                        RESULT = new ProcedureInstruction(id.getLexeme(),parametersList,instructions, symTable);
+                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
+                        procedureTable.addParameters(id, parametersList);
+                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
                     }else{
                         RESULT = new EmptyInstruction();
                     }
@@ -260,31 +250,23 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 
                 |CALL break ID:id break OPEN_PAR break expresions:expresions break CLOSE_PAR
                     {:
-                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
-                     if(flag){
-                        //agregar sameParameters 
+                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
                         RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
                      }
                      else{
-
                         RESULT = new EmptyInstruction();
                      }
 
                     :}
                 | CALL break ID:id  break OPEN_PAR break CLOSE_PAR
                     {:
-                     boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
-                     if(flag){
-                        //agregar sameParameters 
-                        RESULT = new ProcedureCall(new ArrayList<Expr>(), id,procedureTable,symTable);
-                     
+                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
+                        RESULT = new ProcedureCall(new ArrayList<Expr>(), id,procedureTable,symTable);           
                      }
                      else{
-
                         RESULT = new EmptyInstruction();
                      }
                     
-
                     :}
                 
                 ;
@@ -448,11 +430,7 @@ instructionVoid ::=	 FORWARD expr:e
 		
                 | CALL break ID:id  break OPEN_PAR break  expresions:expresions break CLOSE_PAR 
                     {:
-                    boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
-                     
-                     if(flag){
-                        //agregar same Parameters
-                        
+                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
                         RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
                      }
                      else{
@@ -462,22 +440,15 @@ instructionVoid ::=	 FORWARD expr:e
                     :}
                 | CALL break ID:id break OPEN_PAR break CLOSE_PAR
                     {:
-
-                    boolean flag = procedureTable.exists(id, myLexer.isAnalyzingFile());
-                     if(flag){
-                        // agregar same Paramters
-
+                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
                         RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
                      }
                      else{
                         RESULT = new EmptyInstruction();
                      }
                     
-
                     :}
                 ; 
-
-
 
 
 expr ::=    expr:e1 PLUS expr:e2
@@ -502,11 +473,7 @@ expr ::=    expr:e1 PLUS expr:e2
                 :}
             | ID:e
                 {:
-                    if (symTable.exists(e, myLexer.isAnalyzingFile())) {
-                        RESULT = new Expr(e, symTable);
-                    } else {
-                        RESULT = null;
-                    }
+                    RESULT = new Expr(e, symTable);
                 :}
             | INTEGER_LITERAL:e
                 {:
@@ -517,29 +484,3 @@ expr ::=    expr:e1 PLUS expr:e2
 syncToken ::=   FORWARD
                 | LINE_TERMINATOR 
                 ;
-
-/*
-CAMBIOS del 12-09-2019 JP:
--Se cambio el nombre de instructionsRepeat e instructionRepeat por instructionsVoid e instructionVoid respectivamente.
--Se agregaron los no terminales parameters y parameter ya encapsulados en un List<Token> 
--Se agrego parcialmente la regla de produccion de la funcion(VOID) y de la llamada de la funcion (CALL), sin atributos sintetizados 
--Tocaria crear clases de voidInstruction y callInstruction para unirlas a las demas Instructions.
--Se agrego la instruction al bloque de instructionVoid la instruction call.
-*/
-
-/*
-CAMBIOS del 14-09-2019 JP:
--Se creo la clase ProcedureTable que servira como tabla de procedimientos para guardar la informacion de las funciones: parametros, id e instrucciones.
--Se termino de generar los atributos sintetizados para la gramatica de void y call y estan listas para ser enviadas como instrucciones(implementan la interfaz Instruction)
--Las clases ProcedureInstruction y ProcedureCall estan en el codigo de Bryan. Falta unirlas.
--Ya se compilo los archivos Lexer.flex, y Parser.cup. Y se agregaron sus respectivas clases al proyecto.
--Se agrego en el archivo KokyFrame.java el objeto de ProcedureTable y se agrego a los parametros del constructor del Parser.java
--Tocaria unir ambos codigos y probar que este funcionando bien.
--Luego tocaria a generar la accion como tal del momento de encontrar la instruccion ProcedureCall y generar las instrucciones pertinentes.
-*/
-
-/*
-
-probando rama Bryan
-probando ..........
-*/

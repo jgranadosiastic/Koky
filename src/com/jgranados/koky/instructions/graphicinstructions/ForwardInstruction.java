@@ -62,9 +62,8 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
         if(this.getAmbit()!=null){
             steps.setAmbit(this.getAmbit());
         }else{
-            steps.setAmbit(AmbitEnum.GLOBAL.name());
+            steps.setAmbit(AmbitEnum.GLOBAL);
         }
-        
         
     }
 

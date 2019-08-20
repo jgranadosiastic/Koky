@@ -1,5 +1,6 @@
 package com.jgranados.koky.instructions;
 
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.token.Token;
 
 /**
@@ -7,15 +8,13 @@ import com.jgranados.koky.interpreter.token.Token;
  * @author jose
  */
 public abstract class Instruction {
-    private String ambit;
-    
-    
+    private AmbitEnum ambit;
 
-    public String getAmbit() {
+    public AmbitEnum getAmbit() {
         return ambit;
     }
 
-    public void setAmbit(String ambit) {
+    public void setAmbit(AmbitEnum ambit) {
         this.ambit = ambit;
     }
     

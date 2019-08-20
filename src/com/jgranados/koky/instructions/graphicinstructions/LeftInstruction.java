@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
@@ -31,7 +32,11 @@ public class LeftInstruction extends GraphicsInstruction implements ExecutionDes
 
     @Override
     public void assignAmbitToExpresions() {
-        angle.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            angle.setAmbit(this.getAmbit());
+        }else{
+            angle.setAmbit(AmbitEnum.GLOBAL);
+        }
     }
     
     @Override

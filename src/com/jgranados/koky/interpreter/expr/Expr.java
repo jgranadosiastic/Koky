@@ -16,25 +16,25 @@ public class Expr {
     private SymbolsTable table;
     private Token id;
     private int literalValue;
-    private String ambit;
+    private AmbitEnum ambit;
     private Token tableToken;
 
     public Expr(int operator, Expr left, Expr right) {
         this.operator = operator;
         this.left = left;
         this.right = right;
-        this.ambit = AmbitEnum.GLOBAL.name();
+        this.ambit = AmbitEnum.GLOBAL;
     }
 
     public Expr(String literalValue) {
         this.literalValue = Integer.valueOf(literalValue);
-        this.ambit = AmbitEnum.GLOBAL.name();
+        this.ambit = AmbitEnum.GLOBAL;
     }
 
     public Expr(Token id, SymbolsTable table) {
         this.table = table;
         this.id = id;
-        this.ambit = AmbitEnum.GLOBAL.name();
+        this.ambit = AmbitEnum.GLOBAL;
     }
 
     public int operate() {
@@ -74,14 +74,14 @@ public class Expr {
 
     private int getValue() {
         if (id != null) {
-            if (this.getAmbit()==null || this.getAmbit().equals(AmbitEnum.GLOBAL.name())) {
+            if (this.getAmbit()==null || this.getAmbit()==AmbitEnum.GLOBAL) {
                 if ((Integer) table.getIdValue(id)!=null) {
                     return (Integer) table.getIdValue(id);
                 } else {
                     return -1;
                 }
                 
-            } else if (this.getAmbit().equals(AmbitEnum.LOCAL.name())) {
+            } else if (this.getAmbit()==AmbitEnum.LOCAL) {
                 if (tableToken != null) {
                     SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
                     if (sym.getIdValue(id)==null) {
@@ -101,14 +101,15 @@ public class Expr {
         return literalValue;
     }
 
-    public String getAmbit() {
+    public AmbitEnum getAmbit() {
         return ambit;
     }
 
-    public void setAmbit(String ambit) {
+    public void setAmbit(AmbitEnum ambit) {
         this.ambit = ambit;
     }
 
+    
     public Token getTableToken() {
         return tableToken;
     }

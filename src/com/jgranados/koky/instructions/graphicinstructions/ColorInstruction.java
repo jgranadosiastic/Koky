@@ -6,6 +6,7 @@ import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.token.Token;
 
 /**
@@ -46,7 +47,11 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
 
     @Override
     public void assignAmbitToExpresions() {
-        intColor.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            intColor.setAmbit(this.getAmbit());
+        }else{
+            intColor.setAmbit(AmbitEnum.GLOBAL);
+        }
     }
     @Override
     public void assignTableTokenValue(Token token) {

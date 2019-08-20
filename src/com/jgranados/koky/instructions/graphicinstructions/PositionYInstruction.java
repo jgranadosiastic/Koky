@@ -1,5 +1,6 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
@@ -28,7 +29,11 @@ public class PositionYInstruction extends PositionInstruction {
 
     @Override
     public void assignAmbitToExpresions() {
-        posY.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            posY.setAmbit(this.getAmbit());
+        }else{
+            posY.setAmbit(AmbitEnum.GLOBAL);
+        }
     }
 
     @Override
