@@ -1024,13 +1024,13 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
-                        procedureTable.addParameters(id, parametersList);
-                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
-                    }else{
+                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                        RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    } else {
                         RESULT = new EmptyInstruction();
                     }
+
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-14)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1047,15 +1047,14 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    List<Token> parametersList = new ArrayList<>();
-                    SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
-                        procedureTable.addParameters(id, parametersList);
-                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
-                    }else{
+                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                        List<Token> parametersList = new ArrayList<>();
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                        RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    } else {
                         RESULT = new EmptyInstruction();
                     }
-
+                
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-12)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1072,13 +1071,11 @@ class CUP$Parser$actions {
 		int expresionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Expr> expresions = (List<Expr>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-
+                     if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }   
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1092,13 +1089,11 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		Token id = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT = new ProcedureCall(new ArrayList<Expr>(), id,procedureTable,symTable);           
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1145,7 +1140,7 @@ class CUP$Parser$actions {
 		int parameterright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Token parameter = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                    
+                    //verificar repetidos
                 RESULT = parameter;
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1193,7 +1188,7 @@ class CUP$Parser$actions {
 		int expresionright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Expr expresion = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                    
+            
                 RESULT = expresion;
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expresion",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1557,13 +1552,11 @@ class CUP$Parser$actions {
 		int expresionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Expr> expresions = (List<Expr>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instructionVoid",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1577,13 +1570,11 @@ class CUP$Parser$actions {
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).right;
 		Token id = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-4)).value;
 		
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instructionVoid",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

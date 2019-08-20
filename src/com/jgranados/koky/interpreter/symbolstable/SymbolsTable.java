@@ -61,18 +61,8 @@ public class SymbolsTable {
         return sym;
     }
     
-    public boolean addSymTable(Token id, SymbolsTable sym, boolean isAnalyzingFile) {
-        if (this.symTable.containsKey(id.getLexeme())) {
-            if (isAnalyzingFile) {
-                errorsList.add(String.format("La variable '%s' que intenta declar en el archivo que estoy leyendo, linea %d columna %d ya fue declarada anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
-            } else {
-                errorsList.add(String.format("La variable '%s' que intenta declar ya fue declarada anteriormente en el area de instrucciones.", id.getLexeme()));
-            }
-            return false;
-        }
-        
+    public void addSymTable(Token id, SymbolsTable sym) {
         this.symTable.put(id.getLexeme(), sym);
-        return true;
     }
     
     public boolean verifyParameter(Token id) {

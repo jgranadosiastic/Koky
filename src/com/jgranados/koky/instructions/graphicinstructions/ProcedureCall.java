@@ -34,27 +34,17 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         addValueToParameters();
-        //checking if the procedure name exists
-        if (this.symbolsTable.exists(procedureName, true)) {
-            //I compare if the number of parameters to send is equal to the number of parameters to receive in the procedure 
-            if (this.proceduresTable.compareSentParameters(parameters, procedureName.getLexeme())) {
-                //executing instructions
-                for (Instruction instruction : this.proceduresTable.getProcedureTable().get(procedureName.getLexeme())) {
-                    instruction.assignAmbitToExpresions();
-                    instruction.assignTableTokenValue(procedureName);
-                    if (instruction instanceof Graphicable) {
-                        graphicsNoPointer = ((Graphicable) instruction).execute(graphicsNoPointer, currentPointer);
-                    } else if (instruction instanceof Assignable) {
-                        ((Assignable) instruction).assign();
-                    }
-                }
-                executionDescription = "Se llamo al Procedimiento ->" + procedureName.getLexeme();
-
+        //executing instructions
+        for (Instruction instruction : this.proceduresTable.getProcedureTable().get(procedureName.getLexeme()).getInstructions()) {
+            instruction.assignAmbitToExpresions();
+            instruction.assignTableTokenValue(procedureName);
+            if (instruction instanceof Graphicable) {
+                graphicsNoPointer = ((Graphicable) instruction).execute(graphicsNoPointer, currentPointer);
+            } else if (instruction instanceof Assignable) {
+                ((Assignable) instruction).assign();
             }
-
-        } else {
-            executionDescription = "El Procedimiento ->" + procedureName.getLexeme() + " que trata de llamar No existe";
         }
+                executionDescription = "Se llamo al Procedimiento ->" + procedureName.getLexeme();
 
         return graphicsNoPointer;
 
@@ -67,10 +57,6 @@ public class ProcedureCall extends GraphicsInstruction implements ExecutionDescr
             sym.assignValueToId(parameters.get(i), this.parameters.get(i).operate());
         }
        
-    }
-    
-    public void addTableTokenExpr(){
-        
     }
 
     @Override

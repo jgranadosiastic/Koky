@@ -1,5 +1,6 @@
 package com.jgranados.koky.interpreter.expr;
 
+import com.jgranados.koky.interpreter.excepcions.ExceptionOfValue;
 import com.jgranados.koky.interpreter.parser.sym;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.token.Token;
@@ -48,15 +49,12 @@ public class Expr {
             case sym.DIV:
                 return left.operate() / right.operate();
             default:
-                if (getValue()!=-1) {
+                try {
                     return getValue();
-                } else {
-                    if (table.getErrorsList().isEmpty()) {
-                       table.getErrorsList().add(String.format("La variable '%s' no ha sido declarada en ningun momento, linea %d columna %d.", id.getLexeme(), id.getLine(), id.getColumn())); 
-                    }
-                    return 0;
+                } catch (ExceptionOfValue e) {
+                    e.addError();
+                    return literalValue;
                 }
-                
         }
     }
 
@@ -71,27 +69,28 @@ public class Expr {
     public Expr getRight() {
         return right;
     }
+    
+    private int calculateValue() throws ExceptionOfValue {
+        Integer value = (Integer) table.getIdValue(id);
+        if (value!=null) {
+            return value;
+        } else {
+            throw new ExceptionOfValue("El Valor no Existe",id,table.getErrorsList());
+        }
+    
+    }
 
-    private int getValue() {
+    private int getValue() throws ExceptionOfValue{
         if (id != null) {
             if (this.getAmbit()==null || this.getAmbit()==AmbitEnum.GLOBAL) {
-                if ((Integer) table.getIdValue(id)!=null) {
-                    return (Integer) table.getIdValue(id);
-                } else {
-                    return -1;
-                }
-                
+                return calculateValue();
             } else if (this.getAmbit()==AmbitEnum.LOCAL) {
                 if (tableToken != null) {
                     SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
-                    if (sym.getIdValue(id)==null) {
-                        if ((Integer) table.getIdValue(id)!=null) {
-                            return (Integer) table.getIdValue(id);
-                        } else {
-                            return -1;
-                        }      
+                    if (sym.getIdValue(id)!=null) {
+                        return (Integer) sym.getIdValue(id);   
                     } else {
-                        return (Integer) sym.getIdValue(id);
+                        return calculateValue();
                     }
                 } else {
                     return literalValue;

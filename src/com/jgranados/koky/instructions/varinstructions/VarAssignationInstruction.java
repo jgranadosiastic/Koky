@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.varinstructions;
 
 import com.jgranados.koky.instructions.Instruction;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.token.Token;
@@ -27,7 +28,12 @@ public class VarAssignationInstruction extends Instruction implements Assignable
 
     @Override
     public void assignAmbitToExpresions() {
-        expr.setAmbit(this.getAmbit());
+        if(this.getAmbit()!=null){
+            expr.setAmbit(this.getAmbit());
+        }else{
+            expr.setAmbit(AmbitEnum.GLOBAL);
+        }
+        
     }
 
     @Override

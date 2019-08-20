@@ -227,46 +227,41 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     
                 | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
-                    SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
-                        procedureTable.addParameters(id, parametersList);
-                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
-                    }else{
-                        RESULT = new EmptyInstruction();
-                    }
-                    :}
-                |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
-                    {:
-                    List<Token> parametersList = new ArrayList<>();
-                    SymbolsTable sym = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
-                    if(procedureTable.addProcedure(id, sym, myLexer.isAnalyzingFile(),symTable,instructions,parametersList)){
-                        procedureTable.addParameters(id, parametersList);
-                        RESULT = new ProcedureInstruction(id.getLexeme(), instructions);
-                    }else{
+                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                        RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    } else {
                         RESULT = new EmptyInstruction();
                     }
 
+                    :}
+                |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
+                    {:
+                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                        List<Token> parametersList = new ArrayList<>();
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                        RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    } else {
+                        RESULT = new EmptyInstruction();
+                    }
+                
                     :}
                 
                 |CALL break ID:id break OPEN_PAR break expresions:expresions break CLOSE_PAR
                     {:
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-
+                     if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }   
                     :}
                 | CALL break ID:id  break OPEN_PAR break CLOSE_PAR
                     {:
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT = new ProcedureCall(new ArrayList<Expr>(), id,procedureTable,symTable);           
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     :}
                 
                 ;
@@ -284,7 +279,7 @@ parameters ::= parameters:parameters break COMMA break parameter:parameter
                 :};
 parameter ::= ID:parameter 
                 {:
-                    
+                    //verificar repetidos
                 RESULT = parameter;
                 :};     
 
@@ -301,7 +296,7 @@ expresions ::= expresions:expresions break COMMA break expresion:expresion
                 :};
 expresion ::= expr:expresion 
                 {:
-                    
+            
                 RESULT = expresion;
                 :};                     
 /*Antes se llamaba instructionsRepeat ahora instructionsVoid, solo el nombre se cambio*/
@@ -430,23 +425,19 @@ instructionVoid ::=	 FORWARD expr:e
 		
                 | CALL break ID:id  break OPEN_PAR break  expresions:expresions break CLOSE_PAR 
                     {:
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     :}
                 | CALL break ID:id break OPEN_PAR break CLOSE_PAR
                     {:
-                     if(procedureTable.exists(id, myLexer.isAnalyzingFile())){
-                        RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
-                     }
-                     else{
-                        RESULT = new EmptyInstruction();
-                     }
-                    
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
                     :}
                 ; 
 
