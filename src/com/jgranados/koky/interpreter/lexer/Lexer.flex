@@ -62,7 +62,6 @@ Comment     = "#" [^\r\n]*
 %{
     private boolean analyzingFile = false;
     private List<String> errorsList;
-    private Messages message = new Messages();
     private Symbol symbol(int type) {
 
 
@@ -78,9 +77,9 @@ Comment     = "#" [^\r\n]*
 
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         } else {
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         }
     }
 

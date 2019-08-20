@@ -10,8 +10,7 @@ import com.jgranados.koky.instructions.logic.Messages;
  */
 public abstract class PositionInstruction extends TranslationInstruction implements ExecutionDescribable {
 
-    private KokyPointer currentPointer;
-    private Messages message = new Messages();    
+    private KokyPointer currentPointer;  
     @Override
     protected Integer calculateEndX(KokyPointer currentPointer) {
         this.currentPointer = currentPointer;
@@ -55,6 +54,6 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
 
     @Override
     public String getExecutionDescription() {
-        return message.positionMessage(denormalizePosX(), denormalizePosY());
+        return Messages.positionMessage(denormalizePosX(), denormalizePosY());
     }
 }

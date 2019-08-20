@@ -11,8 +11,6 @@ import java.awt.Graphics2D;
  */
 public class ToCenterInstruction extends TranslationInstruction implements ExecutionDescribable {
     
-    private Messages message = new Messages();
-    
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         currentPointer.resetAngle();
@@ -41,7 +39,7 @@ public class ToCenterInstruction extends TranslationInstruction implements Execu
 
     @Override
     public String getExecutionDescription() {
-        return message.centerMessage();
+        return Messages.centerMessage();
     }
     
 }

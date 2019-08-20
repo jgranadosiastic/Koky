@@ -34,7 +34,7 @@ import javax.swing.text.html.HTMLDocument;
  *
  * @author jose
  */
-public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Scanner{
+public class KokyFrame extends javax.swing.JFrame{
 
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String KOK_EXTENSION = "kok";
@@ -54,16 +54,18 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
-    private Messages message;
-
+    public static List<String> infoMes = new ArrayList<>();
+    private Scanner sc;
     /**
      * Creates new form KokFrame
      */
     public KokyFrame() {
+        this.sc = () -> {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        };
         panelDraw = new PanelDraw();
         initComponents();
         typeLanguage();
-        message = new Messages();   
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
@@ -438,7 +440,7 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
-        addInfoMessages(message.changeMessage());
+        addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
@@ -448,7 +450,7 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
-        addInfoMessages(message.changeMessage());
+        addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
@@ -458,7 +460,7 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
         Languages.SPANISH.setTypeLanguage(true);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
-        addInfoMessages(message.changeMessage());
+        addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
@@ -468,7 +470,7 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(true);
         typeLanguage();
-        addInfoMessages(message.changeMessage());
+        addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
     public String getCurrentLine() {
@@ -499,24 +501,15 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
         }
     }
 
-    private void addErrorMessages(List<String> messages) {
-        List<String> errorMessages = messages
-                .stream()
-                .map(message -> "<font color=\"red\">" + message + "</font>")
-                .collect(Collectors.toList());
-        addMessages(errorMessages);
-        messages.clear();
+    private void addMessagesInfo(List<String> messages) {
+            List<String> errorMessages = messages
+                    .stream()
+                    .map(message -> "<font color=\"red\">" + message + "</font>")
+                    .collect(Collectors.toList());
+            addMessages(errorMessages);
+            messages.clear();       
     }
     
-    private void addInfoMessages(List<String> messages){
-       List<String> infoMessage = messages
-                .stream()
-                .map(message -> "<font color=\"blue\">" + message + "</font>")
-                .collect(Collectors.toList());
-        addMessages(infoMessage);
-        messages.clear();
-    }
-
     private void addSuccessMessages(List<String> messages) {
         addMessages(messages);
     }
@@ -569,34 +562,33 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
     }
     
     private void typeLanguage(){
-      Scanner sc = null;
         if(Languages.ALL.getTypeLanguage() == true){
             lexerAll = new LexerAll(new StringReader(""));
             sc = lexerAll;
             instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
-            myParser = new Parser(sc, instructionsSymTable);
-    
+            typeParser(sc, instructionsSymTable);    
         }else if (Languages.SPANISH.getTypeLanguage() == true) {
             lexerSp = new LexerEs(new StringReader(""));
             sc = lexerSp;
             instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
-            myParser = new Parser(sc, instructionsSymTable);
-         
+            typeParser(sc, instructionsSymTable);         
         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
             lexerEn = new Lexer(new StringReader(""));
             sc = lexerEn;
             instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
-            myParser = new Parser(sc, instructionsSymTable);
+            typeParser(sc, instructionsSymTable);
          
         }else if (Languages.KICHE.getTypeLanguage()==true) {
             lexerKi = new LexerKiche(new StringReader(""));
             sc = lexerKi;
             instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
-            myParser = new Parser(sc, instructionsSymTable);
-           
-            
+            typeParser(sc, instructionsSymTable);   
         }
         
+    }
+    
+    private void typeParser(Scanner sc, SymbolsTable symbols){
+        myParser = new Parser(sc, symbols);
     }
     
     //type of lexer to execute
@@ -652,13 +644,13 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
     //return error according to language
     private void errorLanguage(){
         if (Languages.ALL.getTypeLanguage()==true) {
-            addErrorMessages(this.lexerAll.getErrorsList());
+            addMessagesInfo(this.lexerAll.getErrorsList());
         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-            addErrorMessages(this.lexerEn.getErrorsList());
+            addMessagesInfo(this.lexerEn.getErrorsList());
         }else if (Languages.SPANISH.getTypeLanguage()==true) {
-            addErrorMessages(this.lexerSp.getErrorsList());
+            addMessagesInfo(this.lexerSp.getErrorsList());
         }else if (Languages.KICHE.getTypeLanguage()==true) {
-            addErrorMessages(this.lexerKi.getErrorsList());
+            addMessagesInfo(this.lexerKi.getErrorsList());
         }
     }
 
@@ -697,8 +689,5 @@ public class KokyFrame extends javax.swing.JFrame implements java_cup.runtime.Sc
     private javax.swing.JEditorPane txtMessages;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public Symbol next_token() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
 }

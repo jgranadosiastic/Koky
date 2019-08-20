@@ -67,7 +67,6 @@ Comment     = "#" [^\r\n]*
 %{
     private boolean analyzingFile = false;
     private List<String> errorsList;
-    private Messages message = new Messages();
     private Symbol symbol(int type) {
 
 
@@ -84,10 +83,10 @@ Comment     = "#" [^\r\n]*
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
             System.out.printf("Ayi’ Ch’ob’o are tzij %s en are Cholajil %d, columna %d. Kchuputaj e intenta de K’ak’.\n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         } else {
             System.out.printf("Ayi’ Ch’ob’o are tzij %s en are Cholajil. Kchuputaj e intenta de K’ak’.\n", lexeme);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         }
     }
 

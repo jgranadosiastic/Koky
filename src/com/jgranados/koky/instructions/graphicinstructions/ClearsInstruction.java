@@ -11,8 +11,7 @@ import java.awt.Graphics2D;
  * @author jose
  */
 public class ClearsInstruction extends GraphicsInstruction implements ExecutionDescribable {
-    
-    private Messages message = new Messages();
+
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         graphicsNoPointer.setBackground(Color.WHITE);
@@ -24,7 +23,7 @@ public class ClearsInstruction extends GraphicsInstruction implements ExecutionD
 
     @Override
     public String getExecutionDescription() {       
-        return message.clearsMessage();
+        return Messages.clearsMessage();
     }
 
 }

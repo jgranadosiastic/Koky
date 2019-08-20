@@ -67,7 +67,6 @@ Comment     = "#" [^\r\n]*
 %{
     private boolean analyzingFile = false;
     private List<String> errorsList;
-    private Messages message = new Messages();
     private Symbol symbol(int type) {
         String lexeme = yytext();
         System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
@@ -82,10 +81,10 @@ Comment     = "#" [^\r\n]*
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
             System.out.printf("I don't understand the text %s in the line %d, column %d. Delete it and try again\n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         } else {
             System.out.printf("I don't understand the text %s in the instruction. Delete it and try again.\n", lexeme);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         }
     }
 

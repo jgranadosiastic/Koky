@@ -12,11 +12,9 @@ import com.jgranados.koky.instructions.logic.Messages;
 public class ForwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-    private Messages message;
     
     public ForwardInstruction(Expr steps) {
         this.steps = steps;
-        message = new Messages();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
 
     @Override
     public String getExecutionDescription() {
-        return message.fdMessage(steps);
+        return Messages.fdMessage(steps);
     }
 
 }

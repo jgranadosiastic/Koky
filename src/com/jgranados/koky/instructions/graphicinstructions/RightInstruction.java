@@ -12,11 +12,9 @@ import java.awt.Graphics2D;
  */
 public class RightInstruction extends GraphicsInstruction implements ExecutionDescribable {
     private Expr angle;
-    private Messages message;
     
     public RightInstruction(Expr angle) {
         this.angle = angle;
-        message = new Messages();
     }
 
     @Override
@@ -27,7 +25,7 @@ public class RightInstruction extends GraphicsInstruction implements ExecutionDe
 
     @Override
     public String getExecutionDescription() {
-        return message.rightMessage(angle);
+        return Messages.rightMessage(angle);
     }
     
 }

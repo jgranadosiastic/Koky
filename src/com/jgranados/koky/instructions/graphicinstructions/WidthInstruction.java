@@ -14,7 +14,6 @@ import java.awt.Graphics2D;
 public class WidthInstruction extends GraphicsInstruction implements ExecutionDescribable {
     
     private Expr width;
-    Messages message = new Messages();
     
     public WidthInstruction(Expr width) {
         this.width = width;
@@ -28,7 +27,7 @@ public class WidthInstruction extends GraphicsInstruction implements ExecutionDe
     
     @Override
     public String getExecutionDescription() {        
-        return message.widthMessage(width.operate());
+        return Messages.widthMessage(width.operate());
     }
     
 }

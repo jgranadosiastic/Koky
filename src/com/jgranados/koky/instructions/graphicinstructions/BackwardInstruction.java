@@ -12,11 +12,9 @@ import com.jgranados.koky.ui.KokyPointer;
 public class BackwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-    private Messages message;
     
     public BackwardInstruction(Expr steps) {
         this.steps = steps;
-        message = new Messages();
     }
 
     @Override
@@ -55,6 +53,6 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     public String getExecutionDescription() {
-        return message.bkMessage(steps);
+        return Messages.bkMessage(steps);
     }
 }

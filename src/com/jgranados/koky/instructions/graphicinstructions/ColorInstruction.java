@@ -18,7 +18,6 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     private Expr intColor;
     private String hexaColor;
     private boolean isIntColor;
-    private Messages message = new Messages();
     
     public ColorInstruction(Expr color) {
         this.intColor = color;
@@ -43,6 +42,6 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public String getExecutionDescription() {
         ColorEnum color = ColorEnum.fromValue(intColor.operate());
-        return message.colorMessage(color);
+        return Messages.colorMessage(color);
     }
 }

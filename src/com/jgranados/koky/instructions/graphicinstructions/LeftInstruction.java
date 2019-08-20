@@ -13,10 +13,8 @@ import java.awt.Graphics2D;
 public class LeftInstruction extends GraphicsInstruction implements ExecutionDescribable {
 
     private Expr angle;
-    private Messages message;
     public LeftInstruction(Expr angle) {
         this.angle = angle;
-        message = new Messages();
     }
     
     @Override
@@ -27,7 +25,7 @@ public class LeftInstruction extends GraphicsInstruction implements ExecutionDes
 
     @Override
     public String getExecutionDescription() {
-       return message.leftMessage(angle);
+       return Messages.leftMessage(angle);
     }
     
 }

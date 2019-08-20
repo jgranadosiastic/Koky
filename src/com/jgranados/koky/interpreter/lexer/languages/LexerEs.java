@@ -361,7 +361,6 @@ public class LexerEs implements java_cup.runtime.Scanner {
   /* user code: */
     private boolean analyzingFile = false;
     private List<String> errorsList;
-    private Messages message = new Messages();
     private Symbol symbol(int type) {
 
 
@@ -378,10 +377,10 @@ public class LexerEs implements java_cup.runtime.Scanner {
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
             System.out.printf("No entiendo el texto %s en la linea %d, columna %d. Borralo e intenta de nuevo.\n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         } else {
             System.out.printf("No entiendo el texto %s en la instruccion. Borralo e intenta de nuevo.\n", lexeme);
-            errorsList.add(message.errorLexer(lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         }
     }
 
