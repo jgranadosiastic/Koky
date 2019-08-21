@@ -3,9 +3,13 @@ import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.graphicinstructions.ProcedureInstruction;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -22,7 +26,6 @@ public class ProcedureTable {
         
     }
     public boolean compareSentParameters(List<Expr> list, Token id){
-       //checking if the procedure name exists
         if (this.procedureTable.containsKey(id.getLexeme())) {
            if (list.size()!=procedureTable.get(id.getLexeme()).getParameters().size()) {
                 errorsList.add(String.format("El procedimiento '%s' no se puede ejecutar por inconsistencias en los parametros", id.getLexeme()));
@@ -37,7 +40,7 @@ public class ProcedureTable {
         
     }
 
-    public boolean exists(Token id, boolean isAnalyzingFile) {
+    public boolean exists(Token id, List<Token> listParameters,boolean isAnalyzingFile) {
         if (this.procedureTable.containsKey(id.getLexeme())) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("El Nombre '%s' que intenta declarar para el Procedimiento  en el archivo que estoy leyendo, linea %d columna %d ya fue declarado anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
@@ -45,8 +48,27 @@ public class ProcedureTable {
                 errorsList.add(String.format("El nombre '%s' que intenta declarar para el Procedimiento ya fue declarado anteriormente en el area de instrucciones en otra funcion.", id.getLexeme()));
             }
             return true;
+        } else {
+            return compareRepeatsParameters(listParameters,id);
         }
-        return false;
+        
+    }
+    
+    public boolean compareRepeatsParameters(List<Token> list, Token id){
+        List<String> listAux = new ArrayList();
+        for(Token token : list){
+            listAux.add(token.getLexeme());
+        }
+        Set<String> parameters = new HashSet<>(listAux);
+        boolean repeatParameter = false;
+        for (String key : parameters) {
+            if (Collections.frequency(listAux, key)>1) {  
+                repeatParameter = true;
+                errorsList.add(String.format("No se Puede Repetir el Nombre de los Parametros recibidos en el Procedimiento -> '%s'.", id.getLexeme()));
+                break;
+            }
+        }
+        return repeatParameter;
     }
 
     public List<Instruction> getListValue(Token id) {

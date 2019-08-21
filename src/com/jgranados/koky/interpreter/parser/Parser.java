@@ -1024,7 +1024,7 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                     } else {
@@ -1047,8 +1047,8 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
-                        List<Token> parametersList = new ArrayList<>();
+                    List<Token> parametersList = new ArrayList<>();
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                     } else {
@@ -1140,8 +1140,9 @@ class CUP$Parser$actions {
 		int parameterright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Token parameter = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                    //verificar repetidos
+
                 RESULT = parameter;
+                
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

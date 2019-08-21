@@ -227,7 +227,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     
                 | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
-                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                     } else {
@@ -237,8 +237,8 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     :}
                 |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
                     {:
-                    if (!procedureTable.exists(id,myLexer.isAnalyzingFile())) {
-                        List<Token> parametersList = new ArrayList<>();
+                    List<Token> parametersList = new ArrayList<>();
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                     } else {
@@ -279,8 +279,9 @@ parameters ::= parameters:parameters break COMMA break parameter:parameter
                 :};
 parameter ::= ID:parameter 
                 {:
-                    //verificar repetidos
+
                 RESULT = parameter;
+                
                 :};     
 
 expresions ::= expresions:expresions break COMMA break expresion:expresion 
