@@ -94,7 +94,7 @@ public class KokyFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFile = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        btnOpenEditor = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
@@ -228,13 +228,13 @@ public class KokyFrame extends javax.swing.JFrame {
         });
         btnOpenFile.add(btnSaveInstructionsMenuItem);
 
-        jMenuItem1.setText("Abrir el Editor de Texto");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        btnOpenEditor.setText("Abrir el Editor de Texto");
+        btnOpenEditor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                btnOpenEditorActionPerformed(evt);
             }
         });
-        btnOpenFile.add(jMenuItem1);
+        btnOpenFile.add(btnOpenEditor);
 
         jMenuBar1.add(btnOpenFile);
 
@@ -384,9 +384,9 @@ public class KokyFrame extends javax.swing.JFrame {
        generateImage();
     }//GEN-LAST:event_changeVarNameMenuActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
         new EditorFrame(this);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_btnOpenEditorActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -511,6 +511,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnChangeImage;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
+    private javax.swing.JMenuItem btnOpenEditor;
     private javax.swing.JMenu btnOpenFile;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
@@ -519,7 +520,6 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
