@@ -1,14 +1,18 @@
 package com.jgranados.koky.ui;
 
+import com.jgranados.koky.challengeshistory.HistoryHandler;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.interpreter.lexer.Lexer;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
+import com.jgranados.koky.ui.challenges.ChallengesHistory;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -47,17 +51,20 @@ public class KokyFrame extends javax.swing.JFrame {
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
-    
+    private int instructionsMade = 0;
+    private Boolean coutingSteps = false;
+    private HistoryHandler challengeHistoryHandler = new HistoryHandler();
 
     /**
      * Creates new form KokFrame
      */
-    public KokyFrame() {
+    public KokyFrame() throws IOException {
         panelDraw = new PanelDraw();
         initComponents();
         myLexer = new Lexer(new StringReader(""));
         instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
         myParser = new Parser(myLexer, instructionsSymTable);
+        challengeHistoryHandler.uploadHistoryData();
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
@@ -100,8 +107,9 @@ public class KokyFrame extends javax.swing.JFrame {
         btnAbout = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         changeVarNameMenu = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        interactiveMenu = new javax.swing.JMenu();
+        takeChallengeMenuItem = new javax.swing.JMenuItem();
+        challengeHistoryMEnuItem = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -212,7 +220,7 @@ public class KokyFrame extends javax.swing.JFrame {
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -269,18 +277,26 @@ public class KokyFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(exportMenu);
 
-        jMenu1.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu1.setText("Interactivo");
+        interactiveMenu.setForeground(new java.awt.Color(255, 255, 255));
+        interactiveMenu.setText("Interactivo");
 
-        jMenuItem1.setText("¡Tomar un reto!");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        takeChallengeMenuItem.setText("¡Tomar un reto!");
+        takeChallengeMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                takeChallengeMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        interactiveMenu.add(takeChallengeMenuItem);
 
-        jMenuBar1.add(jMenu1);
+        challengeHistoryMEnuItem.setText("Historial de retos");
+        challengeHistoryMEnuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                challengeHistoryMEnuItemActionPerformed(evt);
+            }
+        });
+        interactiveMenu.add(challengeHistoryMEnuItem);
+
+        jMenuBar1.add(interactiveMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -311,8 +327,8 @@ public class KokyFrame extends javax.swing.JFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE))
+                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -341,6 +357,9 @@ public class KokyFrame extends javax.swing.JFrame {
                 historyInput.add(input);
                 history = historyInput.size();
                 lastInput = "";
+                if (coutingSteps) {
+                    instructionsMade++;
+                }
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
@@ -367,11 +386,7 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtInstructionKeyReleased
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
-        parseInstruction(CLEARS);
-        txtInstructions.setText("");
-        txtInstruction.setText("");
-        txtMessages.setText("<p style=\"margin-top: 0\"></p>");
-        instructionsSymTable.cleanAll();
+        cleanAll();
     }//GEN-LAST:event_btnCleanAllActionPerformed
 
     private void btnSaveInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsActionPerformed
@@ -397,24 +412,50 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
     private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
-       generateImage();
+        generateImage();
     }//GEN-LAST:event_changeVarNameMenuActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        Icon icono = new ImageIcon(getClass().getResource(ICON_URL));
-        String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
-        ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName);
-        challengesFrame.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void takeChallengeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeChallengeMenuItemActionPerformed
+        int yesOrNoMessage = JOptionPane.YES_NO_OPTION;
+        int userElection = JOptionPane.showConfirmDialog(this, "Todos tus cambios actuales se van a borrar ¿Deseas continuar?", "Retos | Koky", yesOrNoMessage);
+        if (userElection == 0) {
+            cleanAll();
+            String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
+            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.coutingSteps, this, challengeHistoryHandler);
+            challengesFrame.setVisible(true);
+            coutingSteps = true;
+            blockWhileInChallenge();
+        } else {
+            JOptionPane.showMessageDialog(this, "Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_takeChallengeMenuItemActionPerformed
+
+    private void challengeHistoryMEnuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_challengeHistoryMEnuItemActionPerformed
+        ChallengesHistory challengesHistoryFrame = new ChallengesHistory(challengeHistoryHandler);
+        challengesHistoryFrame.setVisible(true);
+    }//GEN-LAST:event_challengeHistoryMEnuItemActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
-    
+
+    public int returnTotalAttempts() {
+        return instructionsMade;
+    }
+
+    public void cleanAll() {
+        parseInstruction(CLEARS);
+        txtInstructions.setText("");
+        txtInstruction.setText("");
+        txtMessages.setText("<p style=\"margin-top: 0\"></p>");
+        instructionsSymTable.cleanAll();
+        instructionsMade = 0;
+    }
+
     public void generateImage() {
         JFileChooser locationFileChooser = new JFileChooser();
         int selection = locationFileChooser.showSaveDialog(null);
-        try {          
+        try {
             if (selection == JFileChooser.APPROVE_OPTION) {
                 File fileToExport = locationFileChooser.getSelectedFile();
                 String filePath = fileToExport.getAbsolutePath();//Obtains the path to use
@@ -494,6 +535,24 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
+    
+    public void blockWhileInChallenge(){
+        btnOpenFIle.setEnabled(false);
+        helpMenu.setEnabled(false);
+        exportMenu.setEnabled(false);
+        interactiveMenu.setEnabled(false);
+        btnCleanAll.setEnabled(false);
+        btnSaveInstructions.setEnabled(false);
+    }
+    
+    public void enableAfterChallenge(){
+        btnOpenFIle.setEnabled(true);
+        helpMenu.setEnabled(true);
+        exportMenu.setEnabled(true);
+        interactiveMenu.setEnabled(true);
+        btnCleanAll.setEnabled(true);
+        btnSaveInstructions.setEnabled(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
@@ -504,13 +563,13 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
+    private javax.swing.JMenuItem challengeHistoryMEnuItem;
     private javax.swing.JMenuItem changeVarNameMenu;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu interactiveMenu;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -522,6 +581,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
+    private javax.swing.JMenuItem takeChallengeMenuItem;
     private javax.swing.JTextField txtInstruction;
     private javax.swing.JTextArea txtInstructions;
     private javax.swing.JEditorPane txtMessages;
