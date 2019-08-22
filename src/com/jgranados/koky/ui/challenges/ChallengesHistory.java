@@ -4,6 +4,7 @@ import com.jgranados.koky.challengeshistory.ChallengeRegistry;
 import com.jgranados.koky.challengeshistory.HistoryHandler;
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +25,12 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
     private static final String CHALLENGES_URL = "ImagenesRetos/";
     private HistoryHandler challengesHistoryHandler;
 
-    public ChallengesHistory(HistoryHandler inputHistoryHandler) {
+    public ChallengesHistory(HistoryHandler inputHistoryHandler) throws IOException {
         initComponents();
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.WHITE);
         this.challengesHistoryHandler = inputHistoryHandler;
+        this.challengesHistoryHandler.uploadHistoryData();
         addRowToTable();
     }
 
@@ -39,9 +41,9 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         challengeRegistryTable = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        instructionsQCLabel = new javax.swing.JLabel();
+        instructionsENLabel = new javax.swing.JLabel();
+        intructionsESLabel = new javax.swing.JLabel();
         selectedImageLabel = new javax.swing.JLabel();
         turtleImageLabel = new javax.swing.JLabel();
 
@@ -86,22 +88,22 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 540, 230));
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("MENSAJE EN QUICHÉ");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 360, -1, -1));
+        instructionsQCLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        instructionsQCLabel.setForeground(new java.awt.Color(0, 0, 0));
+        instructionsQCLabel.setText("MENSAJE EN QUICHÉ");
+        getContentPane().add(instructionsQCLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 360, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Select in table to see the image created!");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 330, -1, -1));
+        instructionsENLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        instructionsENLabel.setForeground(new java.awt.Color(0, 0, 0));
+        instructionsENLabel.setText("Select in table to see the image created!");
+        getContentPane().add(instructionsENLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 330, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("¡Selecciona uno en la tabla para ver la imagen !");
-        jLabel4.setFocusable(false);
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 290, 260, 40));
+        intructionsESLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        intructionsESLabel.setForeground(new java.awt.Color(0, 0, 0));
+        intructionsESLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        intructionsESLabel.setText("¡Selecciona uno en la tabla para ver la imagen !");
+        intructionsESLabel.setFocusable(false);
+        getContentPane().add(intructionsESLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, 240, 20));
 
         selectedImageLabel.setBackground(new java.awt.Color(255, 255, 255));
         selectedImageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -114,14 +116,11 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
     }// </editor-fold>//GEN-END:initComponents
 
     private void challengeRegistryTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_challengeRegistryTableMouseClicked
-        // TODO add your handling code here:
         int index = challengeRegistryTable.getSelectedRow();
         TableModel model = challengeRegistryTable.getModel();
         String imageName = model.getValueAt(index, 3).toString();
         String path = CHALLENGES_URL+imageName;
-        //ImageIcon icono = new ImageIcon(CHALLENGES_URL+imageName);
         ImageIcon icono = new ImageIcon(path);
-        //ImageIcon icono = new ImageIcon(getClass().getResource(CHALLENGES_URL+imageName));
         Image img = icono.getImage().getScaledInstance(selectedImageLabel.getWidth(), selectedImageLabel.getHeight(), Image.SCALE_SMOOTH);
         selectedImageLabel.setIcon(new ImageIcon(img));
     }//GEN-LAST:event_challengeRegistryTableMouseClicked
@@ -151,10 +150,10 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable challengeRegistryTable;
+    private javax.swing.JLabel instructionsENLabel;
+    private javax.swing.JLabel instructionsQCLabel;
+    private javax.swing.JLabel intructionsESLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel selectedImageLabel;
     private javax.swing.JLabel turtleImageLabel;

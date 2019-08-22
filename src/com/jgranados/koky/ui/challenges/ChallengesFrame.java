@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.jgranados.koky.ui.challenges;
 
 import com.jgranados.koky.challengeshistory.HistoryHandler;
@@ -161,7 +156,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
         int userElection = JOptionPane.showConfirmDialog(this, "¿Deseas abandonar el reto?", "Retos | Koky", yesOrNoMessage);
         if (userElection == 0) {
             chronometerState = false;
-            koyFrame.enableAfterChallenge();
+            koyFrame.enableButonsInChallenge(true);
             this.dispose();
         } else {
         }
@@ -211,30 +206,28 @@ public class ChallengesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void endChallengeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endChallengeButtonActionPerformed
+        File imagesCarpet = new File(CHALLENGES_URL);
+        if (!imagesCarpet.exists()) {imagesCarpet.mkdir();}
         chronometerState = false;
         ImageIcon icon = new ImageIcon(ICON_URL);
         JOptionPane.showMessageDialog(null, "¡Exelente trabajo!", "Reto completado.", JOptionPane.DEFAULT_OPTION, icon);
-        String imageIdentifier = generateIdentifier(userName, totalTimeInSeconds, koyFrame.returnTotalAttempts());
+        String imageIdentifier = generateIdentifier(userName, totalTimeInSeconds, milliseconds, koyFrame.returnTotalAttempts());
         try {
             historyHandler.addChallengeRegistry(userName, totalTimeInSeconds, koyFrame.returnTotalAttempts(), imageIdentifier, challengeDescriptionTextPane.getText());
-        } catch (IOException ex) {
-            Logger.getLogger(ChallengesFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        File outputFile = new File(CHALLENGES_URL + imageIdentifier);
-        try {
+            File outputFile = new File(CHALLENGES_URL + imageIdentifier);
             ImageIO.write(userDraw, JPG_FILE_EXTENSION, outputFile);
         } catch (IOException ex) {
             Logger.getLogger(ChallengesFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         coutingInstructions = false;
         instructionAttempts = 0;
-        koyFrame.enableAfterChallenge();
+        koyFrame.enableButonsInChallenge(true);
         this.dispose();
     }//GEN-LAST:event_endChallengeButtonActionPerformed
 
-    public String generateIdentifier(String user, int seconds, int instructions) {
+    public String generateIdentifier(String user, int seconds, int instructions, int milliseconds) {
         String newIdentifier = "";
-        newIdentifier = user + "_" + seconds + "_" + instructions + JPG__DOT_FILE_EXTENSION;
+        newIdentifier = user + "_" + seconds + "_" + milliseconds + "_" + instructions + JPG__DOT_FILE_EXTENSION;
         return newIdentifier;
     }
 
