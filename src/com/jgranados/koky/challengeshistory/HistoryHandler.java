@@ -13,7 +13,6 @@ public class HistoryHandler implements Serializable {
     private HistoryDataHandler historyDataHandler;  
 
     public HistoryHandler() {
-        historyDataHandler = new HistoryDataHandler();
     }
 
     public void addChallengeRegistry(String userName, int totalSeconds, int intructionsMade, String identifier, String description) throws IOException {

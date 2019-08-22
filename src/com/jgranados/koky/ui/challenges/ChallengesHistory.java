@@ -6,9 +6,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -144,7 +142,6 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         int minutes=(inputSeconds-(3600*hours))/60;
         int seconds=inputSeconds-((hours*3600)+(minutes*60));
         String strTime = hours+"h "+minutes+"m "+seconds+"s";
-        System.out.println(hours+"h "+minutes+"m "+seconds+"s");
         return strTime;
     }
 
