@@ -11,6 +11,14 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -19,12 +27,13 @@ import com.jgranados.koky.instructions.ExecutionDescribable;
 public class PanelDraw extends javax.swing.JPanel {
 
     private static final int PANEL_WIDTH = 1000;
-    private static final int PANEL_HEIGHT = 460;
+    private static final int PANEL_HEIGHT = 460;     
     private KokyPointer kokyPointer;
     private BufferedImage imageWithPointer;
     private BufferedImage imageNoPointer;
     private Graphics2D graphicsWithPointer;
     private Graphics2D graphicsNoPointer;
+    
 
     /**
      * Creates new form PanelDraw
@@ -38,7 +47,7 @@ public class PanelDraw extends javax.swing.JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (imageWithPointer == null) {
-            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this);
+            kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this, KokyPointer.BRUSH_WIDTH);
             initImages();
         }
         g.drawImage(imageWithPointer, 0, 0, null);
@@ -71,13 +80,7 @@ public class PanelDraw extends javax.swing.JPanel {
     private void drawInstruction(Graphicable instruction) {
         // using the no pointer graphic to draw the instruction
         graphicsNoPointer = instruction.execute(graphicsNoPointer, kokyPointer);
-        // cleanning the graphics with the pointer
-        graphicsWithPointer.clearRect(0, 0, this.getWidth(), this.getHeight());
-        // redrawing the graphics without the pointer
-        graphicsWithPointer.drawImage(imageNoPointer, 0, 0, null);
-        // adding the pointer to the draw
-        kokyPointer.drawPointer(graphicsWithPointer);
-        this.repaint();
+        cleanAndDraw();
     }
 
     public List<String> runInstructions(List<Instruction> instructions) {
@@ -105,7 +108,7 @@ public class PanelDraw extends javax.swing.JPanel {
         kokyPointer.drawPointer(graphicsWithPointer);
         this.repaint();
     }
-
+    
     public BufferedImage returnDraw(){
     return imageNoPointer;
     }

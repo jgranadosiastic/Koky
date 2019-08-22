@@ -12,10 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
@@ -30,7 +33,8 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String KOK_EXTENSION = "kok";
     private static final String KOK_EXTENSION_DESC = "Archivos Kok";
-
+    private static final String JPG_FILE_EXTENSION = "jpg";
+    private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
     private static final String CLEARS = "clears";
     private static final String LINE = "\n";
     private static final String BR = "<br>";
@@ -40,6 +44,8 @@ public class KokyFrame extends javax.swing.JFrame {
     private SymbolsTable instructionsSymTable;
     private ProcedureTable procedureTable;
     private String lastInput;
+    private ArrayList<String> historyInput = new ArrayList<>();
+    private int history = 0;
 
     /**
      * Creates new form KokFrame
@@ -82,14 +88,17 @@ public class KokyFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
+        btnChangeImage = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
         bntOpenFile = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        helpMenu = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
+        exportMenu = new javax.swing.JMenu();
+        changeVarNameMenu = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -175,20 +184,32 @@ public class KokyFrame extends javax.swing.JFrame {
             }
         });
 
+        btnChangeImage.setBackground(new java.awt.Color(255, 255, 255));
+        btnChangeImage.setForeground(new java.awt.Color(0, 153, 0));
+        btnChangeImage.setText("Cambiar icono");
+        btnChangeImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChangeImageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 64, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -216,11 +237,11 @@ public class KokyFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(btnOpenFIle);
 
-        jMenu2.setForeground(new java.awt.Color(255, 255, 255));
-        jMenu2.setText("Ayuda");
+        helpMenu.setForeground(new java.awt.Color(255, 255, 255));
+        helpMenu.setText("Ayuda");
 
         btnInstructions.setText("Instrucciones");
-        jMenu2.add(btnInstructions);
+        helpMenu.add(btnInstructions);
 
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -228,9 +249,22 @@ public class KokyFrame extends javax.swing.JFrame {
                 btnAboutActionPerformed(evt);
             }
         });
-        jMenu2.add(btnAbout);
+        helpMenu.add(btnAbout);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(helpMenu);
+
+        exportMenu.setForeground(new java.awt.Color(255, 255, 255));
+        exportMenu.setText("Exportar");
+
+        changeVarNameMenu.setText("Guardar Imagen");
+        changeVarNameMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeVarNameMenuActionPerformed(evt);
+            }
+        });
+        exportMenu.add(changeVarNameMenu);
+
+        jMenuBar1.add(exportMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -288,15 +322,30 @@ public class KokyFrame extends javax.swing.JFrame {
                 this.txtInstructions.append(input + LINE);
                 this.txtInstruction.setText("");
                 addErrorMessages(this.myLexer.getErrorsList());
-                lastInput = input;
+                historyInput.add(input);
+                history = historyInput.size();
+                lastInput = "";
                 break;
             case KeyEvent.VK_UP:
                 // remember the last command
-                if (!input.endsWith(this.lastInput)) {
+                history--;
+                if (history >= 0) {
+                    this.txtInstruction.setText(historyInput.get(history));
+                } else {
+                    history = 0;
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                history++;
+                if (history < historyInput.size()) {
+                    this.txtInstruction.setText(historyInput.get(history));
+                } else {
                     this.txtInstruction.setText(lastInput);
+                    history = historyInput.size();
                 }
                 break;
             default:
+                lastInput = this.txtInstruction.getText();
                 break;
         }
     }//GEN-LAST:event_txtInstructionKeyReleased
@@ -326,8 +375,41 @@ public class KokyFrame extends javax.swing.JFrame {
         // TODO open dialog frame 
     }//GEN-LAST:event_bntOpenFileActionPerformed
 
+    private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
+        KokyImageDialog k = new KokyImageDialog(this, true, panelDraw);
+        k.setVisible(true);
+    }//GEN-LAST:event_btnChangeImageActionPerformed
+
+    private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
+       generateImage();
+    }//GEN-LAST:event_changeVarNameMenuActionPerformed
+
     public String getCurrentLine() {
         return txtInstruction.getText();
+    }
+    
+    public void generateImage() {
+        JFileChooser locationFileChooser = new JFileChooser();
+        int selection = locationFileChooser.showSaveDialog(null);
+        try {          
+            if (selection == JFileChooser.APPROVE_OPTION) {
+                File fileToExport = locationFileChooser.getSelectedFile();
+                String filePath = fileToExport.getAbsolutePath();//Obtains the path to use
+                try {
+                    ImageIO.write(panelDraw.returnDraw(), JPG_FILE_EXTENSION, fileToExport);
+                } catch (IOException ex) {
+                    Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                //Checks if the user puts the file extension in the end of the file name
+                if (!(filePath.endsWith(JPG__DOT_FILE_EXTENSION))) {
+                    File temp = new File(filePath + JPG__DOT_FILE_EXTENSION);
+                    fileToExport.renameTo(temp);//If not, we add it manually
+                }
+                JOptionPane.showMessageDialog(null, "¡Imagen guardada exitosamente!", "Guardado correcto", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {//In case of any problem, the program sends an error message
+            JOptionPane.showMessageDialog(null, "¡Ups! Hubo un error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void addErrorMessages(List<String> messages) {
@@ -393,13 +475,16 @@ public class KokyFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
     private javax.swing.JMenuItem btnAbout;
+    private javax.swing.JButton btnChangeImage;
     private javax.swing.JButton btnCleanAll;
     private javax.swing.JMenuItem btnInstructions;
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
+    private javax.swing.JMenuItem changeVarNameMenu;
+    private javax.swing.JMenu exportMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
