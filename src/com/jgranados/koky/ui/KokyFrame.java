@@ -502,13 +502,10 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenu btnOpenFIle;
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
-//<<<<<<< HEAD
     private javax.swing.JMenuItem colorItem;
-//=======
     private javax.swing.JMenuItem changeVarNameMenu;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
-//>>>>>>> origin/master
     private javax.swing.JEditorPane helpPane;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
