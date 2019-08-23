@@ -110,7 +110,7 @@ public class PanelDraw extends javax.swing.JPanel {
     }
     
     public BufferedImage returnDraw(){
-    return imageWithPointer;
+    return imageNoPointer;
     }
 
 }
