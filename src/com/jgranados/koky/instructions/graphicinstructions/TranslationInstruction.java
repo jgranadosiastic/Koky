@@ -16,7 +16,7 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
-        int outPosX = endPosX;
+        int outPosX = endPosX; //Out position
         int outPosY = endPosY;
         if (currentPointer.getEndPosition() != null) {
             if (TranslationUtils.isOutOfRange(currentPointer.getEndPosition().getEndPosX(), currentPointer.getEndPosition().getEndPosY())) {
@@ -29,6 +29,9 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
             EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(outPosX, outPosY), currentPointer);
             endPosX = endPosition.getEndPosX();
             endPosY = endPosition.getEndPosY();
+        } else {
+            endPosX = outPosX;
+            endPosY = outPosY;
         }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));

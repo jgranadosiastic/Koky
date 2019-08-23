@@ -19,12 +19,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-//<<<<<<< HEAD
 import javax.swing.JColorChooser;
-//=======
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
-//>>>>>>> origin/master
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
