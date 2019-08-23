@@ -9,6 +9,8 @@ public class EndPosition {
     private int endPosX;
     private int endPosY;
     private int hypotenuse;
+    private double accumulationX;
+    private double accumulationY;
 
     public EndPosition() {
     }
@@ -52,5 +54,20 @@ public class EndPosition {
     public void setHypotenuse(int hypotenuse) {
         this.hypotenuse = hypotenuse;
     }
-    
+
+    public double getAccumulationX() {
+        return accumulationX;
+    }
+
+    public void setAccumulationX(double accumulationX) {
+        this.accumulationX = accumulationX;
+    }
+
+    public double getAccumulationY() {
+        return accumulationY;
+    }
+
+    public void setAccumulationY(double accumulationY) {
+        this.accumulationY = accumulationY;
+    }
 }

@@ -39,13 +39,9 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String KOK_EXTENSION = "kok";
     private static final String KOK_EXTENSION_DESC = "Archivos Kok";
-//<<<<<<< HEAD
     private static final int NUM_SUBSTRING = 2;
-
-//=======
     private static final String JPG_FILE_EXTENSION = "jpg";
     private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
-//>>>>>>> origin/master
     private static final String CLEARS = "clears";
     private static final String LINE = "\n";
     private static final String BR = "<br>";
@@ -398,22 +394,19 @@ public class KokyFrame extends javax.swing.JFrame {
         k.setVisible(true);
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
-//<<<<<<< HEAD
     private void colorItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorItemActionPerformed
-        Color c = JColorChooser.showDialog(null, "Seleccione un color", Color.YELLOW);
-        String color = null;
-        if (c != null) {
-            color = "#" + Integer.toHexString(c.getRGB()).substring(NUM_SUBSTRING).toUpperCase();
-            Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-            StringSelection ss = new StringSelection(color);
-            cb.setContents(ss, ss);
+        Color selectedColor = JColorChooser.showDialog(null, "Seleccione un color", Color.YELLOW);
+        String hexaString = null;
+        if (selectedColor != null) {
+            hexaString = "#" + Integer.toHexString(selectedColor.getRGB()).substring(NUM_SUBSTRING).toUpperCase();
+            Clipboard systemCopy = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection selectedString = new StringSelection(hexaString);
+            systemCopy.setContents(selectedString, selectedString);
         }
     }//GEN-LAST:event_colorItemActionPerformed
-//=======
     private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
        generateImage();
     }//GEN-LAST:event_changeVarNameMenuActionPerformed
-//>>>>>>> origin/master
 
     public String getCurrentLine() {
         return txtInstruction.getText();

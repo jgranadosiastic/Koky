@@ -65,19 +65,23 @@ public final class TranslationUtils {
         return false;
     }
 
-    public static EndPosition getEndPosition(EndPosition endPos, KokyPointer kp) {
+    public static EndPosition getEndPosition(EndPosition endPos, KokyPointer actualPoint) {
         EndPosition endPosition = new EndPosition();
         if (endPos.getEndPosX() < TranslationUtils.MINIMUN_RANGE_X) {
-            endPosition.setPosXY(0, kp.getPosY() + getAxisY(kp.getAngle(), getHypotenuseWithX(kp.getAngle(), kp.getPosX())));
+            endPosition.setPosXY(0, endPos.getEndPosY());
+//            endPosition.setPosXY(0, actualPoint.getPosY() + getAxisY(actualPoint.getAngle(), getHypotenuseWithX(actualPoint.getAngle(), actualPoint.getPosX())));
             return endPosition;
         } else if (endPos.getEndPosX() > PanelDraw.PANEL_WIDTH) {
-            endPosition.setPosXY(PanelDraw.PANEL_WIDTH, kp.getPosY() - getAxisY(kp.getAngle(), getHypotenuseWithX(kp.getAngle(), getDistance(PanelDraw.PANEL_WIDTH, kp.getPosX()))));
+            endPosition.setPosXY(PanelDraw.PANEL_WIDTH, endPos.getEndPosY());
+//            endPosition.setPosXY(PanelDraw.PANEL_WIDTH, actualPoint.getPosY() - getAxisY(actualPoint.getAngle(), getHypotenuseWithX(actualPoint.getAngle(), getDistance(PanelDraw.PANEL_WIDTH, actualPoint.getPosX()))));
             return endPosition;
         } else if (endPos.getEndPosY() < TranslationUtils.MINIMUN_RANGE_Y) {
-            endPosition.setPosXY(kp.getPosX() + getAxisX(kp.getAngle(), getHypotenuseWithY(kp.getAngle(), kp.getPosY())), 0);
+            endPosition.setPosXY(endPos.getEndPosX(), TranslationUtils.MINIMUN_RANGE_Y);
+//            endPosition.setPosXY(actualPoint.getPosX() + getAxisX(actualPoint.getAngle(), getHypotenuseWithY(actualPoint.getAngle(), actualPoint.getPosY())), 0);
             return endPosition;
         } else if (endPos.getEndPosY() > PanelDraw.PANEL_HEIGHT) {
-            endPosition.setPosXY(kp.getPosX() - getAxisX(kp.getAngle(), getHypotenuseWithY(kp.getAngle(), getDistance(PanelDraw.PANEL_HEIGHT, kp.getPosY()))), PanelDraw.PANEL_HEIGHT);
+            endPosition.setPosXY(endPos.getEndPosX(), PanelDraw.PANEL_HEIGHT);
+//            endPosition.setPosXY(actualPoint.getPosX() - getAxisX(actualPoint.getAngle(), getHypotenuseWithY(actualPoint.getAngle(), getDistance(PanelDraw.PANEL_HEIGHT, actualPoint.getPosY()))), PanelDraw.PANEL_HEIGHT);
             return endPosition;
         }
         return null;

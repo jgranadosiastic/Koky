@@ -16,13 +16,24 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
-        if (TranslationUtils.isOutOfRange(endPosX, endPosY)) {
-            EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(endPosX, endPosY), currentPointer);
+        int outPosX = endPosX;
+        int outPosY = endPosY;
+        if (currentPointer.getEndPosition() != null) {
+            if (TranslationUtils.isOutOfRange(currentPointer.getEndPosition().getEndPosX(), currentPointer.getEndPosition().getEndPosY())) {
+                outPosX = calculateOutEndX(currentPointer);
+                outPosY = calculateOutEndY(currentPointer);
+            }
+        }
+        currentPointer.setEndPosition(new EndPosition(outPosX, outPosY));
+        if (TranslationUtils.isOutOfRange(outPosX, outPosY)) {
+            EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(outPosX, outPosY), currentPointer);
             endPosX = endPosition.getEndPosX();
             endPosY = endPosition.getEndPosY();
         }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));
+        currentPointer.setAccumulationOutX(calculateAccumulationX(currentPointer));
+        currentPointer.setAccumulationOutY(calculateAccumulationY(currentPointer));
         drawLine(graphicsNoPointer, currentPointer, endPosX, endPosY);
         return graphicsNoPointer;
     }
@@ -45,7 +56,16 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
 
     protected abstract Integer calculateEndY(KokyPointer currentPointer);
 
+    protected abstract Integer calculateOutEndX(KokyPointer currentPointer);
+
+    protected abstract Integer calculateOutEndY(KokyPointer currentPointer);
+
     protected abstract double calculateAccumulationX(KokyPointer currentPointer);
 
     protected abstract double calculateAccumulationY(KokyPointer currentPointer);
+
+    protected abstract double calculateAccumulationOutX(KokyPointer currentPointer);
+
+    protected abstract double calculateAccumulationOutY(KokyPointer currentPointer);
+
 }
