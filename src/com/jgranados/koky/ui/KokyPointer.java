@@ -29,6 +29,7 @@ public class KokyPointer {
     private PanelDraw panelToDraw;
     private double accumulationX;
     private double accumulationY;
+    private EndPosition endPosition;
     private int width;
 
     public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw,int width) {
@@ -172,4 +173,21 @@ public class KokyPointer {
     public void setImage(String direccion) throws IOException {
         this.image = ImageIO.read(getClass().getResource(direccion));
     }
+    
+    public void setEndPosition(EndPosition endPosition){
+        this.endPosition = endPosition;
+    }
+    
+    public EndPosition getEndPosition(){
+        return endPosition;
+    }
+    
+    public void setAccumulationOutX(double accumulationX){
+        this.endPosition.setAccumulationX(accumulationX);
+    }
+    
+    public void setAccumulationOutY(double accumulationY){
+        this.endPosition.setAccumulationY(accumulationY);
+    }
+    
 }

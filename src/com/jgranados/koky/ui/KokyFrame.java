@@ -7,8 +7,11 @@ import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -39,6 +43,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String KOK_EXTENSION = "kok";
     private static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    private static final int NUM_SUBSTRING = 2;
     private static final String JPG_FILE_EXTENSION = "jpg";
     private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
     private static final String CLEARS = "clears";
@@ -95,6 +100,7 @@ public class KokyFrame extends javax.swing.JFrame {
         bntOpenFile = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
+        colorItem = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         changeVarNameMenu = new javax.swing.JMenuItem();
@@ -244,6 +250,14 @@ public class KokyFrame extends javax.swing.JFrame {
 
         btnInstructions.setText("Instrucciones");
         helpMenu.add(btnInstructions);
+
+        colorItem.setText("Consultar color");
+        colorItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                colorItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(colorItem);
 
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -402,6 +416,16 @@ public class KokyFrame extends javax.swing.JFrame {
         k.setVisible(true);
     }//GEN-LAST:event_btnChangeImageActionPerformed
 
+    private void colorItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorItemActionPerformed
+        Color selectedColor = JColorChooser.showDialog(null, "Seleccione un color", Color.YELLOW);
+        String hexaString = null;
+        if (selectedColor != null) {
+            hexaString = "#" + Integer.toHexString(selectedColor.getRGB()).substring(NUM_SUBSTRING).toUpperCase();
+            Clipboard systemCopy = Toolkit.getDefaultToolkit().getSystemClipboard();
+            StringSelection selectedString = new StringSelection(hexaString);
+            systemCopy.setContents(selectedString, selectedString);
+        }
+    }//GEN-LAST:event_colorItemActionPerformed
     private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
         generateImage();
     }//GEN-LAST:event_changeVarNameMenuActionPerformed
@@ -551,6 +575,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JMenuItem challengeHistoryMEnuItem;
+    private javax.swing.JMenuItem colorItem;
     private javax.swing.JMenuItem changeVarNameMenu;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;

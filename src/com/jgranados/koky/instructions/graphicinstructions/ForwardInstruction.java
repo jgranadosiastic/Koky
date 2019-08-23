@@ -33,6 +33,24 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
                         steps.operate(),
                         currentPointer.getAccumulationY());
     }
+    
+    @Override
+    protected Integer calculateOutEndX(KokyPointer currentPointer) {
+        return currentPointer.getEndPosition().getEndPosX() + TranslationUtils
+                .calculateXDimension(
+                        currentPointer.getAngle(),
+                        steps.operate(),
+                        currentPointer.getAccumulationX());
+    }
+
+    @Override
+    protected Integer calculateOutEndY(KokyPointer currentPointer) {
+        return currentPointer.getEndPosition().getEndPosY() - TranslationUtils
+                .calculateYDimension(
+                        currentPointer.getAngle(),
+                        steps.operate(),
+                        currentPointer.getAccumulationY());
+    }
 
     @Override
     protected double calculateAccumulationX(KokyPointer currentPointer) {
@@ -48,6 +66,22 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
                 currentPointer.getAngle(),
                 steps.operate(),
                 currentPointer.getAccumulationY());
+    }
+    
+    @Override
+    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
+        return TranslationUtils.calculateAccumulationX(
+                currentPointer.getAngle(),
+                steps.operate(),
+                currentPointer.getEndPosition().getAccumulationX());
+    }
+
+    @Override
+    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
+        return TranslationUtils.calculateAccumulationY(
+                currentPointer.getAngle(),
+                steps.operate(),
+                currentPointer.getEndPosition().getAccumulationY());
     }
 
     @Override
