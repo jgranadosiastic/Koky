@@ -10,14 +10,13 @@ import java.util.List;
 public class HistoryHandler implements Serializable {
 
     private ArrayList<ChallengeRegistry> challengesList = new ArrayList<>();
-    private HistoryDataHandler historyDataHandler;  
 
     public HistoryHandler() {
     }
 
     public void addChallengeRegistry(String userName, int totalSeconds, int intructionsMade, String identifier, String description) throws IOException {
         challengesList.add(new ChallengeRegistry(userName, totalSeconds, intructionsMade, identifier, description));
-        historyDataHandler.saveHistoryArrayList(challengesList);
+        HistoryDataHandler.saveHistoryArrayList(challengesList);
     }
 
     public List<ChallengeRegistry> returnAllRegistrys() {
@@ -25,7 +24,7 @@ public class HistoryHandler implements Serializable {
     }
 
     public void uploadHistoryData() throws IOException{
-    challengesList = historyDataHandler.uploadHistory();
+    challengesList = HistoryDataHandler.uploadHistory();
     }
     
 }
