@@ -30,9 +30,9 @@ public class SymbolsTable {
         Object value = this.symTable.get(id.getLexeme());
         if (value == null) {
             if (isAnalyzingFile) {
-                errorsList.add(String.format("La Variable '%s' no se ha declarado en el archivo que estoy leyendo, linea %d columna %d. Por tanto no existe.", id.getLexeme(), id.getLine(), id.getColumn()));
+                errorsList.add(String.format("**La Variable '%s' no se ha declarado en el archivo que estoy leyendo, linea %d columna %d. Por tanto no existe.", id.getLexeme(), id.getLine(), id.getColumn()));
             } else {
-                errorsList.add(String.format("La Variable '%s' no se ha declarado en el area de instrucciones, linea %d columna %d. Por tanto no existe.", id.getLexeme(), id.getLine(), id.getColumn()));
+                errorsList.add(String.format("**La Variable '%s' no se ha declarado en el area de instrucciones, linea %d columna %d. Por tanto no existe.", id.getLexeme(), id.getLine(), id.getColumn()));
             }
             return false;
         }
