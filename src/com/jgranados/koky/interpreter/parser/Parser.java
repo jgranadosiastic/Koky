@@ -962,7 +962,7 @@ class CUP$Parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Token e = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
-                        symTable.addId(e, 0, myLexer.isAnalyzingFile()); //clave
+                        symTable.addId(e, 0, myLexer.isAnalyzingFile());
                         RESULT = new EmptyInstruction();
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -980,7 +980,7 @@ class CUP$Parser$actions {
 		int exright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Expr ex = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
-                        RESULT = new VarAssignationInstruction(symTable, e, ex); //clave
+                        RESULT = new VarAssignationInstruction(symTable, e, ex);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1024,11 +1024,13 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                        symTable.clearTemporal();
                     } else {
                         RESULT = new EmptyInstruction();
+                        
                     }
 
                     
@@ -1048,11 +1050,13 @@ class CUP$Parser$actions {
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
                     List<Token> parametersList = new ArrayList<>();
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                        symTable.clearTemporal();
                     } else {
                         RESULT = new EmptyInstruction();
+                        
                     }
                 
                     
@@ -1142,7 +1146,8 @@ class CUP$Parser$actions {
 		
 
                 RESULT = parameter;
-                
+                symTable.addTemporal(parameter.getLexeme());
+
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("parameter",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1670,8 +1675,17 @@ class CUP$Parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Token e = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		
-                    RESULT = new Expr(e, symTable);
+			
+                	if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, myLexer.isAnalyzingFile())) {
+                        		RESULT = new Expr(e, symTable);
+                    		} else {
+                    			RESULT = null;
+                    		}
+                    		
+                    	}
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

@@ -209,12 +209,12 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     :}
                 | ID:e LINE_TERMINATOR
                     {:
-                        symTable.addId(e, 0, myLexer.isAnalyzingFile()); //clave
+                        symTable.addId(e, 0, myLexer.isAnalyzingFile());
                         RESULT = new EmptyInstruction();
                     :}
                 | ID:e EQ expr:ex LINE_TERMINATOR
                     {:
-                        RESULT = new VarAssignationInstruction(symTable, e, ex); //clave
+                        RESULT = new VarAssignationInstruction(symTable, e, ex);
                     :}
                 | LINE_TERMINATOR
                     {:  
@@ -227,22 +227,26 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     
                 | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
                     {:
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                        symTable.clearTemporal();
                     } else {
                         RESULT = new EmptyInstruction();
+                        
                     }
 
                     :}
                 |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
                     {:
                     List<Token> parametersList = new ArrayList<>();
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile())) {
+                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                         SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                        symTable.clearTemporal();
                     } else {
                         RESULT = new EmptyInstruction();
+                        
                     }
                 
                     :}
@@ -281,7 +285,8 @@ parameter ::= ID:parameter
                 {:
 
                 RESULT = parameter;
-                
+                symTable.addTemporal(parameter.getLexeme());
+
                 :};     
 
 expresions ::= expresions:expresions break COMMA break expresion:expresion 
@@ -464,8 +469,17 @@ expr ::=    expr:e1 PLUS expr:e2
                     RESULT = e;
                 :}
             | ID:e
-                {:
-                    RESULT = new Expr(e, symTable);
+                {:	
+                	if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, myLexer.isAnalyzingFile())) {
+                        		RESULT = new Expr(e, symTable);
+                    		} else {
+                    			RESULT = null;
+                    		}
+                    		
+                    	}
                 :}
             | INTEGER_LITERAL:e
                 {:

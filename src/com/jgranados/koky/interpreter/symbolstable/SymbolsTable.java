@@ -1,6 +1,7 @@
 package com.jgranados.koky.interpreter.symbolstable;
 
 import com.jgranados.koky.interpreter.token.Token;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +14,16 @@ public class SymbolsTable {
 
     private Map<String, Object> symTable;
     private List<String> errorsList;
+    private List<String> listTemp;
 
     public SymbolsTable(List<String> errorsList) {
         this.errorsList = errorsList;
+        this.listTemp = new ArrayList();
         symTable = new HashMap<>();
     }
     public SymbolsTable() {
         symTable = new HashMap<>();
+        this.listTemp = new ArrayList();
     }
 
     public boolean exists(Token id, boolean isAnalyzingFile) {
@@ -82,7 +86,20 @@ public class SymbolsTable {
     public void cleanAll() {
         this.symTable.clear();
     }
-
+    
+    public void addTemporal(String var){
+        this.listTemp.add(var);
+    }
+    public boolean verifyTemporalVar(String var){
+        if (this.listTemp.contains(var)) {
+            return true;
+        }
+        return false;
+    }
+    public void clearTemporal(){
+        this.listTemp.clear();
+    }
+    
     public Map<String, Object> getSymTable() {
         return symTable;
     }
