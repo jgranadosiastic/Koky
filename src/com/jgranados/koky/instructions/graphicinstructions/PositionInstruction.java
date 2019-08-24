@@ -28,6 +28,25 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
         }
         return currentPointer.getPosY();
     }
+    
+    @Override
+    protected Integer calculateOutEndX(KokyPointer currentPointer) {
+        this.currentPointer = currentPointer;
+        Integer normalizedEndX = getPositionX(currentPointer);
+        if (normalizedEndX != null) {
+            return normalizedEndX + currentPointer.getPanelDrawWidth() / 2;
+        }
+        return currentPointer.getPosX();
+    }
+
+    @Override
+    protected Integer calculateOutEndY(KokyPointer currentPointer) {
+        Integer normalizedEndY = getPositionY(currentPointer);
+        if (normalizedEndY != null) {
+            return currentPointer.getPanelDrawHeight() / 2 - normalizedEndY;
+        }
+        return currentPointer.getPosY();
+    }
 
     @Override
     protected double calculateAccumulationX(KokyPointer currentPointer) {
@@ -36,6 +55,16 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
 
     @Override
     protected double calculateAccumulationY(KokyPointer currentPointer) {
+        return 0d;
+    }
+    
+    @Override
+    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
+        return 0d;
+    }
+
+    @Override
+    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
         return 0d;
     }
 

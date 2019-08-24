@@ -1,0 +1,10 @@
+Crea un triangulo isósceles, escaleno y equilátero.
+Crea una flor utilizando circulos.
+Deberás dibujar una casa que tenga una puerta y una ventana.
+¡Dibuja una mariposa! 
+Intenta escribir los numeros de 1 al 5.
+Dibuja un carita feliz.
+Intenta dibujar dos montañas y un sol.
+Dibuja un carro de color rojo.
+Algo fácil: Escribe tu nombre!
+Dibuja una cancha de fútbol.
