@@ -213,7 +213,11 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     :}
                 | ID:e EQ expr:ex LINE_TERMINATOR
                     {:
-                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        if(!myLexer.isAnalyzingFile()){
+                            RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        } else {
+                            symTable.addId(e,ex.operate(),myLexer.isAnalyzingFile());
+                        }
                     :}
                 | LINE_TERMINATOR
                     {:  

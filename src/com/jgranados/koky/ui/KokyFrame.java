@@ -8,21 +8,17 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -31,18 +27,9 @@ import javax.swing.text.html.HTMLDocument;
  *
  * @author jose
  */
-public class KokyFrame extends javax.swing.JFrame {
+public class KokyFrame extends KFrame{
 
-    private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
-    public static final String KOK_EXTENSION = "kok";
-    public static final String KOK_EXTENSION_DESC = "Archivos Kok";
-    private static final String JPG_FILE_EXTENSION = "jpg";
-    private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
-    private static final String CLEARS = "clears";
-    private static final String LINE = "\n";
-    private static final String BR = "<br>";
-    private Lexer myLexer;
-    private Parser myParser;
+    
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private String lastInput;
@@ -53,11 +40,9 @@ public class KokyFrame extends javax.swing.JFrame {
      * Creates new form KokFrame
      */
     public KokyFrame() {
+        super(false);
         panelDraw = new PanelDraw();
         initComponents();
-        myLexer = new Lexer(new StringReader(""));
-        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-        myParser = new Parser(myLexer, instructionsSymTable);
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
@@ -80,7 +65,7 @@ public class KokyFrame extends javax.swing.JFrame {
         txtInstructions = new javax.swing.JTextArea();
         txtInstruction = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtMessages = new javax.swing.JEditorPane();
+        txtMessages = super.getEditorPane();
         scrollpnl = new javax.swing.JScrollPane();
         scrollpnl.setViewportView(panelDraw);
         jSeparator2 = new javax.swing.JSeparator();
@@ -346,7 +331,7 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtInstructionKeyReleased
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
-        parseInstruction(CLEARS);
+        parseInstruction(CLEARS,this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -367,11 +352,9 @@ public class KokyFrame extends javax.swing.JFrame {
 
     //Metodo para parsear
     public void run(String input) {
-        parseInstruction("clears\n");
-        parseInstruction(input);
+        parseInstruction(input,this.panelDraw);
         this.txtInstructions.append(input + LINE);
         this.txtInstruction.setText("");
-        addErrorMessages(this.myLexer.getErrorsList());
         lastInput = input;
     }
 
@@ -415,43 +398,9 @@ public class KokyFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "¡Ups! Hubo un error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    private void addErrorMessages(List<String> messages) {
-        List<String> errorMessages = messages
-                .stream()
-                .map(message -> "<font color=\"red\">" + message + "</font>")
-                .collect(Collectors.toList());
-        addMessages(errorMessages);
-        messages.clear();
-    }
-
-    private void addSuccessMessages(List<String> messages) {
-        addMessages(messages);
-    }
-
-    public void addMessages(List<String> messages) {
-        if (!messages.isEmpty()) {
-            HTMLDocument doc = (HTMLDocument) txtMessages.getDocument();
-            try {
-                doc.insertAfterEnd(doc.getCharacterElement(doc.getLength()), String.join(BR, messages) + BR);
-            } catch (BadLocationException | IOException ex) {
-                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            txtMessages.setCaretPosition(doc.getLength());
-        }
-    }
-
-    public void parseInstruction(String instruction) {
-        this.myLexer.yyreset(new StringReader(instruction + LINE));
-        try {
-            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-            if (this.myLexer.getErrorsList().isEmpty()) {
-                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                addSuccessMessages(executionDescriptions);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    
+    public PanelDraw getPanelDraw() {
+        return this.panelDraw;
     }
 
     public String saveInstructionsToFile() {

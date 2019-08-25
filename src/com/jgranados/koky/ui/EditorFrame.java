@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
@@ -16,14 +17,19 @@ import javax.swing.undo.UndoManager;
  *
  * @author anclenius
  */
-public class EditorFrame extends javax.swing.JFrame {
+public class EditorFrame extends KFrame {
     
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
     private int unnamedTabs;
+    private JEditorPane txtMessages;
+    private MessageDialog messageDialog;
     
     
     public EditorFrame(KokyFrame kokyFrame) {
+        super(true);
+        this.txtMessages = super.getEditorPane();
+        txtMessages.setContentType("text/html");
         initComponents();
         this.kokyFrame = kokyFrame;
         this.setVisible(true);
@@ -34,17 +40,6 @@ public class EditorFrame extends javax.swing.JFrame {
         this.redoFile.setEnabled(true);
     }
     
-    public EditorFrame(String text,String name,KokyFrame kokyFrame) {
-        initComponents();
-        this.setVisible(true);
-        this.kokyFrame = kokyFrame;
-        this.unnamedTabs = 0;
-        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KokyFrame.KOK_EXTENSION_DESC, KokyFrame.KOK_EXTENSION));
-        this.addTab(text,name);
-        this.undoFile.setEnabled(true);
-        this.redoFile.setEnabled(true);
-        
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -250,9 +245,7 @@ public class EditorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_newFileActionPerformed
 
     private void executeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeFileActionPerformed
-        InputTab in = (InputTab)Inputs.getSelectedComponent();
-        this.kokyFrame.run(in.getText());
-        this.kokyFrame.setVisible(true);
+        this.run();
     }//GEN-LAST:event_executeFileActionPerformed
 
     private void closeTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeTabActionPerformed
@@ -302,12 +295,31 @@ public class EditorFrame extends javax.swing.JFrame {
         openFile();
     }//GEN-LAST:event_loadFileActionPerformed
 
+    
+    public void run() {
+        InputTab in = (InputTab)Inputs.getSelectedComponent();
+        this.kokyFrame.setVisible(true);
+        super.parseInstruction(in.getText(),this.kokyFrame.getPanelDraw());
+        if(messageDialog == null || !messageDialog.isVisible()) {
+            messageDialog = new MessageDialog(this.txtMessages);
+            messageDialog.setVisible(true);
+        } else if (messageDialog.isVisible()) {
+            messageDialog.dispose();
+            messageDialog = new MessageDialog(this.txtMessages);
+            messageDialog.setVisible(true);
+        }
+        
+        
+        
+    }
+    
     public void addTab() {
         unnamedTabs++;
         InputTab newTab = new InputTab("Pestaña "+unnamedTabs);
         Inputs.addTab("*"+newTab.getName(), newTab);
         this.undoManager = newTab.getManager();
         Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
+        newTab.getTextArea().requestFocus();
     }
     
     public void addTab(String input,String name) {

@@ -271,6 +271,9 @@
                 <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
                 <Property name="text" type="java.lang.String" value=""/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="super.getEditorPane()"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
