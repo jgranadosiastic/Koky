@@ -156,8 +156,10 @@ Comment     = "#" [^\r\n]*
     {T_}{O_}{D_}{R_}{A_}{W_}                    {   return symbol(TODRAW);              }
     {T_}{D_}                                    {   return symbol(TODRAW);              }
     {R_}{E_}{P_}{E_}{A_}{T_}                    {   return symbol(REPEAT);              }
-    {V_}{O_}{I_}{D_}                            {   return symbol(VOID);                }/* SE AGREGO LA PALABRA RESERVADA VOID*/
-    {C_}{A_}{L_}{L_}                            {   return symbol(CALL);                }/* SE AGREGO LA PALABRA RESERVADA CALL*/
+    {W_}{I_}{D_}{T_}{H_}                        {   return symbol(WIDTH);               }
+    {W_}{D_}                                    {   return symbol(WIDTH);               }
+    {V_}{O_}{I_}{D_}                            {   return symbol(VOID);                }
+    {C_}{A_}{L_}{L_}                            {   return symbol(CALL);                }
 
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
