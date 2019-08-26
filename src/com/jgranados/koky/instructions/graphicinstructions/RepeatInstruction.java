@@ -49,5 +49,10 @@ public class RepeatInstruction extends GraphicsInstruction {
     @Override
     public void assignTableTokenValue(Token token) {
         loops.setTableToken(token);
+        for (Instruction instruction : instructions) {
+            instruction.setAmbit(this.getAmbit());
+            instruction.assignAmbitToExpresions();
+            instruction.assignTableTokenValue(token);
+        }
     }
 }
