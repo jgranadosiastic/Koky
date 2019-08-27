@@ -15,11 +15,12 @@ import javax.imageio.ImageIO;
 public class KokyPointer {
 
     private static final String IMG_URL = "/com/jgranados/koky/ui/images/kok_pointer_32.png";
-
     public static final int IMG_SIZE = 32;
     public static final int BRUSH_WIDTH = 2;
     private int posX;
+    private int outPosX;
     private int posY;
+    private int outPosY;
     private int angle;
     private boolean hidden;
     private boolean isPenUp;
@@ -28,8 +29,9 @@ public class KokyPointer {
     private Color penColor;
     private PanelDraw panelToDraw;
     private double accumulationX;
+    private double outAccumulationX;
     private double accumulationY;
-    private EndPosition endPosition;
+    private double outAccumulationY;
     private int width;
 
     public KokyPointer(int posX, int posY, int angle, PanelDraw panelToDraw,int width) {
@@ -147,7 +149,9 @@ public class KokyPointer {
 
     public void resetLocation() {
         this.posX = this.getPanelDrawWidth() / 2;
+        this.outPosX = this.posX;
         this.posY = this.getPanelDrawHeight() / 2;
+        this.outPosY = this.posY;
     }
     
     public void resetWidth() {
@@ -173,21 +177,37 @@ public class KokyPointer {
     public void setImage(String direccion) throws IOException {
         this.image = ImageIO.read(getClass().getResource(direccion));
     }
-    
-    public void setEndPosition(EndPosition endPosition){
-        this.endPosition = endPosition;
+
+    public int getOutPosX() {
+        return outPosX;
     }
-    
-    public EndPosition getEndPosition(){
-        return endPosition;
+
+    public void setOutPosX(int outPosX) {
+        this.outPosX = outPosX;
     }
-    
-    public void setAccumulationOutX(double accumulationX){
-        this.endPosition.setAccumulationX(accumulationX);
+
+    public int getOutPosY() {
+        return outPosY;
     }
-    
-    public void setAccumulationOutY(double accumulationY){
-        this.endPosition.setAccumulationY(accumulationY);
+
+    public void setOutPosY(int outPosY) {
+        this.outPosY = outPosY;
     }
-    
+
+    public double getOutAccumulationX() {
+        return outAccumulationX;
+    }
+
+    public void setOutAccumulationX(double outAccumulationX) {
+        this.outAccumulationX = outAccumulationX;
+    }
+
+    public double getOutAccumulationY() {
+        return outAccumulationY;
+    }
+
+    public void setOutAccumulationY(double outAccumulationY) {
+        this.outAccumulationY = outAccumulationY;
+    }
+            
 }

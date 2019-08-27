@@ -14,29 +14,33 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
+        EndPosition endPosition = new EndPosition(currentPointer.getOutPosX(), currentPointer.getOutPosY());
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
         int outPosX = endPosX; //Out position
         int outPosY = endPosY;
-        if (currentPointer.getEndPosition() != null) {
-            if (TranslationUtils.isOutOfRange(currentPointer.getEndPosition().getEndPosX(), currentPointer.getEndPosition().getEndPosY())) {
-                outPosX = calculateOutEndX(currentPointer);
-                outPosY = calculateOutEndY(currentPointer);
-            }
+        if (TranslationUtils.isOutOfRange(currentPointer.getOutPosX(), currentPointer.getOutPosY())) {
+            outPosX = calculateOutEndX(currentPointer);
+            outPosY = calculateOutEndY(currentPointer);
         }
-        currentPointer.setEndPosition(new EndPosition(outPosX, outPosY));
+        currentPointer.setOutPosX(outPosX);
+        currentPointer.setOutPosY(outPosY);
         if (TranslationUtils.isOutOfRange(outPosX, outPosY)) {
-            EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(outPosX, outPosY), currentPointer);
-            endPosX = endPosition.getEndPosX();
-            endPosY = endPosition.getEndPosY();
+            if (!TranslationUtils.isOutOfRange(endPosition.getPosX(), endPosition.getPosY())) {
+                endPosition = TranslationUtils.getEndPosition(currentPointer);
+            } else {
+                endPosition = TranslationUtils.getOutPosition(currentPointer);
+            }
+            endPosX = endPosition.getPosX();
+            endPosY = endPosition.getPosY();
         } else {
             endPosX = outPosX;
             endPosY = outPosY;
         }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));
-        currentPointer.setAccumulationOutX(calculateAccumulationX(currentPointer));
-        currentPointer.setAccumulationOutY(calculateAccumulationY(currentPointer));
+        currentPointer.setOutAccumulationX(calculateAccumulationX(currentPointer));
+        currentPointer.setOutAccumulationY(calculateAccumulationY(currentPointer));
         drawLine(graphicsNoPointer, currentPointer, endPosX, endPosY);
         return graphicsNoPointer;
     }
@@ -66,9 +70,5 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     protected abstract double calculateAccumulationX(KokyPointer currentPointer);
 
     protected abstract double calculateAccumulationY(KokyPointer currentPointer);
-
-    protected abstract double calculateAccumulationOutX(KokyPointer currentPointer);
-
-    protected abstract double calculateAccumulationOutY(KokyPointer currentPointer);
 
 }

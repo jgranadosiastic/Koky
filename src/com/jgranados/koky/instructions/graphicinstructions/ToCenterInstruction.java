@@ -45,16 +45,6 @@ public class ToCenterInstruction extends TranslationInstruction implements Execu
     protected double calculateAccumulationY(KokyPointer currentPointer) {
         return 0d;
     }
-    
-    @Override
-    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
-        return 0d;
-    }
-
-    @Override
-    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
-        return 0d;
-    }
 
     @Override
     public String getExecutionDescription() {

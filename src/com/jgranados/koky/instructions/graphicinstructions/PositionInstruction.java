@@ -57,17 +57,6 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
     protected double calculateAccumulationY(KokyPointer currentPointer) {
         return 0d;
     }
-    
-    @Override
-    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
-        return 0d;
-    }
-
-    @Override
-    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
-        return 0d;
-    }
-
     protected abstract Integer getPositionX(KokyPointer currentPointer);
 
     protected abstract Integer getPositionY(KokyPointer currentPointer);

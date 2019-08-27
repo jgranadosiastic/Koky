@@ -6,9 +6,8 @@ package com.jgranados.koky.ui;
  */
 public class EndPosition {
 
-    private int endPosX;
-    private int endPosY;
-    private int hypotenuse;
+    private int posX;
+    private int posY;
     private double accumulationX;
     private double accumulationY;
 
@@ -16,43 +15,29 @@ public class EndPosition {
     }
     
     public EndPosition(int endPosX, int endPosY) {
-        this.endPosX = endPosX;
-        this.endPosY = endPosY;
+        this.posX = endPosX;
+        this.posY = endPosY;
     }
 
-    public int getEndPosX() {
-        return endPosX;
+    public int getPosX() {
+        return posX;
     }
 
-    public void setEndPosX(int endPosX) {
-        this.endPosX = endPosX;
+    public void setPosX(int endPosX) {
+        this.posX = endPosX;
     }
 
-    public int getEndPosY() {
-        return endPosY;
+    public int getPosY() {
+        return posY;
     }
 
-    public void setEndPosY(int endPosY) {
-        this.endPosY = endPosY;
+    public void setPosY(int endPosY) {
+        this.posY = endPosY;
     }
     
     public void setPosXY(int endPosX, int endPosY){
-        this.endPosX = endPosX;
-        this.endPosY = endPosY;
-    }
-
-    public void setAll(int endPosx, int endPosY, int hypotenuse){
-        this.endPosX = endPosY;
-        this.endPosX = endPosx;
-        this.hypotenuse = hypotenuse;
-    }
-    
-    public int getHypotenuse() {
-        return hypotenuse;
-    }
-
-    public void setHypotenuse(int hypotenuse) {
-        this.hypotenuse = hypotenuse;
+        this.posX = endPosX;
+        this.posY = endPosY;
     }
 
     public double getAccumulationX() {
