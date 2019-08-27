@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
 
@@ -11,7 +12,7 @@ import com.jgranados.koky.ui.KokyPointer;
 public class BackwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
     private Expr steps;
-
+    
     public BackwardInstruction(Expr steps) {
         this.steps = steps;
     }
@@ -35,24 +36,6 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
     }
 
     @Override
-    protected Integer calculateOutEndX(KokyPointer currentPointer) {
-        return currentPointer.getEndPosition().getEndPosX() - TranslationUtils
-                .calculateXDimension(
-                        currentPointer.getAngle(),
-                        steps.operate(),
-                        currentPointer.getAccumulationX());
-    }
-
-    @Override
-    protected Integer calculateOutEndY(KokyPointer currentPointer) {
-        return currentPointer.getEndPosition().getEndPosY() + TranslationUtils
-                .calculateYDimension(
-                        currentPointer.getAngle(),
-                        steps.operate(),
-                        currentPointer.getAccumulationY());
-    }
-    
-    @Override
     protected double calculateAccumulationX(KokyPointer currentPointer) {
         return TranslationUtils.calculateAccumulationX(
                 currentPointer.getAngle(),
@@ -67,25 +50,9 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
                 steps.operate(),
                 currentPointer.getAccumulationY());
     }
-    
-    @Override
-    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
-        return TranslationUtils.calculateAccumulationX(
-                currentPointer.getAngle(),
-                steps.operate(),
-                currentPointer.getEndPosition().getAccumulationX());
-    }
-
-    @Override
-    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
-        return TranslationUtils.calculateAccumulationY(
-                currentPointer.getAngle(),
-                steps.operate(),
-                currentPointer.getEndPosition().getAccumulationY());
-    }
 
     @Override
     public String getExecutionDescription() {
-        return "Retrocedí " + steps.operate() + " pasos.";
+        return Messages.bkMessage(steps);
     }
 }

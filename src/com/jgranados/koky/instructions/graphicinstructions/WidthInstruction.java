@@ -2,6 +2,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
@@ -26,7 +27,7 @@ public class WidthInstruction extends GraphicsInstruction implements ExecutionDe
     
     @Override
     public String getExecutionDescription() {        
-        return "Dibujaré con pincel de tamaño " + width.operate();
+        return Messages.widthMessage(width.operate());
     }
     
 }

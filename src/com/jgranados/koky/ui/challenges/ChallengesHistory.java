@@ -88,7 +88,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
 
         instructionsQCLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         instructionsQCLabel.setForeground(new java.awt.Color(0, 0, 0));
-        instructionsQCLabel.setText("MENSAJE EN QUICHÉ");
+        instructionsQCLabel.setText("Ri ch'ojib'al chawe are' !!");
         getContentPane().add(instructionsQCLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 360, -1, -1));
 
         instructionsENLabel.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
