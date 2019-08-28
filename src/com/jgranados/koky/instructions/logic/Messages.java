@@ -171,12 +171,12 @@ public class Messages {
     
     //messages for instruction to center
     public static String widthMessage(int pluma){
-        return methodIfWithInt(WIDTH_SPANISH,WIDTH_ENGLISH,WIDTH_SPANISH,WIDTH_KICHE,pluma);
+        return methodIfWithInt(WIDTH_SPANISH,WIDTH_SPANISH,WIDTH_ENGLISH,WIDTH_KICHE,pluma);
     }
     
     //messages for instruction to center
     public static String widthErrorMessage(int pluma){
-        return methodIfWithInt(WIDTH_ERROR_SPANISH,WIDTH_ERROR_ENGLISH,WIDTH_ERROR_SPANISH,WIDTH_ERROR_KICHE,pluma);
+        return methodIfWithInt(WIDTH_ERROR_SPANISH,WIDTH_ERROR_SPANISH,WIDTH_ERROR_ENGLISH,WIDTH_ERROR_KICHE,pluma);
     }
     //messages for color
     public static String colorMessage(ColorEnum color){
@@ -197,7 +197,7 @@ public class Messages {
     }
     //messages for error color
     public static String colorErrorMessage(int color){
-        return methodIfWithInt(COLOR_ERROR_SPANISH, COLOR_ERROR_ENGLISH,COLOR_ERROR_SPANISH, COLOR_ERROR_KICHE, color);
+        return methodIfWithInt(COLOR_ERROR_SPANISH, COLOR_ERROR_SPANISH,COLOR_ERROR_ENGLISH, COLOR_ERROR_KICHE, color);
     }  
     //messages for position xy, x and y
     public static String positionMessage(Integer x, Integer y){
