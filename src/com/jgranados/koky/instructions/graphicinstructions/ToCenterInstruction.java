@@ -28,12 +28,32 @@ public class ToCenterInstruction extends TranslationInstruction implements Execu
     }
 
     @Override
+    protected Integer calculateOutEndX(KokyPointer currentPointer) {
+        return currentPointer.getPanelDrawWidth() / 2;
+    }
+
+    @Override
+    protected Integer calculateOutEndY(KokyPointer currentPointer) {
+        return currentPointer.getPanelDrawHeight() / 2;
+    }
+    
+    @Override
     protected double calculateAccumulationX(KokyPointer currentPointer) {
         return 0d;
     }
 
     @Override
     protected double calculateAccumulationY(KokyPointer currentPointer) {
+        return 0d;
+    }
+    
+    @Override
+    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
+        return 0d;
+    }
+
+    @Override
+    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
         return 0d;
     }
 
