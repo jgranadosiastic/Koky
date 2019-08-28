@@ -37,6 +37,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -70,6 +71,7 @@ public class KokyFrame extends javax.swing.JFrame {
     private Boolean coutingSteps = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
     private Scanner sc;
+    private DrawingInstruction draw;
     public static List<String> infoMes = new ArrayList<>();
 
     public KokyFrame() {
@@ -79,6 +81,7 @@ public class KokyFrame extends javax.swing.JFrame {
         typeLanguage();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        draw = new DrawingInstruction(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -117,6 +120,13 @@ public class KokyFrame extends javax.swing.JFrame {
         interactiveMenu = new javax.swing.JMenu();
         takeChallengeMenuItem = new javax.swing.JMenuItem();
         challengeHistoryMEnuItem = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        triangleMenuItem = new javax.swing.JMenuItem();
+        squareMenuItem = new javax.swing.JMenuItem();
+        circleMenuItem = new javax.swing.JMenuItem();
+        pentagonMenuItem = new javax.swing.JMenuItem();
+        starMenuItem = new javax.swing.JMenuItem();
+        cubeMenuItem = new javax.swing.JMenuItem();
         lenguagesMenu = new javax.swing.JMenu();
         lenguagesAll = new javax.swing.JMenuItem();
         lenguageEnglish = new javax.swing.JMenuItem();
@@ -316,6 +326,58 @@ public class KokyFrame extends javax.swing.JFrame {
         });
         interactiveMenu.add(challengeHistoryMEnuItem);
 
+        jMenu1.setText("Dibujos Predefinidos");
+
+        triangleMenuItem.setText("Triangulo");
+        triangleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                triangleMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(triangleMenuItem);
+
+        squareMenuItem.setText("Cuadrado");
+        squareMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                squareMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(squareMenuItem);
+
+        circleMenuItem.setText("Circulo");
+        circleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                circleMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(circleMenuItem);
+
+        pentagonMenuItem.setText("Pentagono");
+        pentagonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pentagonMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(pentagonMenuItem);
+
+        starMenuItem.setText("Estrella");
+        starMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                starMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(starMenuItem);
+
+        cubeMenuItem.setText("Cubo");
+        cubeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cubeMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(cubeMenuItem);
+
+        interactiveMenu.add(jMenu1);
+
         jMenuBar1.add(interactiveMenu);
 
         lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -505,7 +567,7 @@ public class KokyFrame extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_challengeHistoryMEnuItemActionPerformed
 
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
@@ -519,7 +581,6 @@ public class KokyFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
-
         Languages.ALL.setTypeLanguage(false);
         Languages.ENGLISH.setTypeLanguage(true);
         Languages.SPANISH.setTypeLanguage(false);
@@ -547,6 +608,66 @@ public class KokyFrame extends javax.swing.JFrame {
         typeLanguage();
         addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
+
+    private void triangleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_triangleMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_ISTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_triangleMenuItemActionPerformed
+
+    private void squareMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_squareMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_squareMenuItemActionPerformed
+
+    private void circleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleMenuItemActionPerformed
+         if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_circleMenuItemActionPerformed
+
+    private void pentagonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pentagonMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_pentagonMenuItemActionPerformed
+
+    private void starMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_starMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_QUICHE);
+        }  
+    }//GEN-LAST:event_starMenuItemActionPerformed
+
+    private void cubeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cubeMenuItemActionPerformed
+          if (Languages.SPANISH.getTypeLanguage() == true || Languages.ALL.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_cubeMenuItemActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -590,12 +711,12 @@ public class KokyFrame extends javax.swing.JFrame {
     }
 
     private void addMessagesInfo(List<String> messages) {
-            List<String> errorMessages = messages
-                    .stream()
-                    .map(message -> "<font color=\"red\">" + message + "</font>")
-                    .collect(Collectors.toList());
-            addMessages(errorMessages);
-            messages.clear();       
+        List<String> errorMessages = messages
+                .stream()
+                .map(message -> "<font color=\"red\">" + message + "</font>")
+                .collect(Collectors.toList());
+        addMessages(errorMessages);
+        messages.clear();
     }
 
     private void addSuccessMessages(List<String> messages) {
@@ -614,17 +735,17 @@ public class KokyFrame extends javax.swing.JFrame {
         }
     }
 
-    private void parseInstruction(String instruction) {
-        if (Languages.ALL.getTypeLanguage()==true) {
+    protected void parseInstruction(String instruction) {
+        if (Languages.ALL.getTypeLanguage() == true) {
             lexerAll(lexerAll, instruction);
-        }else if (Languages.SPANISH.getTypeLanguage()==true) {
+        } else if (Languages.SPANISH.getTypeLanguage() == true) {
             lexerSpanish(lexerSp, instruction);
-        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
             lexerEnglish(lexerEn, instruction);
-        }else if (Languages.KICHE.getTypeLanguage()==true) {
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
             lexerKiche(lexerKi, instruction);
         }
-        
+
     }
 
     private void saveInstructionsToFile() {
@@ -648,100 +769,104 @@ public class KokyFrame extends javax.swing.JFrame {
         }
         return baseName;
     }
-    
-    private void typeLanguage(){
-        if(Languages.ALL.getTypeLanguage() == true){
+
+    private void typeLanguage() {
+        if (Languages.ALL.getTypeLanguage() == true) {
             lexerAll = new LexerAll(new StringReader(""));
             sc = lexerAll;
             instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
-            typeParser(sc, instructionsSymTable);    
-        }else if (Languages.SPANISH.getTypeLanguage() == true) {
+            typeParser(sc, instructionsSymTable);
+        } else if (Languages.SPANISH.getTypeLanguage() == true) {
             lexerSp = new LexerEs(new StringReader(""));
             sc = lexerSp;
             instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
-            typeParser(sc, instructionsSymTable);         
-        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+            typeParser(sc, instructionsSymTable);
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
             lexerEn = new Lexer(new StringReader(""));
             sc = lexerEn;
             instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
             typeParser(sc, instructionsSymTable);
-         
-        }else if (Languages.KICHE.getTypeLanguage()==true) {
+
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
             lexerKi = new LexerKiche(new StringReader(""));
             sc = lexerKi;
             instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
-            typeParser(sc, instructionsSymTable);   
+            typeParser(sc, instructionsSymTable);
         }
-        
+
     }
-    
-    private void typeParser(Scanner sc, SymbolsTable symbols){
+
+    private void typeParser(Scanner sc, SymbolsTable symbols) {
         myParser = new Parser(sc, symbols);
     }
-    
+
     //type of lexer to execute
-    private void lexerAll(LexerAll lexer, String instruction){
+    private void lexerAll(LexerAll lexer, String instruction) {
         lexer.yyreset(new StringReader(instruction + LINE));
-            try {
-                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-                if (lexer.getErrorsList().isEmpty()) {
-                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                    addSuccessMessages(executionDescriptions);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+            if (lexer.getErrorsList().isEmpty()) {
+                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                addSuccessMessages(executionDescriptions);
             }
+        } catch (Exception ex) {
+            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void lexerSpanish(LexerEs lexer, String instruction){
+
+    private void lexerSpanish(LexerEs lexer, String instruction) {
         lexer.yyreset(new StringReader(instruction + LINE));
-            try {
-                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-                if (lexer.getErrorsList().isEmpty()) {
-                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                    addSuccessMessages(executionDescriptions);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+            if (lexer.getErrorsList().isEmpty()) {
+                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                addSuccessMessages(executionDescriptions);
             }
+        } catch (Exception ex) {
+            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void lexerEnglish(Lexer lexer, String instruction){
+
+    private void lexerEnglish(Lexer lexer, String instruction) {
         lexer.yyreset(new StringReader(instruction + LINE));
-            try {
-                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-                if (lexer.getErrorsList().isEmpty()) {
-                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                    addSuccessMessages(executionDescriptions);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+            if (lexer.getErrorsList().isEmpty()) {
+                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                addSuccessMessages(executionDescriptions);
             }
+        } catch (Exception ex) {
+            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void lexerKiche(LexerKiche lexer, String instruction){
+
+    private void lexerKiche(LexerKiche lexer, String instruction) {
         lexer.yyreset(new StringReader(instruction + LINE));
-            try {
-                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-                if (lexer.getErrorsList().isEmpty()) {
-                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                    addSuccessMessages(executionDescriptions);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+            if (lexer.getErrorsList().isEmpty()) {
+                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                addSuccessMessages(executionDescriptions);
             }
+        } catch (Exception ex) {
+            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     //return error according to language
-    private void errorLanguage(){
-        if (Languages.ALL.getTypeLanguage()==true) {
+    private void errorLanguage() {
+        if (Languages.ALL.getTypeLanguage() == true) {
             addMessagesInfo(this.lexerAll.getErrorsList());
-        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+        } else if (Languages.ENGLISH.getTypeLanguage() == true) {
             addMessagesInfo(this.lexerEn.getErrorsList());
-        }else if (Languages.SPANISH.getTypeLanguage()==true) {
+        } else if (Languages.SPANISH.getTypeLanguage() == true) {
             addMessagesInfo(this.lexerSp.getErrorsList());
-        }else if (Languages.KICHE.getTypeLanguage()==true) {
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
             addMessagesInfo(this.lexerKi.getErrorsList());
         }
     }
-    public void enableButonsInChallenge(Boolean inputInstruction){
+
+    public void enableButonsInChallenge(Boolean inputInstruction) {
         btnOpenFIle.setEnabled(inputInstruction);
         helpMenu.setEnabled(inputInstruction);
         exportMenu.setEnabled(inputInstruction);
@@ -749,8 +874,11 @@ public class KokyFrame extends javax.swing.JFrame {
         btnCleanAll.setEnabled(inputInstruction);
         btnSaveInstructions.setEnabled(inputInstruction);
     }
-    
-    
+
+    public JTextArea getTxtInstructions() {
+        return txtInstructions;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem bntOpenFile;
@@ -763,11 +891,14 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JMenuItem challengeHistoryMEnuItem;
     private javax.swing.JMenuItem changeVarNameMenu;
+    private javax.swing.JMenuItem circleMenuItem;
     private javax.swing.JMenuItem colorItem;
+    private javax.swing.JMenuItem cubeMenuItem;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
     private javax.swing.JMenu interactiveMenu;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -783,9 +914,13 @@ public class KokyFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem lenguageSpanish;
     private javax.swing.JMenuItem lenguagesAll;
     private javax.swing.JMenu lenguagesMenu;
+    private javax.swing.JMenuItem pentagonMenuItem;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
+    private javax.swing.JMenuItem squareMenuItem;
+    private javax.swing.JMenuItem starMenuItem;
     private javax.swing.JMenuItem takeChallengeMenuItem;
+    private javax.swing.JMenuItem triangleMenuItem;
     private javax.swing.JTextField txtInstruction;
     private javax.swing.JTextArea txtInstructions;
     private javax.swing.JEditorPane txtMessages;
