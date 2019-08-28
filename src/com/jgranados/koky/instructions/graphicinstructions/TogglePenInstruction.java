@@ -1,5 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
+import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -7,7 +9,7 @@ import java.awt.Graphics2D;
  *
  * @author jose
  */
-public class TogglePenInstruction extends GraphicsInstruction {
+public class TogglePenInstruction extends GraphicsInstruction implements ExecutionDescribable{
 
     private boolean toggle;
 
@@ -21,4 +23,12 @@ public class TogglePenInstruction extends GraphicsInstruction {
         return graphicsNoPointer;
     }
     
+    @Override
+    public String getExecutionDescription() {
+        if (toggle==true) {
+            return Messages.togglePenFalseTurtle();
+        }else{
+            return Messages.togglePenTrueTurtle();
+        }
+    }
 }

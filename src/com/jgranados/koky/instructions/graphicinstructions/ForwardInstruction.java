@@ -3,6 +3,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.ui.KokyPointer;
+import com.jgranados.koky.instructions.logic.Messages;
 
 /**
  *
@@ -10,7 +11,7 @@ import com.jgranados.koky.ui.KokyPointer;
  */
 public class ForwardInstruction extends TranslationInstruction implements ExecutionDescribable {
 
-    private Expr steps;
+       private Expr steps;
 
     public ForwardInstruction(Expr steps) {
         this.steps = steps;
@@ -86,7 +87,7 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
 
     @Override
     public String getExecutionDescription() {
-        return "Avancé " + steps.operate() + " pasos.";
+        return Messages.fdMessage(steps);
     }
 
 }
