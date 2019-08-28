@@ -1,9 +1,6 @@
 package com.jgranados.koky.ui;
 
 import com.jgranados.koky.challengeshistory.HistoryHandler;
-import com.jgranados.koky.instructions.Instruction;
-import com.jgranados.koky.interpreter.lexer.Lexer;
-import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
@@ -13,26 +10,17 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
 
 /**
  *
@@ -463,7 +451,7 @@ public class KokyFrame extends KFrame{
     }
 
     public void cleanAll() {
-        parseInstruction(CLEARS);
+        parseInstruction(CLEARS,this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -543,7 +531,7 @@ public class KokyFrame extends KFrame{
     }
     
     public void enableButonsInChallenge(Boolean inputInstruction){
-        btnOpenFIle.setEnabled(inputInstruction);
+        btnOpenFile.setEnabled(inputInstruction);
         helpMenu.setEnabled(inputInstruction);
         exportMenu.setEnabled(inputInstruction);
         interactiveMenu.setEnabled(inputInstruction);
