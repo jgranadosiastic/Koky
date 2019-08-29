@@ -2,6 +2,7 @@ package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.ui.KokyPointer;
+import com.jgranados.koky.instructions.logic.Messages;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -21,8 +22,8 @@ public class ClearsInstruction extends GraphicsInstruction implements ExecutionD
     }
 
     @Override
-    public String getExecutionDescription() {
-        return "He limpiado la pantalla.";
+    public String getExecutionDescription() {       
+        return Messages.clearsMessage();
     }
 
 }

@@ -1,3 +1,4 @@
+
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.ui.EndPosition;

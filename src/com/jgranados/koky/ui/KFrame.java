@@ -1,7 +1,11 @@
 package com.jgranados.koky.ui;
-
+import com.jgranados.koky.challengeshistory.HistoryHandler;
 import com.jgranados.koky.instructions.Instruction;
+import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.interpreter.lexer.Lexer;
+import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
+import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
+import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import java.io.IOException;
@@ -11,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java_cup.runtime.Scanner;
 import javax.swing.JEditorPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
@@ -30,22 +35,31 @@ public class KFrame extends javax.swing.JFrame {
     protected static final String CLEARS = "clears";
     protected static final String LINE = "\n";
     protected static final String BR = "<br>";
-    
-    
-    private Lexer myLexer;
-    private Parser myParser;
-    private SymbolsTable instructionsSymTable;
-    private String lastInput;
-    private ArrayList<String> historyInput = new ArrayList<>();
-    private int history = 0;
-    private JEditorPane txtMessages;
-    private boolean isFile;
+    protected static final int NUM_SUBSTRING = 2;
+    private PanelDraw panelDraw;
+    private int instructionsMade = 0;
+    private Boolean coutingSteps = false;
+    private HistoryHandler challengeHistoryHandler = new HistoryHandler();
+    private Scanner sc;
+    protected Lexer lexerEn;
+    protected LexerAll lexerAll;
+    protected LexerEs lexerSp;
+    protected LexerKiche lexerKi;
+    protected Lexer myLexer;
+    protected Parser myParser;
+    protected SymbolsTable instructionsSymTable;
+    protected String lastInput;
+    protected ArrayList<String> historyInput = new ArrayList<>();
+    protected int history = 0;
+    protected JEditorPane txtMessages;
+    protected boolean isFile;
     
     protected KFrame(boolean isFile) {
+        this.typeLanguage();
         txtMessages = new JEditorPane();
         myLexer = new Lexer(new StringReader(""));
         instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-        myParser = new Parser(myLexer, instructionsSymTable);
+        
         this.isFile = isFile;
         if(isFile) {
             myLexer.setAnalyzingFile(true);
@@ -61,17 +75,15 @@ public class KFrame extends javax.swing.JFrame {
             instructionsSymTable.cleanAll();
             txtMessages.setText("");
         }
-        this.myLexer.yyreset(new StringReader(instruction + LINE));
-        try {
-            List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
-            //if (this.myLexer.getErrorsList().isEmpty()) {
-                List<String> executionDescriptions = panelDraw.runInstructions(instructions);
-                addSuccessMessages(executionDescriptions);
-            //}
-        } catch (Exception ex) {
-            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+        if (Languages.ALL.getTypeLanguage()==true) {
+            lexerAll(lexerAll, instruction, panelDraw);
+        }else if (Languages.SPANISH.getTypeLanguage()==true) {
+            lexerSpanish(lexerSp, instruction, panelDraw);
+        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+            lexerEnglish(lexerEn, instruction, panelDraw);
+        }else if (Languages.KICHE.getTypeLanguage()==true) {
+            lexerKiche(lexerKi, instruction, panelDraw);
         }
-        addErrorMessages(this.myLexer.getErrorsList());
     }
     
     protected void addSuccessMessages(List<String> messages) {
@@ -97,5 +109,94 @@ public class KFrame extends javax.swing.JFrame {
             }
             txtMessages.setCaretPosition(doc.getLength());
         }
+    }
+    
+    protected void addMessagesInfo(List<String> messages) {
+            List<String> errorMessages = messages
+                    .stream()
+                    .map(message -> "<font color=\"red\">" + message + "</font>")
+                    .collect(Collectors.toList());
+            addMessages(errorMessages);
+            messages.clear();       
+    }
+    
+    //type of lexer to execute
+    private void lexerAll(LexerAll lexer, String instruction,PanelDraw panelDraw){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerSpanish(LexerEs lexer, String instruction,PanelDraw panelDraw){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerEnglish(Lexer lexer, String instruction,PanelDraw panelDraw){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    private void lexerKiche(LexerKiche lexer, String instruction,PanelDraw panelDraw){
+        lexer.yyreset(new StringReader(instruction + LINE));
+            try {
+                List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                if (lexer.getErrorsList().isEmpty()) {
+                    List<String> executionDescriptions = panelDraw.runInstructions(instructions);
+                    addSuccessMessages(executionDescriptions);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    protected void typeLanguage(){
+        if(Languages.ALL.getTypeLanguage() == true){
+            lexerAll = new LexerAll(new StringReader(""));
+            sc = lexerAll;
+            instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
+            typeParser(sc, instructionsSymTable);    
+        }else if (Languages.SPANISH.getTypeLanguage() == true) {
+            lexerSp = new LexerEs(new StringReader(""));
+            sc = lexerSp;
+            instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
+            typeParser(sc, instructionsSymTable);         
+        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+            lexerEn = new Lexer(new StringReader(""));
+            sc = lexerEn;
+            instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
+            typeParser(sc, instructionsSymTable);
+         
+        }else if (Languages.KICHE.getTypeLanguage()==true) {
+            lexerKi = new LexerKiche(new StringReader(""));
+            sc = lexerKi;
+            instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
+            typeParser(sc, instructionsSymTable);   
+        }
+        
+    }
+    
+    protected void typeParser(Scanner sc, SymbolsTable symbols){
+        myParser = new Parser(sc, symbols);
     }
 }

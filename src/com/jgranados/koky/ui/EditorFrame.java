@@ -12,6 +12,10 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
+import com.jgranados.koky.instructions.logic.Languages;
+import com.jgranados.koky.instructions.logic.Messages;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,10 +28,12 @@ public class EditorFrame extends KFrame {
     private int unnamedTabs;
     private JEditorPane txtMessages;
     private MessageDialog messageDialog;
+    private List<String> messages;
     
     
     public EditorFrame(KokyFrame kokyFrame) {
         super(true);
+        messages = new ArrayList<>();
         this.txtMessages = super.getEditorPane();
         txtMessages.setContentType("text/html");
         initComponents();
@@ -62,6 +68,11 @@ public class EditorFrame extends KFrame {
         jMenu2 = new javax.swing.JMenu();
         btnInstructions = new javax.swing.JMenuItem();
         btnAbout = new javax.swing.JMenuItem();
+        lenguagesMenu = new javax.swing.JMenu();
+        lenguagesAll = new javax.swing.JMenuItem();
+        lenguageEnglish = new javax.swing.JMenuItem();
+        lenguageSpanish = new javax.swing.JMenuItem();
+        lenguageKiche = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editor de Texto");
@@ -199,6 +210,44 @@ public class EditorFrame extends KFrame {
 
         jMenuBar1.add(jMenu2);
 
+        lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
+        lenguagesMenu.setText("Idiomas");
+        lenguagesMenu.setToolTipText("");
+
+        lenguagesAll.setText("Todos");
+        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguagesAllActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguagesAll);
+
+        lenguageEnglish.setText("Ingles");
+        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageEnglishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageEnglish);
+
+        lenguageSpanish.setText("Español");
+        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageSpanishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageSpanish);
+
+        lenguageKiche.setText("Kiche");
+        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageKicheActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageKiche);
+
+        jMenuBar1.add(lenguagesMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -295,6 +344,51 @@ public class EditorFrame extends KFrame {
         openFile();
     }//GEN-LAST:event_loadFileActionPerformed
 
+    private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
+        
+        messages.clear();
+        Languages.ALL.setTypeLanguage(true);
+        Languages.ENGLISH.setTypeLanguage(false);
+        Languages.SPANISH.setTypeLanguage(false);
+        Languages.KICHE.setTypeLanguage(false);
+        typeLanguage();
+        messages = Messages.changeMessage();
+        JOptionPane.showMessageDialog(null, messages);
+    }//GEN-LAST:event_lenguagesAllActionPerformed
+
+    private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
+        messages.clear();
+        Languages.ALL.setTypeLanguage(false);
+        Languages.ENGLISH.setTypeLanguage(true);
+        Languages.SPANISH.setTypeLanguage(false);
+        Languages.KICHE.setTypeLanguage(false);
+        typeLanguage();
+        messages = Messages.changeMessage();
+        JOptionPane.showMessageDialog(null, messages);
+    }//GEN-LAST:event_lenguageEnglishActionPerformed
+
+    private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
+        messages.clear();
+        Languages.ALL.setTypeLanguage(false);
+        Languages.ENGLISH.setTypeLanguage(false);
+        Languages.SPANISH.setTypeLanguage(true);
+        Languages.KICHE.setTypeLanguage(false);
+        typeLanguage();
+        messages = Messages.changeMessage();
+        JOptionPane.showMessageDialog(null, messages);
+    }//GEN-LAST:event_lenguageSpanishActionPerformed
+
+    private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
+        messages.clear();
+        Languages.ALL.setTypeLanguage(false);
+        Languages.ENGLISH.setTypeLanguage(false);
+        Languages.SPANISH.setTypeLanguage(false);
+        Languages.KICHE.setTypeLanguage(true);
+        typeLanguage();
+        messages = Messages.changeMessage();
+        JOptionPane.showMessageDialog(null, messages);
+    }//GEN-LAST:event_lenguageKicheActionPerformed
+
     
     public void run() {
         InputTab in = (InputTab)Inputs.getSelectedComponent();
@@ -363,6 +457,11 @@ public class EditorFrame extends KFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuItem lenguageEnglish;
+    private javax.swing.JMenuItem lenguageKiche;
+    private javax.swing.JMenuItem lenguageSpanish;
+    private javax.swing.JMenuItem lenguagesAll;
+    private javax.swing.JMenu lenguagesMenu;
     private javax.swing.JButton loadFile;
     private javax.swing.JButton newFile;
     private javax.swing.JButton redoFile;
