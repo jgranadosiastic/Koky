@@ -345,7 +345,6 @@ public class EditorFrame extends KFrame {
     }//GEN-LAST:event_loadFileActionPerformed
 
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
-        
         messages.clear();
         Languages.ALL.setTypeLanguage(true);
         Languages.ENGLISH.setTypeLanguage(false);
