@@ -298,11 +298,31 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                     :}
                 | ID:e EQ expr:ex LINE_TERMINATOR
                     {:
-                        if(!myLexer.isAnalyzingFile()){
-                            RESULT = new VarAssignationInstruction(symTable, e, ex);
-                        } else {
-                            symTable.addId(e,ex.operate(),myLexer.isAnalyzingFile());
-                        }
+                        if (Languages.ALL.getTypeLanguage()==true) {
+                            if(!lexerAll.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
+                            }
+                         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                           if(!lexerEnglish.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
+                            }
+                         }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                            if(!lexerEs.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
+                            }
+                         }else if (Languages.KICHE.getTypeLanguage()==true) {
+                            if(!lexerKi.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
+                            }
+                         }
                     :}
                 | LINE_TERMINATOR
                     {:  
