@@ -12,7 +12,7 @@ import com.jgranados.koky.ui.KokyPointer;
 public class PositionXInstruction extends PositionInstruction {
 
     private Expr posX;
-
+  
     public PositionXInstruction(Expr posX) {
         this.posX = posX;
     }

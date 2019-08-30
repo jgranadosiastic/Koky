@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.token.Token;
+import com.jgranados.koky.instructions.logic.Messages;
+
 
 /**
  *
@@ -18,7 +20,7 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     private Expr intColor;
     private String hexaColor;
     private boolean isIntColor;
-
+    
     public ColorInstruction(Expr color) {
         this.intColor = color;
         this.isIntColor = true;
@@ -41,8 +43,12 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
 
     @Override
     public String getExecutionDescription() {
-        ColorEnum color = ColorEnum.fromValue(intColor.operate());
-        return "Dibujaré con color " + color.toString();
+        if (isIntColor) {
+            ColorEnum color = ColorEnum.fromValue(intColor.operate());
+            return Messages.colorMessage(color);
+        }else{
+            return Messages.colorHMessage();
+        } 
     }
 
     @Override

@@ -6,10 +6,15 @@
 package com.jgranados.koky.interpreter.parser;
 
 import com.jgranados.koky.interpreter.lexer.Lexer;
+import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
+import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
+import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
+import com.jgranados.koky.instructions.logic.Languages;
+import com.jgranados.koky.instructions.logic.Messages;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -582,52 +587,123 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
-        private Lexer myLexer;
+       private Lexer lexerEnglish;
+        private LexerEs lexerEs;
+        private LexerKiche lexerKi;
+        private LexerAll lexerAll;
         private List<String> errorsList;
         private SymbolsTable symTable;
-        private ProcedureTable procedureTable;
+	private ProcedureTable procedureTable;
+
+	// LA TABLA DE SIMBOLOS SE REINICIA CADA VEZ QUE SE SELECCIONA UN IDIOMA
         
-
-	// Connect this parser to a scanner!
-	public Parser(Lexer lex, SymbolsTable symTable, ProcedureTable procedureTable) {
-            super(lex);
-            myLexer = lex;
-            this.errorsList = myLexer.getErrorsList();
+        public Parser(Scanner scan, SymbolsTable symTable, ProcedureTable procedureTable){
+            super(scan);
+             if (Languages.ALL.getTypeLanguage()==true) {
+                lexerAll = (LexerAll) scan;
+                this.errorsList = lexerAll.getErrorsList();
+            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                lexerEnglish = (Lexer) scan;
+                this.errorsList = lexerEnglish.getErrorsList();
+            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                lexerEs = (LexerEs) scan;
+                this.errorsList = lexerEs.getErrorsList();
+            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                lexerKi = (LexerKiche) scan;
+                this.errorsList = lexerKi.getErrorsList();
+            }
             this.symTable = symTable;
-            this.procedureTable = procedureTable; 
-	}
-
+ 	    this.procedureTable = procedureTable; 	
+        }
+       
         @Override
         public void syntax_error(Symbol st) {
-            if (st.sym != sym.LINE_TERMINATOR) {
-                Token token = (Token) st.value;
-                report_error("Error Sintactico:"+ token.getLexeme()+"- "+token.getLine()+"-"+token.getColumn() + "\n",null);
-                if (myLexer.isAnalyzingFile()) {
-                    System.out.println("No entiendo que hacer con " + token.getLexeme() + "En la linea " + token.getLine() + ", columna " + token.getColumn());
-                    errorsList.add(String.format("No entiendo que hacer con '%s' en linea %d y columna %d. Intenta borrandolo.", token.getLexeme(), token.getLine(), token.getColumn()));
-                } else {
-                    System.out.println("No entiendo que hacer con " + token.getLexeme());
-                    errorsList.add(String.format("No entiendo que hacer con '%s'. Intenta de nuevo con una instruccion válida.", token.getLexeme()));
-                }
-            }
+            //validation to respond according to language   
+            if (Languages.ALL.getTypeLanguage()==true) {
+                getAnalyzingFile(st, Languages.ALL);
+            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                getAnalyzingFile(st, Languages.ENGLISH);
+            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                getAnalyzingFile(st, Languages.SPANISH);
+            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                getAnalyzingFile(st, Languages.KICHE);
+            }  
         }
+        
+        public void getAnalyzingFile(Symbol st, Enum typeLanguage){
+                if (st.sym != sym.LINE_TERMINATOR) {
+                    Token token = (Token) st.value;
+                    report_error(Messages.reportError(token.getLexeme(),token.getLine(),token.getColumn()),null);
+                    if (typeLanguage.equals(Languages.KICHE)) {
+                        if (lexerKi.isAnalyzingFile()) {
+                            errorsList(token);
+                        } else {
+                            errorsList(token);
+                        }
+                    }else if (typeLanguage.equals(Languages.SPANISH)) {
+                        if (lexerEs.isAnalyzingFile()) {
+                            errorsList(token);
+                        } else {
+                            errorsList(token);
+                        }
+                    }else if (typeLanguage.equals(Languages.ENGLISH)) {
+                        if (lexerEnglish.isAnalyzingFile()) {
+                            errorsList(token);
+                        } else {
+                            errorsList(token);
+                        }
+                    }else if (typeLanguage.equals(Languages.ALL)) {
+                        if (lexerAll.isAnalyzingFile()) {
+                            errorsList(token);
+                        } else {
+                            errorsList(token);
+                        }
+                    }
+                }
+        }
+
+        public void setLexersAnalyzingFile(boolean flag) {
+            this.lexerAll.setAnalyzingFile(flag);
+            this.lexerEnglish.setAnalyzingFile(flag);
+            this.lexerEs.setAnalyzingFile(flag);
+            this.lexerKi.setAnalyzingFile(flag);
+        }
+
+        private void getColorError(Enum typeLanguage, int token){
+                    if (typeLanguage.equals(Languages.KICHE)) {
+                        if (lexerKi.isAnalyzingFile()) {
+                            errorsList.add(Messages.colorErrorMessage(token));
+                        } else {
+                            errorsList.add(Messages.colorErrorMessage(token));
+                        }
+                    }else if (typeLanguage.equals(Languages.SPANISH)) {
+                        if (lexerEs.isAnalyzingFile()) {
+                            errorsList.add(Messages.colorErrorMessage(token));
+                        } else {
+                            errorsList.add(Messages.colorErrorMessage(token));
+                        }
+                    }else if (typeLanguage.equals(Languages.ENGLISH)) {
+                        if (lexerEnglish.isAnalyzingFile()) {
+                           errorsList.add(Messages.colorErrorMessage(token));
+                        } else {
+                            errorsList.add(Messages.colorErrorMessage(token));
+                        }
+                    }else if (typeLanguage.equals(Languages.ALL)) {
+                        if (lexerAll.isAnalyzingFile()) {
+                           errorsList.add(Messages.colorErrorMessage(token));
+                        } else {
+                           errorsList.add(Messages.colorErrorMessage(token));
+                        }
+                    }
+        }
+        
+        private void errorsList(Token token){
+            errorsList.add(Messages.errorCup(token.getLexeme()));
+        }   
 
         public void addSemanticError(String msg) {
             this.errorsList.add(msg);
         }
-
-        /*public Integer getIDValue(Token id) {
-            Integer value = this.symTable.get(id.getLexeme());
-            if (value == null) {
-                if (myLexer.isAnalyzingFile()) {
-                    errorsList.add(String.format("La variable '%s' no se ha creado en el archivo que estoy leyendo. Debe crear la variable antes de usarla.", id.getLexeme()));
-                } else {
-                    errorsList.add(String.format("La variable '%s' no se ha creado en el area de instrucciones. Ingrese una instrucción para crear la variable.", id.getLexeme()));
-                }
-                return 0;
-            }
-            return value;
-        }*/
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -835,16 +911,23 @@ class CUP$Parser$actions {
 		  
                         System.out.println("un color ");
                         RESULT = new ColorInstruction(e);
-                        /*if (e > 0 && e < 10) {
+                        if (e.operate() >= 0 && e.operate() < 10) {
                             RESULT = new ColorInstruction(e);
                         } else {
-                            if (myLexer.isAnalyzingFile()) {
-                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
-                            } else {
-                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            if (Languages.ALL.getTypeLanguage()==true) {
+                                if (Languages.ALL.getTypeLanguage()==true) {
+                                getColorError(Languages.ALL, e.operate());
+                            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                                getColorError(Languages.ENGLISH, e.operate());
+                            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                                getColorError(Languages.SPANISH, e.operate());
+                            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                                getColorError(Languages.KICHE, e.operate());
                             }
+                            
                             RESULT = new EmptyInstruction();
-                        }*/
+                            }
+                        }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -972,7 +1055,7 @@ class CUP$Parser$actions {
                         if(e.operate() > 0 && e.operate() < 16) {
                             RESULT = new WidthInstruction(e);
                         } else {
-                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
+                            errorsList.add(Messages.widthErrorMessage(e.operate()));
                         }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1005,8 +1088,16 @@ class CUP$Parser$actions {
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Token e = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
-                        symTable.addId(e, 0, myLexer.isAnalyzingFile());
-                        RESULT = new EmptyInstruction();
+                         if (Languages.ALL.getTypeLanguage()==true) {
+                             symTable.addId(e, 0, lexerAll.isAnalyzingFile());
+                         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                            symTable.addId(e, 0, lexerEnglish.isAnalyzingFile());
+                         }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                            symTable.addId(e, 0, lexerEs.isAnalyzingFile());
+                         }else if (Languages.KICHE.getTypeLanguage()==true) {
+                            symTable.addId(e, 0, lexerKi.isAnalyzingFile());
+                         }
+                          RESULT = new EmptyInstruction();
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1023,7 +1114,31 @@ class CUP$Parser$actions {
 		int exright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Expr ex = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
-                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        if (Languages.ALL.getTypeLanguage()==true) {
+                            if(!lexerAll.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
+                            }
+                         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                           if(!lexerEnglish.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
+                            }
+                         }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                            if(!lexerEs.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
+                            }
+                         }else if (Languages.KICHE.getTypeLanguage()==true) {
+                            if(!lexerKi.isAnalyzingFile()){
+                                RESULT = new VarAssignationInstruction(symTable, e, ex);
+                            } else {
+                                symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
+                            }
+                         }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1067,8 +1182,8 @@ class CUP$Parser$actions {
 		int instructionsright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
-                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                    if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                         symTable.clearTemporal();
                     } else {
@@ -1093,8 +1208,8 @@ class CUP$Parser$actions {
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		
                     List<Token> parametersList = new ArrayList<>();
-                    if (!procedureTable.exists(id, parametersList, myLexer.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
-                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,myLexer.isAnalyzingFile());
+                    if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
                         RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                         symTable.clearTemporal();
                     } else {
@@ -1417,16 +1532,23 @@ class CUP$Parser$actions {
 		  
                         System.out.println("un color ");
                         RESULT = new ColorInstruction(e);
-                        /*if (e > 0 && e < 10) {
+                         if (e.operate() >= 0 && e.operate() < 10) {
                             RESULT = new ColorInstruction(e);
                         } else {
-                            if (myLexer.isAnalyzingFile()) {
-                                errorsList.add(String.format("El color '%d' definido en la linea %d no es correcto. Prueba uno entre 0 y 9.", e, color.getLine()));
-                            } else {
-                                errorsList.add(String.format("El color '%d' no es correcto. Prueba uno entre 0 y 9.", e));
+                            if (Languages.ALL.getTypeLanguage()==true) {
+                                if (Languages.ALL.getTypeLanguage()==true) {
+                                getColorError(Languages.ALL, e.operate());
+                            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                                getColorError(Languages.ENGLISH, e.operate());
+                            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                                getColorError(Languages.SPANISH, e.operate());
+                            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                                getColorError(Languages.KICHE, e.operate());
                             }
+                            
                             RESULT = new EmptyInstruction();
-                        }*/
+                            }
+                        }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instructionVoid",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1554,7 +1676,7 @@ class CUP$Parser$actions {
                         if(e.operate() > 0 && e.operate() < 16) {
                             RESULT = new WidthInstruction(e);
                         } else {
-                            errorsList.add(String.format("El Tamaño '%d' no es correcto. Prueba uno entre 1 y 15.", e.operate()));
+                            errorsList.add(Messages.widthErrorMessage(e.operate()));
                         }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instructionVoid",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1736,17 +1858,56 @@ class CUP$Parser$actions {
 		int eleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Token e = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-			
-                	if (symTable.verifyTemporalVar(e.getLexeme())) {
+		  
+                     if (Languages.ALL.getTypeLanguage()==true) {
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
                     		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, myLexer.isAnalyzingFile())) {
-                        		RESULT = new Expr(e, symTable);
-                    		} else {
-                    			RESULT = null;
-                    		}
+                    		if (symTable.exists(e, lexerAll.isAnalyzingFile())) {
+                           	 	RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
                     		
                     	}
+        
+                     }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, lexerEnglish.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
+                     }else if (Languages.SPANISH.getTypeLanguage()==true) {
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, lexerEs.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
+                     }else if (Languages.KICHE.getTypeLanguage()==true) {
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, lexerKi.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
+                     }
                 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expr",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }

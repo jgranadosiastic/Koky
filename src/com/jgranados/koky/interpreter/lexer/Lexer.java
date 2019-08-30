@@ -8,6 +8,7 @@ import com.jgranados.koky.interpreter.parser.sym;
 import static com.jgranados.koky.interpreter.parser.sym.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.jgranados.koky.instructions.logic.Messages;
 
 
 /**
@@ -353,7 +354,6 @@ public class Lexer implements java_cup.runtime.Scanner {
   /* user code: */
     private boolean analyzingFile = false;
     private List<String> errorsList;
-
     private Symbol symbol(int type) {
 
 
@@ -369,11 +369,9 @@ public class Lexer implements java_cup.runtime.Scanner {
 
     private void error(String lexeme) {
         if (isAnalyzingFile()) {
-            System.out.printf("No entiendo el texto %s en la linea %d, columna %d. Borralo e intenta de nuevo.\n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(String.format("No entiendo el texto %s en la linea %d, columna %d. Borralo e intenta de nuevo.", lexeme, yyline + 1, yycolumn + 1));
+            errorsList.add(Messages.errorLexer(lexeme));
         } else {
-            System.out.printf("No entiendo el texto %s en la instruccion. Borralo e intenta de nuevo.\n", lexeme);
-            errorsList.add(String.format("No entiendo el texto %s en la instruccion. Borralo e intenta de nuevo.", lexeme));
+            errorsList.add(Messages.errorLexer(lexeme));
         }
     }
 

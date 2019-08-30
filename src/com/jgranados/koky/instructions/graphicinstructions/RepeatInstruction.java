@@ -1,11 +1,13 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
+import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.varinstructions.Assignable;
 import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
+import com.jgranados.koky.instructions.logic.Messages;
 import java.awt.Graphics2D;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  *
  * @author jose
  */
-public class RepeatInstruction extends GraphicsInstruction {
+public class RepeatInstruction extends GraphicsInstruction implements ExecutionDescribable{
 
     private Expr loops;
     private List<Instruction> instructions;
@@ -55,4 +57,9 @@ public class RepeatInstruction extends GraphicsInstruction {
             instruction.assignTableTokenValue(token);
         }
     }
+    @Override
+    public String getExecutionDescription() {
+     return Messages.repeatInstruction();
+    }
+   
 }

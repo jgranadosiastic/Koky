@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
-
 import com.jgranados.koky.interpreter.token.Token;
+import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -8,7 +9,7 @@ import java.awt.Graphics2D;
  *
  * @author jose
  */
-public class ToggleTurtleInstruction extends GraphicsInstruction {
+public class ToggleTurtleInstruction extends GraphicsInstruction implements ExecutionDescribable {
 
     private boolean toggle;
 
@@ -32,4 +33,12 @@ public class ToggleTurtleInstruction extends GraphicsInstruction {
         //Nothing this class don't have Expr
     }
     
+    @Override
+    public String getExecutionDescription() {
+        if (toggle==true) {
+            return Messages.toggleTrueTurtle();
+        }else{
+            return Messages.toggleFalseTurtle();
+        }
+    }
 }
