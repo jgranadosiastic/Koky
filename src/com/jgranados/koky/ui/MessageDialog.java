@@ -11,6 +11,7 @@ public class MessageDialog extends javax.swing.JFrame {
     public MessageDialog(JEditorPane txtMessages) {
         initComponents();
         this.scrollPanel.setViewportView(txtMessages);
+        txtMessages.setEditable(false);
     }
 
     @SuppressWarnings("unchecked")

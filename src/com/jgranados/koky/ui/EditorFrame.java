@@ -393,6 +393,7 @@ public class EditorFrame extends KFrame {
         InputTab in = (InputTab)Inputs.getSelectedComponent();
         this.kokyFrame.setVisible(true);
         super.parseInstruction(in.getText(),this.kokyFrame.getPanelDraw());
+        errorLanguage();
         if(messageDialog == null || !messageDialog.isVisible()) {
             messageDialog = new MessageDialog(this.txtMessages);
             messageDialog.setVisible(true);

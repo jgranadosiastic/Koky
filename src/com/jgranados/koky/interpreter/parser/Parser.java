@@ -490,7 +490,7 @@ public class Parser extends java_cup.runtime.lr_parser {
             }  
         }
         
-        private void getAnalyzingFile(Symbol st, Enum typeLanguage){
+        public void getAnalyzingFile(Symbol st, Enum typeLanguage){
                 if (st.sym != sym.LINE_TERMINATOR) {
                     Token token = (Token) st.value;
                     report_error(Messages.reportError(token.getLexeme(),token.getLine(),token.getColumn()),null);
@@ -556,6 +556,18 @@ public class Parser extends java_cup.runtime.lr_parser {
 
         public void addSemanticError(String msg) {
             this.errorsList.add(msg);
+        }
+        
+        public void setLexersAnalyzingFile(boolean flag) {
+            if (Languages.ALL.getTypeLanguage()==true) {
+                lexerAll.setAnalyzingFile(flag);
+            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                lexerEnglish.setAnalyzingFile(flag);
+            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                lexerEs.setAnalyzingFile(flag);
+            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                lexerKi.setAnalyzingFile(flag);
+            }
         }
 
 

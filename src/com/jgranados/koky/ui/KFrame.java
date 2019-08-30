@@ -58,7 +58,6 @@ public class KFrame extends javax.swing.JFrame {
         this.typeLanguage();
         txtMessages = new JEditorPane();
         myLexer = new Lexer(new StringReader(""));
-        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
         
         this.isFile = isFile;
         if(isFile) {
@@ -120,11 +119,24 @@ public class KFrame extends javax.swing.JFrame {
             messages.clear();       
     }
     
+    protected void errorLanguage(){
+        if (Languages.ALL.getTypeLanguage()==true) {
+            addMessagesInfo(this.lexerAll.getErrorsList());
+        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+            addMessagesInfo(this.lexerEn.getErrorsList());
+        }else if (Languages.SPANISH.getTypeLanguage()==true) {
+            addMessagesInfo(this.lexerSp.getErrorsList());
+        }else if (Languages.KICHE.getTypeLanguage()==true) {
+            addMessagesInfo(this.lexerKi.getErrorsList());
+        }
+    }
+    
     //type of lexer to execute
     private void lexerAll(LexerAll lexer, String instruction,PanelDraw panelDraw){
         lexer.yyreset(new StringReader(instruction + LINE));
             try {
                 List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
+                
                 if (lexer.getErrorsList().isEmpty()) {
                     List<String> executionDescriptions = panelDraw.runInstructions(instructions);
                     addSuccessMessages(executionDescriptions);
@@ -198,5 +210,6 @@ public class KFrame extends javax.swing.JFrame {
     
     protected void typeParser(Scanner sc, SymbolsTable symbols){
         myParser = new Parser(sc, symbols);
+        myParser.setLexersAnalyzingFile(true);
     }
 }

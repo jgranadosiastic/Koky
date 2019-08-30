@@ -635,18 +635,6 @@ public class KokyFrame extends KFrame{
         return baseName;
     }
     
-    //return error according to language
-    private void errorLanguage(){
-        if (Languages.ALL.getTypeLanguage()==true) {
-            addMessagesInfo(this.lexerAll.getErrorsList());
-        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-            addMessagesInfo(this.lexerEn.getErrorsList());
-        }else if (Languages.SPANISH.getTypeLanguage()==true) {
-            addMessagesInfo(this.lexerSp.getErrorsList());
-        }else if (Languages.KICHE.getTypeLanguage()==true) {
-            addMessagesInfo(this.lexerKi.getErrorsList());
-        }
-    }
     public void enableButonsInChallenge(Boolean inputInstruction){
         btnOpenFile.setEnabled(inputInstruction);
         helpMenu.setEnabled(inputInstruction);

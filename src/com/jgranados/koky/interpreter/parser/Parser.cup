@@ -61,7 +61,7 @@ parser code {:
             }  
         }
         
-        private void getAnalyzingFile(Symbol st, Enum typeLanguage){
+        public void getAnalyzingFile(Symbol st, Enum typeLanguage){
                 if (st.sym != sym.LINE_TERMINATOR) {
                     Token token = (Token) st.value;
                     report_error(Messages.reportError(token.getLexeme(),token.getLine(),token.getColumn()),null);
@@ -91,6 +91,13 @@ parser code {:
                         }
                     }
                 }
+        }
+
+        public void setLexersAnalyzingFile(boolean flag) {
+            this.lexerAll.setAnalyzingFile(flag);
+            this.lexerEnglish.setAnalyzingFile(flag);
+            this.lexerEs.setAnalyzingFile(flag);
+            this.lexerKi.setAnalyzingFile(flag);
         }
 
         private void getColorError(Enum typeLanguage, int token){
