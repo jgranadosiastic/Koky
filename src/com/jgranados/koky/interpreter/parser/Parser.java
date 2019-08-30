@@ -16,12 +16,10 @@ import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import com.jgranados.koky.instructions.*;
 import com.jgranados.koky.instructions.graphicinstructions.*;
 import com.jgranados.koky.instructions.varinstructions.*;
 import java_cup.runtime.*;
-import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
   */
@@ -451,7 +449,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
-       private Lexer lexerEnglish;
+        private Lexer lexerEnglish;
         private LexerEs lexerEs;
         private LexerKiche lexerKi;
         private LexerAll lexerAll;
@@ -462,7 +460,7 @@ public class Parser extends java_cup.runtime.lr_parser {
         
         public Parser(Scanner scan, SymbolsTable symTable){
             super(scan);
-             if (Languages.ALL.getTypeLanguage()==true) {
+            if (Languages.ALL.getTypeLanguage()==true) {
                 lexerAll = (LexerAll) scan;
                 this.errorsList = lexerAll.getErrorsList();
             }else if (Languages.ENGLISH.getTypeLanguage()==true) {
@@ -492,7 +490,7 @@ public class Parser extends java_cup.runtime.lr_parser {
             }  
         }
         
-        private void getAnalyzingFile(Symbol st, Enum typeLanguage){
+        public void getAnalyzingFile(Symbol st, Enum typeLanguage){
                 if (st.sym != sym.LINE_TERMINATOR) {
                     Token token = (Token) st.value;
                     report_error(Messages.reportError(token.getLexeme(),token.getLine(),token.getColumn()),null);
@@ -558,6 +556,18 @@ public class Parser extends java_cup.runtime.lr_parser {
 
         public void addSemanticError(String msg) {
             this.errorsList.add(msg);
+        }
+        
+        public void setLexersAnalyzingFile(boolean flag) {
+            if (Languages.ALL.getTypeLanguage()==true) {
+                lexerAll.setAnalyzingFile(flag);
+            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                lexerEnglish.setAnalyzingFile(flag);
+            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                lexerEs.setAnalyzingFile(flag);
+            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                lexerKi.setAnalyzingFile(flag);
+            }
         }
 
 
@@ -969,7 +979,32 @@ class CUP$Parser$actions {
 		int exright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Expr ex = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		
-                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        
+                    if (Languages.ALL.getTypeLanguage()==true) {
+                        if(!lexerAll.isAnalyzingFile()){
+                            RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        } else {
+                            symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
+                        }
+                     }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                       if(!lexerEnglish.isAnalyzingFile()){
+                            RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        } else {
+                            symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
+                        }
+                     }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                        if(!lexerEs.isAnalyzingFile()){
+                            RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        } else {
+                            symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
+                        }
+                     }else if (Languages.KICHE.getTypeLanguage()==true) {
+                        if(!lexerKi.isAnalyzingFile()){
+                            RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        } else {
+                            symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
+                        }
+                     }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
