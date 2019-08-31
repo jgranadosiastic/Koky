@@ -93,44 +93,51 @@ public final class TranslationUtils {
         }
         if (isXDownOfRange(actualPoint.getOutPosX())) {
             endPosition.setPosXY(TranslationUtils.MINIMUN_RANGE_X, getAxisY(endPosition, slope, TranslationUtils.MINIMUN_RANGE_X));
-            return endPosition;
         } else if (isXUpOfRange(actualPoint.getOutPosX())) {
             endPosition.setPosXY(PanelDraw.PANEL_WIDTH, getAxisY(endPosition, slope, PanelDraw.PANEL_WIDTH));
-            return endPosition;
         } else if (isYDownOfRange(actualPoint.getOutPosY())) {
             if (slope != 0) {
                 endPosition.setPosXY(getAxisX(endPosition, slope, TranslationUtils.MINIMUN_RANGE_Y), TranslationUtils.MINIMUN_RANGE_Y);
             } else {
                 endPosition.setPosXY(actualPoint.getOutPosX(), TranslationUtils.MINIMUN_RANGE_Y);
             }
-            return endPosition;
         } else if (isYUpOfRange(actualPoint.getOutPosY())) {
             if (slope != 0) {
                 endPosition.setPosXY(getAxisX(endPosition, slope, PanelDraw.PANEL_HEIGHT), PanelDraw.PANEL_HEIGHT);
             } else {
                 endPosition.setPosXY(actualPoint.getOutPosX(), PanelDraw.PANEL_HEIGHT);
             }
-            return endPosition;
         }
-        return null;
+        endPosition = getVerifiedPosition(endPosition);
+        return endPosition;
     }
 
     public static EndPosition getOutPosition(KokyPointer actualPointer) {
         EndPosition endPosition = new EndPosition();
         if (isXDownOfRange(actualPointer.getOutPosX())) {
             endPosition.setPosXY(0, actualPointer.getPosY());
-            return endPosition;
         } else if (isXUpOfRange(actualPointer.getOutPosX())) {
             endPosition.setPosXY(PanelDraw.PANEL_WIDTH, actualPointer.getOutPosY());
-            return endPosition;
         } else if (isYDownOfRange(actualPointer.getOutPosY())) {
             endPosition.setPosXY(actualPointer.getOutPosX(), TranslationUtils.MINIMUN_RANGE_Y);
-            return endPosition;
         } else if (isYUpOfRange(actualPointer.getOutPosY())) {
             endPosition.setPosXY(actualPointer.getOutPosX(), PanelDraw.PANEL_HEIGHT);
-            return endPosition;
         }
-        return null;
+        endPosition = getVerifiedPosition(endPosition);
+        return endPosition;
+    }
+    
+    private static EndPosition getVerifiedPosition(EndPosition finalPosition){
+        if (isXDownOfRange(finalPosition.getPosX())) {
+            finalPosition.setPosX(TranslationUtils.MINIMUN_RANGE_X);
+        } else if (isXUpOfRange(finalPosition.getPosX())) {
+            finalPosition.setPosX(PanelDraw.PANEL_WIDTH);
+        } else if (isYDownOfRange(finalPosition.getPosY())) {
+            finalPosition.setPosY(TranslationUtils.MINIMUN_RANGE_Y);
+        } else if (isYUpOfRange(finalPosition.getPosY())) {
+            finalPosition.setPosY(PanelDraw.PANEL_HEIGHT);
+        }
+        return finalPosition;
     }
 
     private static int getAxisY(EndPosition endPosition, double slope, int posX) {

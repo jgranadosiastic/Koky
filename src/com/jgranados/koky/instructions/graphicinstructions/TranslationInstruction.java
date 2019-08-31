@@ -1,3 +1,4 @@
+
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.ui.EndPosition;
@@ -70,5 +71,5 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     protected abstract double calculateAccumulationX(KokyPointer currentPointer);
 
     protected abstract double calculateAccumulationY(KokyPointer currentPointer);
-
 }
+
