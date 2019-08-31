@@ -1123,32 +1123,33 @@ class CUP$Parser$actions {
 		int exleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int exright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Expr ex = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		
-                        if (Languages.ALL.getTypeLanguage()==true) {
-                            if(!lexerAll.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
-                            }
-                         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-                           if(!lexerEnglish.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
-                            }
-                         }else if (Languages.SPANISH.getTypeLanguage()==true) {
-                            if(!lexerEs.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
-                            }
-                         }else if (Languages.KICHE.getTypeLanguage()==true) {
-                            if(!lexerKi.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
-                            }
-                         }
+                
+                            RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+//                        if (Languages.ALL.getTypeLanguage()==true) {
+//                            if(!lexerAll.isAnalyzingFile()){
+//                                RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+//                            } else {
+//                                symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
+//                            }
+//                         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+//                           if(!lexerEnglish.isAnalyzingFile()){
+//                                RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+//                            } else {
+//                                symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
+//                            }
+//                         }else if (Languages.SPANISH.getTypeLanguage()==true) {
+//                            if(!lexerEs.isAnalyzingFile()){
+//                                RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+//                            } else {
+//                                symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
+//                            }
+//                         }else if (Languages.KICHE.getTypeLanguage()==true) {
+//                            if(!lexerKi.isAnalyzingFile()){
+//                                RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+//                            } else {
+//                                symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
+//                            }
+//                         }
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instruction",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1193,38 +1194,46 @@ class CUP$Parser$actions {
 		List<Instruction> instructions = (List<Instruction>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
                     ///////////////
                     if (Languages.ALL.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEnglish.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.SPANISH.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEs.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.KICHE.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerKi.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
@@ -1258,38 +1267,46 @@ class CUP$Parser$actions {
                     ///////////////
                     List<Token> parametersList = new ArrayList<>();
                     if (Languages.ALL.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEnglish.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.SPANISH.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEs.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
                     }else if (Languages.KICHE.getTypeLanguage()==true) {
-                        if (!procedureTable.exists(id, parametersList, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
                             SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerKi.isAnalyzingFile());
                             RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
                             symTable.clearTemporal();
                         } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
                             RESULT = new EmptyInstruction();
 
                         }
@@ -1801,7 +1818,7 @@ class CUP$Parser$actions {
 		int exright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Expr ex = (Expr)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
-                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
                     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instructionVoid",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1952,7 +1969,7 @@ class CUP$Parser$actions {
 			if (symTable.verifyTemporalVar(e.getLexeme())) {
                     		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, lexerAll.isAnalyzingFile())) {
+                    		if (symTable.exists(e, procedureTable, lexerAll.isAnalyzingFile())) {
                            	 	RESULT = new Expr(e, symTable);
                         	} else {
                             		RESULT = null;
@@ -1964,7 +1981,7 @@ class CUP$Parser$actions {
 			if (symTable.verifyTemporalVar(e.getLexeme())) {
                     		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, lexerEnglish.isAnalyzingFile())) {
+                    		if (symTable.exists(e, procedureTable, lexerEnglish.isAnalyzingFile())) {
                             		RESULT = new Expr(e, symTable);
                         	} else {
                             		RESULT = null;
@@ -1976,7 +1993,7 @@ class CUP$Parser$actions {
 			if (symTable.verifyTemporalVar(e.getLexeme())) {
                     		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, lexerEs.isAnalyzingFile())) {
+                    		if (symTable.exists(e, procedureTable, lexerEs.isAnalyzingFile())) {
                             		RESULT = new Expr(e, symTable);
                         	} else {
                             		RESULT = null;
@@ -1988,7 +2005,7 @@ class CUP$Parser$actions {
 			if (symTable.verifyTemporalVar(e.getLexeme())) {
                     		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, lexerKi.isAnalyzingFile())) {
+                    		if (symTable.exists(e, procedureTable, lexerKi.isAnalyzingFile())) {
                             		RESULT = new Expr(e, symTable);
                         	} else {
                             		RESULT = null;

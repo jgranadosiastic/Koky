@@ -26,7 +26,7 @@ public class SymbolsTable {
         this.listTemp = new ArrayList();
     }
 
-    public boolean exists(Token id, boolean isAnalyzingFile) {
+    public boolean exists(Token id, ProcedureTable procedureTable ,boolean isAnalyzingFile) {
         Object value = this.symTable.get(id.getLexeme());
         if (value == null) {
             if (isAnalyzingFile) {
@@ -36,7 +36,7 @@ public class SymbolsTable {
             }
             return false;
         }
-        return true;
+        return procedureTable.existName(id);
     }
 
     public Object getIdValue(Token id) {

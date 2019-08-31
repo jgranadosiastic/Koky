@@ -39,9 +39,17 @@ public class ProcedureTable {
         }
         
     }
+    //utilizar var
+     public boolean existName(Token id){
+        if (this.procedureTable.containsKey(id.getLexeme())){
+            errorsList.add(String.format("La variable '%s' no puede ser utilizada porque ya es utilizada como nombre de Procedimiento, linea %d columna %d.", id.getLexeme(), id.getLine(), id.getColumn()));
+            return false;
+        }
+        return true;
+    }
 
-    public boolean exists(Token id, List<Token> listParameters,boolean isAnalyzingFile) {
-        if (this.procedureTable.containsKey(id.getLexeme())) {
+    public boolean exists(Token id, List<Token> listParameters, SymbolsTable sym, boolean isAnalyzingFile) {
+        if (this.procedureTable.containsKey(id.getLexeme()) || !sym.addId(id, 0, isAnalyzingFile)) {
             if (isAnalyzingFile) {
                 errorsList.add(String.format("El Nombre '%s' que intenta declarar para el Procedimiento  en el archivo que estoy leyendo, linea %d columna %d ya fue declarado anteriormente.", id.getLexeme(), id.getLine(), id.getColumn()));
             } else {
@@ -85,6 +93,9 @@ public class ProcedureTable {
     
     public void cleanAll() {
         this.procedureTable.clear();
+    }
+    public void deleteProcedure(Token id){
+        this.procedureTable.remove(id.getLexeme());
     }
 
     public Map<String, ProcedureInstruction> getProcedureTable() {
