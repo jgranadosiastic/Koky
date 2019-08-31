@@ -1,8 +1,10 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 
 /**
@@ -16,6 +18,7 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
     public BackwardInstruction(Expr steps) {
         this.steps = steps;
     }
+    
 
     @Override
     protected Integer calculateEndX(KokyPointer currentPointer) {
@@ -25,6 +28,7 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
                         steps.operate(),
                         currentPointer.getAccumulationX());
     }
+    
 
     @Override
     protected Integer calculateEndY(KokyPointer currentPointer) {
@@ -88,5 +92,19 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
     @Override
     public String getExecutionDescription() {
         return Messages.bkMessage(steps);
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        if(this.getAmbit()!=null){
+            steps.setAmbit(this.getAmbit());
+        }else{
+            steps.setAmbit(AmbitEnum.GLOBAL);
+        }
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        steps.setTableToken(token);
     }
 }

@@ -7,6 +7,7 @@ import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
 import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
 import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.parser.Parser;
+import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import java.io.IOException;
 import java.io.StringReader;
@@ -48,6 +49,7 @@ public class KFrame extends javax.swing.JFrame {
     protected Lexer myLexer;
     protected Parser myParser;
     protected SymbolsTable instructionsSymTable;
+    protected ProcedureTable instructionsSymProcedureTable;
     protected String lastInput;
     protected ArrayList<String> historyInput = new ArrayList<>();
     protected int history = 0;
@@ -72,6 +74,7 @@ public class KFrame extends javax.swing.JFrame {
     protected void parseInstruction(String instruction, PanelDraw panelDraw) {
         if(isFile) {
             instructionsSymTable.cleanAll();
+            instructionsSymProcedureTable.cleanAll();
             txtMessages.setText("");
         }
         if (Languages.ALL.getTypeLanguage()==true) {
@@ -187,29 +190,33 @@ public class KFrame extends javax.swing.JFrame {
             lexerAll = new LexerAll(new StringReader(""));
             sc = lexerAll;
             instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
-            typeParser(sc, instructionsSymTable);    
+            instructionsSymProcedureTable = new ProcedureTable(lexerAll.getErrorsList());
+            typeParser(sc, instructionsSymTable,instructionsSymProcedureTable);    
         }else if (Languages.SPANISH.getTypeLanguage() == true) {
             lexerSp = new LexerEs(new StringReader(""));
             sc = lexerSp;
             instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
-            typeParser(sc, instructionsSymTable);         
+            instructionsSymProcedureTable = new ProcedureTable(lexerSp.getErrorsList());
+            typeParser(sc, instructionsSymTable,instructionsSymProcedureTable);         
         }else if (Languages.ENGLISH.getTypeLanguage()==true) {
             lexerEn = new Lexer(new StringReader(""));
             sc = lexerEn;
             instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
-            typeParser(sc, instructionsSymTable);
+            instructionsSymProcedureTable = new ProcedureTable(lexerEn.getErrorsList());
+            typeParser(sc, instructionsSymTable,instructionsSymProcedureTable);
          
         }else if (Languages.KICHE.getTypeLanguage()==true) {
             lexerKi = new LexerKiche(new StringReader(""));
             sc = lexerKi;
             instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
-            typeParser(sc, instructionsSymTable);   
+            instructionsSymProcedureTable = new ProcedureTable(lexerKi.getErrorsList());
+            typeParser(sc, instructionsSymTable,instructionsSymProcedureTable);   
         }
         
     }
     
-    protected void typeParser(Scanner sc, SymbolsTable symbols){
-        myParser = new Parser(sc, symbols);
+    protected void typeParser(Scanner sc, SymbolsTable symbols, ProcedureTable procedures){
+        myParser = new Parser(sc, symbols, procedures); //se agrego tambien la tabla de Procedures
         myParser.setLexersAnalyzingFile(true);
     }
 }

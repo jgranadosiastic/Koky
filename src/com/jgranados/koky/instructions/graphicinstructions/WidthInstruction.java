@@ -2,8 +2,10 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -28,6 +30,20 @@ public class WidthInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public String getExecutionDescription() {        
         return Messages.widthMessage(width.operate());
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        if(this.getAmbit()!=null){
+            width.setAmbit(this.getAmbit());
+        }else{
+            width.setAmbit(AmbitEnum.GLOBAL);
+        }
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        width.setTableToken(token);
     }
     
 }
