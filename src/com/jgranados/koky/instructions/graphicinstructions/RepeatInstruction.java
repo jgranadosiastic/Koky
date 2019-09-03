@@ -3,7 +3,9 @@ package com.jgranados.koky.instructions.graphicinstructions;
 import com.jgranados.koky.instructions.ExecutionDescribable;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.varinstructions.Assignable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.awt.Graphics2D;
@@ -38,7 +40,26 @@ public class RepeatInstruction extends GraphicsInstruction implements ExecutionD
     }
 
     @Override
+    public void assignAmbitToExpresions() {
+        if(this.getAmbit()!=null){
+            loops.setAmbit(this.getAmbit());
+        }else{
+            loops.setAmbit(AmbitEnum.GLOBAL);
+        }
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        loops.setTableToken(token);
+        for (Instruction instruction : instructions) {
+            instruction.setAmbit(this.getAmbit());
+            instruction.assignAmbitToExpresions();
+            instruction.assignTableTokenValue(token);
+        }
+    }
+    @Override
     public String getExecutionDescription() {
      return Messages.repeatInstruction();
     }
+   
 }

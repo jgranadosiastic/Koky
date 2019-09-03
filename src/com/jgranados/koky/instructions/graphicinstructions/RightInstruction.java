@@ -1,8 +1,10 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.expr.AmbitEnum;
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.expr.Expr;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.Graphics2D;
 
@@ -26,6 +28,21 @@ public class RightInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public String getExecutionDescription() {
         return Messages.rightMessage(angle);
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+        if(this.getAmbit()!=null){
+            angle.setAmbit(this.getAmbit());
+        }else{
+            angle.setAmbit(AmbitEnum.GLOBAL);
+        }
+       
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        angle.setTableToken(token);
     }
     
 }

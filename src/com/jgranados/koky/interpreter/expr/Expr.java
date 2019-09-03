@@ -16,20 +16,25 @@ public class Expr {
     private SymbolsTable table;
     private Token id;
     private int literalValue;
+    private AmbitEnum ambit;
+    private Token tableToken;
 
     public Expr(int operator, Expr left, Expr right) {
         this.operator = operator;
         this.left = left;
         this.right = right;
+        this.ambit = AmbitEnum.GLOBAL;
     }
-    
+
     public Expr(String literalValue) {
         this.literalValue = Integer.valueOf(literalValue);
+        this.ambit = AmbitEnum.GLOBAL;
     }
-    
+
     public Expr(Token id, SymbolsTable table) {
         this.table = table;
         this.id = id;
+        this.ambit = AmbitEnum.GLOBAL;
     }
 
     public int operate() {
@@ -44,6 +49,7 @@ public class Expr {
                 return left.operate() / right.operate();
             default:
                 return getValue();
+                
         }
     }
 
@@ -61,9 +67,41 @@ public class Expr {
 
     private int getValue() {
         if (id != null) {
-            return table.getIdValue(id);
+            if (this.getAmbit()==null || this.getAmbit()==AmbitEnum.GLOBAL) {
+                return (Integer) table.getIdValue(id);
+            } else if (this.getAmbit()==AmbitEnum.LOCAL) {
+                if (tableToken != null) {
+                    SymbolsTable sym = (SymbolsTable) table.getIdValue(tableToken);
+                    if (sym.getIdValue(id)!=null) {
+                        return (Integer) sym.getIdValue(id);   
+                    } else {
+                        return (Integer) table.getIdValue(id);
+                    }
+                } else {
+                    return literalValue;
+                }
+            }
         }
         return literalValue;
     }
 
+    public AmbitEnum getAmbit() {
+        return ambit;
+    }
+
+    public void setAmbit(AmbitEnum ambit) {
+        this.ambit = ambit;
+    }
+
+    
+    public Token getTableToken() {
+        return tableToken;
+    }
+
+    public void setTableToken(Token tableToken) {
+        this.tableToken = tableToken;
+    }
+
+    
+    
 }

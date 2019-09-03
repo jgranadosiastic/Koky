@@ -1,6 +1,7 @@
 package com.jgranados.koky.instructions.graphicinstructions;
 
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.ui.KokyPointer;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.awt.Color;
@@ -24,6 +25,16 @@ public class ClearsInstruction extends GraphicsInstruction implements ExecutionD
     @Override
     public String getExecutionDescription() {       
         return Messages.clearsMessage();
+    }
+
+    @Override
+    public void assignAmbitToExpresions() {
+       //Nothing this class don't have Expresions
+    }
+
+    @Override
+    public void assignTableTokenValue(Token token) {
+        //Nothing this class don't have Expresions
     }
 
 }

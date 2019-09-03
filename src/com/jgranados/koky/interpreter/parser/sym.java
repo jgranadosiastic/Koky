@@ -8,40 +8,42 @@ package com.jgranados.koky.interpreter.parser;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int PENUP = 21;
-  public static final int CLOSE_BRACKET = 8;
-  public static final int PLUS = 11;
-  public static final int POSITIONXY = 25;
-  public static final int WIDTH = 33;
-  public static final int COLOR = 24;
-  public static final int TOCENTER = 23;
-  public static final int POSITIONY = 27;
-  public static final int ID = 5;
-  public static final int POSITIONX = 26;
-  public static final int BACKWARD = 17;
-  public static final int OPEN_BRACKET = 7;
-  public static final int RIGHT = 18;
-  public static final int OPEN_PAR = 9;
-  public static final int FORWARD = 16;
-  public static final int PENDOWN = 22;
-  public static final int LEFT = 19;
-  public static final int COMMA = 6;
-  public static final int LINE_TERMINATOR = 2;
-  public static final int EOF = 0;
-  public static final int MULT = 13;
-  public static final int SHOWTURTLE = 29;
-  public static final int DIV = 14;
-  public static final int TODRAW = 31;
-  public static final int TOERASE = 30;
   public static final int HEXA_LITERAL = 4;
-  public static final int MINUS = 12;
-  public static final int error = 1;
-  public static final int EQ = 15;
-  public static final int INTEGER_LITERAL = 3;
   public static final int HIDETURTLE = 28;
-  public static final int CLEARS = 20;
+  public static final int TODRAW = 31;
+  public static final int PENDOWN = 22;
+  public static final int POSITIONXY = 25;
+  public static final int MULT = 13;
+  public static final int BACKWARD = 17;
+  public static final int WIDTH = 33;
+  public static final int LINE_TERMINATOR = 2;
   public static final int REPEAT = 32;
+  public static final int FORWARD = 16;
+  public static final int MINUS = 12;
   public static final int CLOSE_PAR = 10;
+  public static final int OPEN_PAR = 9;
+  public static final int COMMA = 6;
+  public static final int TOCENTER = 23;
+  public static final int CALL = 35;
+  public static final int DIV = 14;
+  public static final int TOERASE = 30;
+  public static final int PLUS = 11;
+  public static final int ID = 5;
+  public static final int LEFT = 19;
+  public static final int EOF = 0;
+  public static final int error = 1;
+  public static final int POSITIONY = 27;
+  public static final int CLOSE_BRACKET = 8;
+  public static final int OPEN_BRACKET = 7;
+  public static final int POSITIONX = 26;
+  public static final int VOID = 34;
+  public static final int EQ = 15;
+  public static final int COLOR = 24;
+  public static final int SHOWTURTLE = 29;
+  public static final int PENUP = 21;
+  public static final int CLEARS = 20;
+  public static final int RIGHT = 18;
+  public static final int INTEGER_LITERAL = 3;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -76,7 +78,9 @@ public class sym {
   "TOERASE",
   "TODRAW",
   "REPEAT",
-  "WIDTH"
+  "WIDTH",
+  "VOID",
+  "CALL"
   };
 }
 

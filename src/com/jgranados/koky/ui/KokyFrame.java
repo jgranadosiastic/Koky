@@ -10,7 +10,7 @@ import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
 import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
 import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.parser.Parser;
-
+import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
@@ -46,6 +46,7 @@ public class KokyFrame extends KFrame{
    
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
+    private ProcedureTable instructionsSymProcedureTable;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
@@ -63,6 +64,17 @@ public class KokyFrame extends KFrame{
         typeLanguage();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+//        super(false);
+//        panelDraw = new PanelDraw();
+//        initComponents();
+//        myLexer = new Lexer(new StringReader(""));
+//        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
+//        procedureTable = new ProcedureTable(myLexer.getErrorsList());
+//        myParser = new Parser(myLexer, instructionsSymTable,procedureTable);
+//        txtInstruction.requestFocusInWindow();
+//        typeLanguage();
+//        this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
+//        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
     }
 
     @SuppressWarnings("unchecked")
@@ -425,6 +437,7 @@ public class KokyFrame extends KFrame{
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
         instructionsSymTable.cleanAll();
+        instructionsSymProcedureTable.cleanAll();
 
     }//GEN-LAST:event_btnCleanAllActionPerformed
 
@@ -560,6 +573,7 @@ public class KokyFrame extends KFrame{
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
         instructionsSymTable.cleanAll();
+        instructionsSymProcedureTable.cleanAll();
         instructionsMade = 0;
     }
 

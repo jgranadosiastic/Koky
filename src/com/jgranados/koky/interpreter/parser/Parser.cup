@@ -7,6 +7,7 @@ import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.token.Token;
 import com.jgranados.koky.interpreter.expr.Expr;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.util.ArrayList;
@@ -26,10 +27,11 @@ parser code {:
         private LexerAll lexerAll;
         private List<String> errorsList;
         private SymbolsTable symTable;
+	private ProcedureTable procedureTable;
 
 	// LA TABLA DE SIMBOLOS SE REINICIA CADA VEZ QUE SE SELECCIONA UN IDIOMA
         
-        public Parser(Scanner scan, SymbolsTable symTable){
+        public Parser(Scanner scan, SymbolsTable symTable, ProcedureTable procedureTable){
             super(scan);
              if (Languages.ALL.getTypeLanguage()==true) {
                 lexerAll = (LexerAll) scan;
@@ -45,6 +47,7 @@ parser code {:
                 this.errorsList = lexerKi.getErrorsList();
             }
             this.symTable = symTable;
+ 	    this.procedureTable = procedureTable; 	
         }
        
         @Override
@@ -94,10 +97,19 @@ parser code {:
         }
 
         public void setLexersAnalyzingFile(boolean flag) {
-            this.lexerAll.setAnalyzingFile(flag);
-            this.lexerEnglish.setAnalyzingFile(flag);
-            this.lexerEs.setAnalyzingFile(flag);
-            this.lexerKi.setAnalyzingFile(flag);
+            //this.lexerAll.setAnalyzingFile(flag);
+            //this.lexerEnglish.setAnalyzingFile(flag);
+            //this.lexerEs.setAnalyzingFile(flag);
+            //this.lexerKi.setAnalyzingFile(flag);
+            if (Languages.ALL.getTypeLanguage()==true) {
+                lexerAll.setAnalyzingFile(flag);
+            }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                lexerEnglish.setAnalyzingFile(flag);
+            }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                lexerEs.setAnalyzingFile(flag);
+            }else if (Languages.KICHE.getTypeLanguage()==true) {
+                lexerKi.setAnalyzingFile(flag);
+            }
         }
 
         private void getColorError(Enum typeLanguage, int token){
@@ -144,12 +156,18 @@ terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
 terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
 terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
 terminal Token          TODRAW, REPEAT,WIDTH;
+terminal Token          VOID, CALL;
 
 /* Non-terminals */
-non terminal List<Instruction>          program, instructions, instructionsRepeat;
-non terminal Instruction                instruction, instructionRepeat;
+non terminal List<Instruction>          program, instructions, instructionsVoid;
+non terminal Instruction                instruction, instructionVoid;
 non terminal                            syncToken;
 non terminal Expr                       expr;
+non terminal List<Token>                parameters;
+non terminal Token                      parameter;
+non terminal                            break;
+non terminal List<Expr>                 expresions;
+non terminal Expr                       expresion;
 
 /* precedence */
 precedence left     PLUS, MINUS;
@@ -285,7 +303,7 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                             errorsList.add(Messages.widthErrorMessage(e.operate()));
                         }
                     :}
-                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET LINE_TERMINATOR
+                | REPEAT expr:e OPEN_BRACKET instructionsVoid:inst CLOSE_BRACKET LINE_TERMINATOR
                     {:
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
@@ -306,29 +324,33 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 | ID:e EQ expr:ex LINE_TERMINATOR
                     {:
                         if (Languages.ALL.getTypeLanguage()==true) {
-                            if(!lexerAll.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
-                            }
+                            RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //if(!lexerAll.isAnalyzingFile()){
+                            //    RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //} else {
+                            //    symTable.addId(e,ex.operate(),lexerAll.isAnalyzingFile());
+                            //}
                          }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-                           if(!lexerEnglish.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
-                            }
+                            RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                           //if(!lexerEnglish.isAnalyzingFile()){
+                            //    RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //} else {
+                            //    symTable.addId(e,ex.operate(),lexerEnglish.isAnalyzingFile());
+                            //}
                          }else if (Languages.SPANISH.getTypeLanguage()==true) {
-                            if(!lexerEs.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
-                            }
+                            RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //if(!lexerEs.isAnalyzingFile()){
+                            //    RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //} else {
+                            //    symTable.addId(e,ex.operate(),lexerEs.isAnalyzingFile());
+                            //}
                          }else if (Languages.KICHE.getTypeLanguage()==true) {
-                            if(!lexerKi.isAnalyzingFile()){
-                                RESULT = new VarAssignationInstruction(symTable, e, ex);
-                            } else {
-                                symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
-                            }
+                            RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //if(!lexerKi.isAnalyzingFile()){
+                            //    RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
+                            //} else {
+                            //    symTable.addId(e,ex.operate(),lexerKi.isAnalyzingFile());
+                            //}
                          }
                     :}
                 | LINE_TERMINATOR
@@ -339,14 +361,192 @@ instruction ::=	 FORWARD expr:e  LINE_TERMINATOR
                 /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "+ eleft + eright); RESULT = new EmptyInstruction(); :}*/
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e syncToken {: System.out.println("--------Error nnn  " + eleft + eright); RESULT = new EmptyInstruction(); :}
-		;
+                    
+                | VOID break ID:id break OPEN_PAR break parameters:parametersList break CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET 
+                    {:
+                    ///////////////
+                    if (Languages.ALL.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
 
-instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
+                        }
+                    }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEnglish.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEs.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }else if (Languages.KICHE.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerKi.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }
+
+                    //////////////
+                    
+                    //if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                    //    SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
+                    //    RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    //    symTable.clearTemporal();
+                    //} else {
+                    //    RESULT = new EmptyInstruction();
+                    //    
+                    //}
+
+                    :}
+                |VOID break ID:id  break OPEN_PAR break  CLOSE_PAR break OPEN_BRACKET break instructionsVoid:instructions break CLOSE_BRACKET
+                    {:
+                    ///////////////
+                    List<Token> parametersList = new ArrayList<>();
+                    if (Languages.ALL.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }else if (Languages.ENGLISH.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEnglish.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEnglish.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }else if (Languages.SPANISH.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerEs.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerEs.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }else if (Languages.KICHE.getTypeLanguage()==true) {
+                        if (!procedureTable.exists(id, parametersList, symTable, lexerKi.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                            SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerKi.isAnalyzingFile());
+                            RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                            symTable.clearTemporal();
+                        } else {
+                            symTable.removeParameter(id);
+                            procedureTable.deleteProcedure(id);
+                            RESULT = new EmptyInstruction();
+
+                        }
+                    }
+
+                    //////////////
+                    //List<Token> parametersList = new ArrayList<>();
+                    //if (!procedureTable.exists(id, parametersList, lexerAll.isAnalyzingFile()) && symTable.getErrorsList().isEmpty()) {
+                    //    SymbolsTable symTableLocal = symTable.createSymTable(parametersList,lexerAll.isAnalyzingFile());
+                    //    RESULT = new ProcedureInstruction(id, parametersList, symTableLocal, symTable, instructions, procedureTable);
+                    //    symTable.clearTemporal();
+                    //} else {
+                    //    RESULT = new EmptyInstruction();
+                    //    
+                    //}
+                
+                    :}
+                
+                |CALL break ID:id break OPEN_PAR break expresions:expresions break CLOSE_PAR
+                    {:
+                     if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }   
+                    :}
+                | CALL break ID:id  break OPEN_PAR break CLOSE_PAR
+                    {:
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
+                    :}
+                
+                ;
+
+parameters ::= parameters:parameters break COMMA break parameter:parameter 
+                {: parameters.add(parameter);
+                   RESULT = parameters;
+                :}
+                
+                | parameter:parameter 
+                {:
+                    List<Token> parameters = new ArrayList<>();
+                    parameters.add(parameter);
+                    RESULT = parameters;
+                :};
+parameter ::= ID:parameter 
+                {:
+
+                RESULT = parameter;
+                symTable.addTemporal(parameter.getLexeme());
+
+                :};     
+
+expresions ::= expresions:expresions break COMMA break expresion:expresion 
+                {: expresions.add(expresion);
+                   RESULT = expresions;
+                :}
+                
+                | expresion:expresion 
+                {:
+                    List<Expr> expresions = new ArrayList<>();
+                    expresions.add(expresion);
+                    RESULT = expresions;
+                :};
+expresion ::= expr:expresion 
+                {:
+            
+                RESULT = expresion;
+                :};                     
+/*Antes se llamaba instructionsRepeat ahora instructionsVoid, solo el nombre se cambio*/
+instructionsVoid ::=  instructionsVoid:list break instructionVoid:ins
                             {:  
                                 list.add(ins);
                                 RESULT = list;
                             :}
-                        | instructionRepeat:ins
+                        | instructionVoid:ins
                             {:
                                 List<Instruction> instructions = new ArrayList<>();
                                 instructions.add(ins);
@@ -354,7 +554,9 @@ instructionsRepeat ::=  instructionsRepeat:list instructionRepeat:ins
                             :}
                         ;
 
-instructionRepeat ::=	 FORWARD expr:e
+break ::=  break  LINE_TERMINATOR | ;
+
+instructionVoid ::=	 FORWARD expr:e
                     {:  
                         System.out.println("un forward con n = " + e);
                         RESULT = new ForwardInstruction(e);
@@ -464,19 +666,37 @@ instructionRepeat ::=	 FORWARD expr:e
                             errorsList.add(Messages.widthErrorMessage(e.operate()));
                         }
                     :}
-                | REPEAT expr:e OPEN_BRACKET instructionsRepeat:inst CLOSE_BRACKET
+                | REPEAT expr:e OPEN_BRACKET instructionsVoid:inst CLOSE_BRACKET
                     {:
                         System.out.println("un REPEAT CON " + e);
                         RESULT = new RepeatInstruction(e, inst);
                     :}
                 | ID:e EQ expr:ex
                     {:
-                        RESULT = new VarAssignationInstruction(symTable, e, ex);
+                        RESULT = new VarAssignationInstruction(symTable, procedureTable, e, ex);
                     :}
                 /*| FORWARD error:e syncToken {: System.out.println("--------Error en fd  "); RESULT = new EmptyInstruction(); :}*/
                 /* | error:e syncToken {: System.out.println("--------Error en fin linea  "); RESULT = new EmptyInstruction(); :}*/
                 | error:e CLOSE_BRACKET {: System.out.println("--------Error nnn  "); RESULT = new EmptyInstruction(); :}
-		;
+		
+                | CALL break ID:id  break OPEN_PAR break  expresions:expresions break CLOSE_PAR 
+                    {:
+                       if (procedureTable.compareSentParameters(expresions,id)) {
+                            RESULT =  new ProcedureCall(expresions,id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
+                    :}
+                | CALL break ID:id break OPEN_PAR break CLOSE_PAR
+                    {:
+                       if (procedureTable.compareSentParameters(new ArrayList<Expr>(),id)) {
+                            RESULT =  new ProcedureCall(new ArrayList<Expr>(),id,procedureTable,symTable);
+                        } else {
+                            RESULT = new EmptyInstruction();
+                        }
+                    :}
+                ; 
+
 
 expr ::=    expr:e1 PLUS expr:e2
                 {:
@@ -501,29 +721,53 @@ expr ::=    expr:e1 PLUS expr:e2
             | ID:e
                 {:  
                      if (Languages.ALL.getTypeLanguage()==true) {
-                        if (symTable.exists(e, lexerAll.isAnalyzingFile())) {
-                            RESULT = new Expr(e, symTable);
-                        } else {
-                            RESULT = null;
-                        }
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, procedureTable, lexerAll.isAnalyzingFile())) {
+                           	 	RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+        
                      }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-                        if (symTable.exists(e, lexerEnglish.isAnalyzingFile())) {
-                            RESULT = new Expr(e, symTable);
-                        } else {
-                            RESULT = null;
-                        }
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, procedureTable, lexerEnglish.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
                      }else if (Languages.SPANISH.getTypeLanguage()==true) {
-                        if (symTable.exists(e, lexerEs.isAnalyzingFile())) {
-                            RESULT = new Expr(e, symTable);
-                        } else {
-                            RESULT = null;
-                        }
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, procedureTable, symTable);
+                    	} else {
+                    		if (symTable.exists(e, lexerEs.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
                      }else if (Languages.KICHE.getTypeLanguage()==true) {
-                        if (symTable.exists(e, lexerKi.isAnalyzingFile())) {
-                            RESULT = new Expr(e, symTable);
-                        } else {
-                            RESULT = null;
-                        }
+			if (symTable.verifyTemporalVar(e.getLexeme())) {
+                    		RESULT = new Expr(e, symTable);
+                    	} else {
+                    		if (symTable.exists(e, procedureTable, lexerKi.isAnalyzingFile())) {
+                            		RESULT = new Expr(e, symTable);
+                        	} else {
+                            		RESULT = null;
+                        	}
+                    		
+                    	}
+                        
                      }
                 :}
             | INTEGER_LITERAL:e

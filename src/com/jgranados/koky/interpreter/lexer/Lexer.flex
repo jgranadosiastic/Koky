@@ -52,6 +52,7 @@ R_ = [rR]
 S_ = [sS]
 T_ = [tT]
 U_ = [uU]
+V_ = [vV]
 W_ = [wW]
 X_ = [xX]
 Y_ = [yY]
@@ -155,7 +156,8 @@ Comment     = "#" [^\r\n]*
     {R_}{E_}{P_}{E_}{A_}{T_}                    {   return symbol(REPEAT);              }
     {W_}{I_}{D_}{T_}{H_}                        {   return symbol(WIDTH);               }
     {W_}{D_}                                    {   return symbol(WIDTH);               }
-    
+    {V_}{O_}{I_}{D_}                            {   return symbol(VOID);                }
+    {C_}{A_}{L_}{L_}                            {   return symbol(CALL);                }
 
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
