@@ -33,16 +33,16 @@ public class RightInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            angle.setAmbit(this.getAmbit());
+            angle.changeAmbit(this.getAmbit());
         }else{
-            angle.setAmbit(AmbitEnum.GLOBAL);
+            angle.changeAmbit(AmbitEnum.GLOBAL);
         }
        
     }
 
     @Override
     public void assignTableTokenValue(Token token) {
-        angle.setTableToken(token);
+        angle.changeTableToken(token);
     }
     
 }

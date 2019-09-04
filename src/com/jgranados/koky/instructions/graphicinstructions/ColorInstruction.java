@@ -54,13 +54,13 @@ public class ColorInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            intColor.setAmbit(this.getAmbit());
+            intColor.changeAmbit(this.getAmbit());
         }else{
-            intColor.setAmbit(AmbitEnum.GLOBAL);
+            intColor.changeAmbit(AmbitEnum.GLOBAL);
         }
     }
     @Override
     public void assignTableTokenValue(Token token) {
-        intColor.setTableToken(token);
+        intColor.changeTableToken(token);
     }
 }

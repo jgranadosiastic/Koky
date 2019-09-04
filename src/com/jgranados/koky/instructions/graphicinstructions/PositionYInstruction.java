@@ -29,15 +29,15 @@ public class PositionYInstruction extends PositionInstruction {
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            posY.setAmbit(this.getAmbit());
+            posY.changeAmbit(this.getAmbit());
         }else{
-            posY.setAmbit(AmbitEnum.GLOBAL);
+            posY.changeAmbit(AmbitEnum.GLOBAL);
         }
     }
 
     @Override
     public void assignTableTokenValue(Token token) {
-        posY.setTableToken(token);
+        posY.changeTableToken(token);
     }
 
     
