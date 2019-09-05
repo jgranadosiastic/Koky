@@ -198,41 +198,40 @@ Comment     = "#" [^\r\n]*
     {A_}{N_}                                    {   return symbol(WIDTH);               }
     
      /* Reserved words in kiche*/
-    {C_}{H_}{U_}{C_}{H_}                {   return symbol(FORWARD);                     }
-    {C_}{H_}                            {   return symbol(FORWARD);                     }
-    {C_}{H_}{I_}{R_}{I_}{J_}            {   return symbol(BACKWARD);                    }
-    {C_}{J_}                            {   return symbol(BACKWARD);                    }
-    {W_}{I_}{K_}{I_}{Q_}"'"{A_}{B_}     {   return symbol(RIGHT);                       }
-    {W_}{B_}                            {   return symbol(RIGHT);                       }
+    {B_}"'"{I_}{N_}{I_}{K_}             {   return symbol(FORWARD);                     }
+    {B_}{K_}                            {   return symbol(FORWARD);                     }
+    {T_}{Z_}{A_}{L_}{I_}{J_}{I_}{K_}    {   return symbol(BACKWARD);                    }
+    {T_}{K_}                            {   return symbol(BACKWARD);                    }
+    {K_}"'"{I_}{Q_}"'"{A_}{B_}"'"       {   return symbol(RIGHT);                       }
+    {K_}{B_}                            {   return symbol(RIGHT);                       }
     {M_}{O_}{X_}{Q_}"'"{A_}{B_}         {   return symbol(LEFT);                        }
     {M_}{B_}                            {   return symbol(LEFT);                        }
     {S_}{U_}"'"{N_}{I_}{K_}             {   return symbol(CLEARS);                      }
     {S_}{K_}                            {   return symbol(CLEARS);                      }
-    {K_}{A_}{I_}{Q_}{O_}                {   return symbol(PENUP);                       }
-    {K_}{O_}                            {   return symbol(PENUP);                       }
-    {X_}{U_}{L_}{U_}{N_}{I_}{K_}        {   return symbol(PENDOWN);                     }
-    {X_}{K_}                            {   return symbol(PENDOWN);                     }
-    {U_}{K_}"'"{U_}"'"{X_}              {   return symbol(TOCENTER);                    }
-    {U_}{X_}                            {   return symbol(TOCENTER);                    }
-    {J_}{A_}{S_}{T_}{A_}{Q_}            {   return symbol(COLOR);                       }
-    {B_}"'"{A_}{N_}{I_}{K_}{I_}{L_}{X_}{Y_}    {   return symbol(POSITIONXY);          }
-    {B_}"'"{A_}{X_}{Y_}                        {   return symbol(POSITIONXY);          }
-    {B_}"'"{A_}{N_}{I_}{K_}{I_}{L_}{X_}        {   return symbol(POSITIONX);           }
-    {B_}"'"{A_}{X_}                            {   return symbol(POSITIONX);           }
-    {B_}"'"{A_}{N_}{I_}{K_}{I_}{L_}{Y_}        {   return symbol(POSITIONY);           }
-    {B_}"'"{A_}{Y_}                            {   return symbol(POSITIONY);           }
-    {K_}{U_}{Q_}"'"{U_}"'"{K_}{O_}{K_}         {   return symbol(HIDETURTLE);          }
-    {Q_}{K_}                                    {   return symbol(HIDETURTLE);          }
-    {K_}"'"{U_}{T_}{U_}{N_}{I_}{K_}{K_}{O_}{K_} {   return symbol(SHOWTURTLE);          }
-    {K_}{K_}                                    {   return symbol(SHOWTURTLE);          }
-    {C_}{H_}{U_}{P_}{T_}{Z_}"'"{I_}{B_}"'"      {   return symbol(TOERASE);             }
-    {T_}{U_}{R_}{T_}{Z_}"'"{I_}{B_}"'"          {   return symbol(TOERASE);             }
-    {T_}{C_}                                    {   return symbol(TOERASE);             }
-    {T_}{Z_}"'"{A_}{J_}{A_}{N_}{I_}{K_}         {   return symbol(TODRAW);              }
-    {T_}{K_}                                    {   return symbol(TODRAW);              }
-    {K_}{A_}{M_}{U_}{L_}                        {   return symbol(REPEAT);              }
-    {N_}{I_}{M_}{U_}{W_}{U_}{C_}{H_}            {   return symbol(WIDTH);               } 
-    {N_}{U_}                                    {   return symbol(WIDTH);               } 
+    {W_}{A_}"'"{L_}{I_}{J_}{I_}{K_}     {   return symbol(PENUP);                       }
+    {W_}{K_}                            {   return symbol(PENUP);                       }
+    {Q_}{A_}{J_}{I_}{K_}                {   return symbol(PENDOWN);                     }
+    {Q_}{K_}                            {   return symbol(PENDOWN);                     }
+    {O_}{J_}{P_}{A_}{N_}{I_}{K_}"'"{A_}{J_} {   return symbol(TOCENTER);                    }
+    {O_}{J_}                            {   return symbol(TOCENTER);                    }
+    {K_}{A_}{Y_}{B_}"'"{A_}{L_}{I_}{L_} {   return symbol(COLOR);                       }
+    {K_}{R_}{I_}{Q_}{T_}{A_}{J_}{X_}{Y_}    {   return symbol(POSITIONXY);          }
+    {K_}{J_}{X_}{Y_}                        {   return symbol(POSITIONXY);          }
+    {K_}{R_}{I_}{Q_}{T_}{A_}{J_}{X_}        {   return symbol(POSITIONX);           }
+    {K_}{J_}{X_}                            {   return symbol(POSITIONX);           }
+    {K_}{R_}{I_}{Q_}{T_}{A_}{J_}{Y_}        {   return symbol(POSITIONY);           }
+    {K_}{J_}{Y_}                            {   return symbol(POSITIONY);           }
+    {U_}{K_}"'"{U_}"'"{I_}{K_}{K_}{O_}{K_}      {   return symbol(HIDETURTLE);          }
+    {U_}{K_}                                    {   return symbol(HIDETURTLE);          }
+    {R_}{I_}{L_}{I_}{K_}{K_}{O_}{K_}            {   return symbol(SHOWTURTLE);          }
+    {R_}{K_}                                    {   return symbol(SHOWTURTLE);          }
+    {C_}{H_}{U_}{P_}{U_}{B_}"'"{A_}{L_}         {   return symbol(TOERASE);             }
+    {C_}{L_}                                    {   return symbol(TOERASE);             }
+    {U_}{T_}{Z_}{J_}{U_}{C_}{H_}"'"{U_}{N_}{I_}{K_} {   return symbol(TODRAW);              }
+    {U_}{J_}                                    {   return symbol(TODRAW);              }
+    {J_}{U_}{T_}{I_}{J_}{C_}{H_}{I_}{K_}        {   return symbol(REPEAT);              }
+    {U_}{W_}{A_}{C_}{H_}                        {   return symbol(WIDTH);               } 
+    {U_}{W_}                                    {   return symbol(WIDTH);               } 
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
     {Comment}           {   /* ignoring */  }
