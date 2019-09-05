@@ -2,16 +2,7 @@ package com.jgranados.koky.ui;
 
 import com.jgranados.koky.challengeshistory.HistoryHandler;
 
-import com.jgranados.koky.instructions.Instruction;
-import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
-import com.jgranados.koky.interpreter.lexer.Lexer;
-import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
-import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
-import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
-import com.jgranados.koky.interpreter.parser.Parser;
-import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
-import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
 import java.awt.Color;
@@ -23,18 +14,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.runtime.Scanner;
 import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 /**
  *
@@ -43,38 +30,25 @@ import static javax.swing.text.html.HTML.Tag.HEAD;
 
 public class KokyFrame extends KFrame{
 
-   
+    private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
+    private static final String CLEARS = "clears";
+    private static final int NUM_SUBSTRING = 2;
+    
     private PanelDraw panelDraw;
-    private SymbolsTable instructionsSymTable;
-    private ProcedureTable instructionsSymProcedureTable;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
     private int instructionsMade = 0;
     private Boolean coutingSteps = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
-    private Scanner sc;
-    public static List<String> infoMes = new ArrayList<>();
 
     public KokyFrame() {
         super(false);
         panelDraw = new PanelDraw();
         initComponents();
         txtInstruction.requestFocusInWindow();
-        typeLanguage();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
-//        super(false);
-//        panelDraw = new PanelDraw();
-//        initComponents();
-//        myLexer = new Lexer(new StringReader(""));
-//        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-//        procedureTable = new ProcedureTable(myLexer.getErrorsList());
-//        myParser = new Parser(myLexer, instructionsSymTable,procedureTable);
-//        txtInstruction.requestFocusInWindow();
-//        typeLanguage();
-//        this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
-//        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
     }
 
     @SuppressWarnings("unchecked")
@@ -518,43 +492,23 @@ public class KokyFrame extends KFrame{
 
 
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
-
-        Languages.ALL.setTypeLanguage(true);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageAll();
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(true);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageEnglish();
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(true);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageSpanish();
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(true);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageKiche();
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
 

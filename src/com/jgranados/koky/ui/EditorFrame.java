@@ -12,7 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
-import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.util.ArrayList;
 import java.util.List;
@@ -346,46 +345,26 @@ public class EditorFrame extends KFrame {
 
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
         messages.clear();
-        Languages.ALL.setTypeLanguage(true);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        messages = Messages.changeMessage();
-        JOptionPane.showMessageDialog(null, messages);
+        selectLanguageAll();
+        JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
         messages.clear();
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(true);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        messages = Messages.changeMessage();
-        JOptionPane.showMessageDialog(null, messages);
+        selectLanguageEnglish();
+        JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
         messages.clear();
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(true);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        messages = Messages.changeMessage();
-        JOptionPane.showMessageDialog(null, messages);
+        selectLanguageSpanish();
+        JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
         messages.clear();
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(true);
-        typeLanguage();
-        messages = Messages.changeMessage();
-        JOptionPane.showMessageDialog(null, messages);
+        selectLanguageKiche();
+        JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
     
@@ -431,7 +410,7 @@ public class EditorFrame extends KFrame {
         try {
             Scanner scan = new Scanner(new FileInputStream(file));
             while (scan.hasNext()) {
-                buffer += scan.nextLine() + "\n";
+                buffer += scan.nextLine() + LINE;
             }
             System.out.println(buffer);
         } catch (FileNotFoundException ex) {

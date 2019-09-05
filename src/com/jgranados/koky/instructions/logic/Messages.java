@@ -279,17 +279,15 @@ public class Messages {
     }
     
     //messages for the change of language
-    public static List<String> changeMessage(){
-        if (Languages.ALL.getTypeLanguage()==true) {
-            KokyFrame.infoMes.add(LANGUAGE_ALL);
-        }else if (Languages.ENGLISH.getTypeLanguage()==true) {
-            KokyFrame.infoMes.add(LANGUAGE_ENGLISH);
-        }else if (Languages.SPANISH.getTypeLanguage()==true) {
-            KokyFrame.infoMes.add(LANGUAGE_SPANISH);
-        }else if (Languages.KICHE.getTypeLanguage()==true) {
-            KokyFrame.infoMes.add(LANGUAGE_KICHE);
+    public static String changeMessage() {
+        if (Languages.ENGLISH.getTypeLanguage() == true) {
+            return LANGUAGE_ENGLISH;
+        } else if (Languages.SPANISH.getTypeLanguage() == true) {
+            return LANGUAGE_SPANISH;
+        } else if (Languages.KICHE.getTypeLanguage() == true) {
+            return LANGUAGE_KICHE;
         }
-       return KokyFrame.infoMes;
+        return LANGUAGE_ALL;
     }
     
     public static String reportError(String lexema, int linea, int columna){
