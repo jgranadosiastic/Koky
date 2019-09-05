@@ -132,7 +132,7 @@ Comment     = "#" [^\r\n]*
     {B_}{K_}                            {   return symbol(FORWARD);                     }
     {T_}{Z_}{A_}{L_}{I_}{J_}{I_}{K_}    {   return symbol(BACKWARD);                    }
     {T_}{K_}                            {   return symbol(BACKWARD);                    }
-    {K_}"'"{I_}{Q_}"'"{A_}{B_}"'  "     {   return symbol(RIGHT);                       }
+    {K_}"'"{I_}{Q_}"'"{A_}{B_}"'"       {   return symbol(RIGHT);                       }
     {K_}{B_}                            {   return symbol(RIGHT);                       }
     {M_}{O_}{X_}{Q_}"'"{A_}{B_}         {   return symbol(LEFT);                        }
     {M_}{B_}                            {   return symbol(LEFT);                        }
