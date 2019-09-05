@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JColorChooser;
@@ -27,19 +28,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author jose
  */
-
-public class KokyFrame extends KFrame{
+public class KokyFrame extends KFrame {
 
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String CLEARS = "clears";
     private static final int NUM_SUBSTRING = 2;
-    
+
     private PanelDraw panelDraw;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
     private int instructionsMade = 0;
-    private Boolean coutingSteps = false;
+    private ArrayList<String> instructionsMadeList = new ArrayList<>();
+    private Boolean makingChallenge = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
 
     public KokyFrame() {
@@ -406,7 +407,7 @@ public class KokyFrame extends KFrame{
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
 
-        parseInstruction(CLEARS,this.panelDraw);
+        parseInstruction(CLEARS, this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -429,15 +430,16 @@ public class KokyFrame extends KFrame{
 
     //Metodo para parsear
     public void run(String input) {
-        parseInstruction(input,this.panelDraw);
+        parseInstruction(input, this.panelDraw);
         this.txtInstructions.append(input + LINE);
         this.txtInstruction.setText("");
         errorLanguage();
         historyInput.add(input);
         history = historyInput.size();
         lastInput = "";
-        if (coutingSteps) {
+        if (makingChallenge) {
             instructionsMade++;
+            instructionsMadeList.add(input);
         }
     }
 
@@ -471,9 +473,9 @@ public class KokyFrame extends KFrame{
         if (userElection == 0) {
             cleanAll();
             String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
-            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.coutingSteps, this, challengeHistoryHandler);
+            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
             challengesFrame.setVisible(true);
-            coutingSteps = true;
+            makingChallenge = true;
             enableButonsInChallenge(false);
         } else {
             JOptionPane.showMessageDialog(this, "Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
@@ -487,7 +489,7 @@ public class KokyFrame extends KFrame{
         } catch (IOException ex) {
             Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_challengeHistoryMEnuItemActionPerformed
 
 
@@ -511,18 +513,24 @@ public class KokyFrame extends KFrame{
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
-
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
-
 
     public int returnTotalAttempts() {
         return instructionsMade;
     }
 
+    public ArrayList<String> returnComandsList() {
+        return  this.instructionsMadeList;
+    }
+    
+    public void cleanInstructionsMadeList(){
+    this.instructionsMadeList.clear();
+    }
+
     public void cleanAll() {
-        parseInstruction(CLEARS,this.panelDraw);
+        parseInstruction(CLEARS, this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -554,7 +562,7 @@ public class KokyFrame extends KFrame{
             JOptionPane.showMessageDialog(null, "¡Ups! Hubo un error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     public PanelDraw getPanelDraw() {
         return this.panelDraw;
     }
@@ -573,8 +581,9 @@ public class KokyFrame extends KFrame{
                     JOptionPane.ERROR_MESSAGE);
         }
         return file.getName();
-    
+
     }
+
     public String saveInstructionsToFile(String input) {
         saveFileChooser.showSaveDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
@@ -602,17 +611,16 @@ public class KokyFrame extends KFrame{
         }
         return baseName;
     }
-    
-    public void enableButonsInChallenge(Boolean inputInstruction){
+
+    public void enableButonsInChallenge(Boolean inputInstruction) {
         btnOpenFile.setEnabled(inputInstruction);
         helpMenu.setEnabled(inputInstruction);
         exportMenu.setEnabled(inputInstruction);
         interactiveMenu.setEnabled(inputInstruction);
         btnCleanAll.setEnabled(inputInstruction);
         btnSaveInstructions.setEnabled(inputInstruction);
+        lenguagesMenu.setEnabled(inputInstruction);
     }
-    
-    
 
     public File openFile() {
         int status = saveFileChooser.showOpenDialog(this);
