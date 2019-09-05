@@ -30,16 +30,16 @@ public class PositionXInstruction extends PositionInstruction {
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            posX.setAmbit(this.getAmbit());
+            posX.changeAmbit(this.getAmbit());
         }else{
-            posX.setAmbit(AmbitEnum.GLOBAL);
+            posX.changeAmbit(AmbitEnum.GLOBAL);
         }
         
     }
     
     @Override
     public void assignTableTokenValue(Token token) {
-        posX.setTableToken(token);
+        posX.changeTableToken(token);
     }
 
 }

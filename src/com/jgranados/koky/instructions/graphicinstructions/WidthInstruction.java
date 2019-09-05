@@ -35,15 +35,15 @@ public class WidthInstruction extends GraphicsInstruction implements ExecutionDe
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            width.setAmbit(this.getAmbit());
+            width.changeAmbit(this.getAmbit());
         }else{
-            width.setAmbit(AmbitEnum.GLOBAL);
+            width.changeAmbit(AmbitEnum.GLOBAL);
         }
     }
 
     @Override
     public void assignTableTokenValue(Token token) {
-        width.setTableToken(token);
+        width.changeTableToken(token);
     }
     
 }

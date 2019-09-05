@@ -38,16 +38,16 @@ public class VarAssignationInstruction extends Instruction implements Assignable
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            expr.setAmbit(this.getAmbit());
+            expr.changeAmbit(this.getAmbit());
         }else{
-            expr.setAmbit(AmbitEnum.GLOBAL);
+            expr.changeAmbit(AmbitEnum.GLOBAL);
         }
         
     }
 
     @Override
     public void assignTableTokenValue(Token token) {
-        expr.setTableToken(token);
+        expr.changeTableToken(token);
     }
     
     public String getExecutionDescription() {
