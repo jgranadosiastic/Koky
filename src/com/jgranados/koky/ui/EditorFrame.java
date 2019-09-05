@@ -15,6 +15,9 @@ import javax.swing.undo.UndoManager;
 import com.jgranados.koky.instructions.logic.Messages;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 
 /**
  *
@@ -32,10 +35,11 @@ public class EditorFrame extends KFrame {
     
     public EditorFrame(KokyFrame kokyFrame) {
         super(true);
+        initComponents();
+        language.setText(super.language.name());
         messages = new ArrayList<>();
         this.txtMessages = super.getEditorPane();
         txtMessages.setContentType("text/html");
-        initComponents();
         this.kokyFrame = kokyFrame;
         this.setVisible(true);
         this.unnamedTabs = 0;
@@ -60,6 +64,9 @@ public class EditorFrame extends KFrame {
         redoFile = new javax.swing.JButton();
         executeFile = new javax.swing.JButton();
         Inputs = new javax.swing.JTabbedPane();
+        lineCount = new javax.swing.JLabel();
+        languageInfo = new javax.swing.JLabel();
+        language = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
@@ -168,6 +175,14 @@ public class EditorFrame extends KFrame {
             }
         });
 
+        lineCount.setText("Linea: 1 Columna: 1   ");
+
+        languageInfo.setFont(new java.awt.Font("DejaVu Sans", 1, 24)); // NOI18N
+        languageInfo.setText("Lenguaje:");
+
+        language.setFont(new java.awt.Font("DejaVu Sans", 1, 24)); // NOI18N
+        language.setForeground(new java.awt.Color(255, 0, 0));
+
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(114, 35));
@@ -253,16 +268,32 @@ public class EditorFrame extends KFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Inputs)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Inputs))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(lineCount, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(194, 194, 194)
+                        .addComponent(languageInfo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(language, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(language, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lineCount)
+                        .addComponent(languageInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Inputs, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
                 .addContainerGap())
@@ -346,24 +377,28 @@ public class EditorFrame extends KFrame {
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
         messages.clear();
         selectLanguageAll();
+        language.setText(super.language.name());
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
         messages.clear();
         selectLanguageEnglish();
+        language.setText(super.language.name());
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
         messages.clear();
         selectLanguageSpanish();
+        language.setText(super.language.name());
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
         messages.clear();
         selectLanguageKiche();
+        language.setText(super.language.name());
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
@@ -393,6 +428,19 @@ public class EditorFrame extends KFrame {
         this.undoManager = newTab.getManager();
         Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
         newTab.getTextArea().requestFocus();
+        newTab.getTextArea().addCaretListener( new CaretListener() {
+            public void caretUpdate( CaretEvent e ) {
+            int pos = e.getDot();
+                try {
+                    int row = newTab.getTextArea().getLineOfOffset( pos ) + 1;
+                    int col = pos - newTab.getTextArea().getLineStartOffset( row - 1 ) + 1;
+                    lineCount.setText("Línea: " + row + " Columna: " + col );
+                }
+                catch( BadLocationException exc ){
+                    System.out.println(exc);
+                }
+            }
+        });
     }
     
     public void addTab(String input,String name) {
@@ -436,11 +484,14 @@ public class EditorFrame extends KFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel language;
+    private javax.swing.JLabel languageInfo;
     private javax.swing.JMenuItem lenguageEnglish;
     private javax.swing.JMenuItem lenguageKiche;
     private javax.swing.JMenuItem lenguageSpanish;
     private javax.swing.JMenuItem lenguagesAll;
     private javax.swing.JMenu lenguagesMenu;
+    private javax.swing.JLabel lineCount;
     private javax.swing.JButton loadFile;
     private javax.swing.JButton newFile;
     private javax.swing.JButton redoFile;

@@ -3,6 +3,7 @@ package com.jgranados.koky.ui;
 import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.interpreter.lexer.Lexer;
+import com.jgranados.koky.interpreter.lexer.languages.Language;
 import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
 import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
 import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
@@ -45,7 +46,7 @@ public class KFrame extends javax.swing.JFrame {
     protected JEditorPane txtMessages;
     protected boolean isFile;
     protected List<String> infoMesages = new ArrayList<>();
-
+    protected Language language;
     public KFrame(boolean isFile) {
         this.typeLanguage();
         txtMessages = new JEditorPane();
@@ -191,25 +192,28 @@ public class KFrame extends javax.swing.JFrame {
             instructionsSymTable = new SymbolsTable(lexerAll.getErrorsList());
             instructionsSymProcedureTable = new ProcedureTable(lexerAll.getErrorsList());
             typeParser(sc, instructionsSymTable, instructionsSymProcedureTable);
+            this.language = Language.Universal;
         } else if (Languages.SPANISH.getTypeLanguage() == true) {
             lexerSp = new LexerEs(new StringReader(""));
             sc = lexerSp;
             instructionsSymTable = new SymbolsTable(lexerSp.getErrorsList());
             instructionsSymProcedureTable = new ProcedureTable(lexerSp.getErrorsList());
             typeParser(sc, instructionsSymTable, instructionsSymProcedureTable);
+            this.language = Language.Español;
         } else if (Languages.ENGLISH.getTypeLanguage() == true) {
             lexerEn = new Lexer(new StringReader(""));
             sc = lexerEn;
             instructionsSymTable = new SymbolsTable(lexerEn.getErrorsList());
             instructionsSymProcedureTable = new ProcedureTable(lexerEn.getErrorsList());
             typeParser(sc, instructionsSymTable, instructionsSymProcedureTable);
-
+            this.language = Language.English;
         } else if (Languages.KICHE.getTypeLanguage() == true) {
             lexerKi = new LexerKiche(new StringReader(""));
             sc = lexerKi;
             instructionsSymTable = new SymbolsTable(lexerKi.getErrorsList());
             instructionsSymProcedureTable = new ProcedureTable(lexerKi.getErrorsList());
             typeParser(sc, instructionsSymTable, instructionsSymProcedureTable);
+            this.language = Language.Kiche;
         }
 
     }
