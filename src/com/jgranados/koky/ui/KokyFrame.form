@@ -400,7 +400,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="btnCleanAll" pref="126" max="32767" attributes="0"/>
+              <Component id="btnCleanAll" max="32767" attributes="0"/>
               <Component id="btnChangeImage" alignment="0" max="32767" attributes="0"/>
               <Component id="btnSaveInstructions" alignment="0" max="32767" attributes="0"/>
           </Group>
