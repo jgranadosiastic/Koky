@@ -5,6 +5,8 @@ import com.jgranados.koky.ui.KokyFrame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,6 +69,28 @@ public class ChallengesFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         importChallenges();
         selectRandomChallenge();
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            //With this method we can set up what we want this frame do before close it.
+            public void windowClosing(WindowEvent windowEvent) {
+                if (startButton.isEnabled()) {
+                    //If user haven't start the challenge it can be closed normally.
+                    JOptionPane.showMessageDialog(windowEvent.getWindow(), "¡Reto cancelado! Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
+                    koyFrame.enableButonsInChallenge(true);
+                    windowEvent.getWindow().dispose();
+                } else {
+                    //If user is already in a challenge, program ask for confirmation.
+                    int userElection = JOptionPane.showConfirmDialog(null, "¿Esta seguro que deseas cancelar el reto? Los cambios no se guardarán si lo haces.", "Cerrar", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                    if (userElection == JOptionPane.YES_OPTION) {
+                        chronometerState = false;
+                        koyFrame.cleanInstructionsMadeList();
+                        koyFrame.enableButonsInChallenge(true);
+                        windowEvent.getWindow().dispose();
+                    }
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -209,7 +233,9 @@ public class ChallengesFrame extends javax.swing.JFrame {
 
     private void endChallengeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endChallengeButtonActionPerformed
         File imagesCarpet = new File(CHALLENGES_URL);
-        if (!imagesCarpet.exists()) {imagesCarpet.mkdir();}
+        if (!imagesCarpet.exists()) {
+            imagesCarpet.mkdir();
+        }
         chronometerState = false;
         ImageIcon icon = new ImageIcon(ICON_URL);
         JOptionPane.showMessageDialog(null, "¡Excelente trabajo!", "Reto completado.", JOptionPane.DEFAULT_OPTION, icon);

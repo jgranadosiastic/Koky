@@ -551,10 +551,18 @@ public class KokyFrame extends KFrame {
         if (userElection == 0) {
             cleanAll();
             String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
-            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
-            challengesFrame.setVisible(true);
-            makingChallenge = true;
-            enableButonsInChallenge(false);
+            if (userName == null) {
+            } else if (userName.equals("")) {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), "Amigo", instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            } else {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
         }
