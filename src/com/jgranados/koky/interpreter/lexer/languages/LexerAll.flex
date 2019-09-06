@@ -160,6 +160,8 @@ Comment     = "#" [^\r\n]*
     {R_}{E_}{P_}{E_}{A_}{T_}                    {   return symbol(REPEAT);              }
     {W_}{I_}{D_}{T_}{H_}                        {   return symbol(WIDTH);               }
     {W_}{D_}                                    {   return symbol(WIDTH);               }
+    {V_}{O_}{I_}{D_}                            {   return symbol(VOID);                }
+    {C_}{A_}{L_}{L_}                            {   return symbol(CALL);                }
 
      /* Reserved words in spanish*/
     {A_}{V_}{A_}{N_}{Z_}{A_}{R_}        {   return symbol(FORWARD);                     }
@@ -196,6 +198,8 @@ Comment     = "#" [^\r\n]*
     {R_}{E_}{P_}{E_}{T_}{I_}{R_}                {   return symbol(REPEAT);              }
     {A_}{N_}{C_}{H_}{O_}                        {   return symbol(WIDTH);               }
     {A_}{N_}                                    {   return symbol(WIDTH);               }
+    {P_}{R_}{O_}{C_}{E_}{S_}{O_}                {   return symbol(VOID);                }
+    {L_}{L_}{A_}{M_}{A_}{R_}                    {   return symbol(CALL);                }
     
      /* Reserved words in kiche*/
     {C_}{H_}{U_}{C_}{H_}                {   return symbol(FORWARD);                     }
@@ -233,6 +237,8 @@ Comment     = "#" [^\r\n]*
     {K_}{A_}{M_}{U_}{L_}                        {   return symbol(REPEAT);              }
     {N_}{I_}{M_}{U_}{W_}{U_}{C_}{H_}            {   return symbol(WIDTH);               } 
     {N_}{U_}                                    {   return symbol(WIDTH);               } 
+    {K_}{J_}{E_}{Q_}{E_}"'"{I_}{K_}             {   return symbol(VOID);                }
+    {S_}{I_}{K_}"'"{I_}{M_}                     {   return symbol(CALL);                }
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
     {Comment}           {   /* ignoring */  }
