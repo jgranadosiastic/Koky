@@ -490,10 +490,18 @@ public class KokyFrame extends KFrame {
         if (userElection == 0) {
             cleanAll();
             String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
-            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
-            challengesFrame.setVisible(true);
-            makingChallenge = true;
-            enableButonsInChallenge(false);
+            if (userName == null) {
+            } else if (userName.equals("")) {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), "Amigo", instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            } else {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -518,19 +526,19 @@ public class KokyFrame extends KFrame {
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
         selectLanguageEnglish();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
         selectLanguageSpanish();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
         selectLanguageKiche();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
@@ -543,11 +551,11 @@ public class KokyFrame extends KFrame {
     }
 
     public ArrayList<String> returnComandsList() {
-        return  this.instructionsMadeList;
+        return this.instructionsMadeList;
     }
-    
-    public void cleanInstructionsMadeList(){
-    this.instructionsMadeList.clear();
+
+    public void cleanInstructionsMadeList() {
+        this.instructionsMadeList.clear();
     }
 
     public void cleanAll() {

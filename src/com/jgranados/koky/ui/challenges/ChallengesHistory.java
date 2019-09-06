@@ -62,6 +62,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         ComandsTextArea = new javax.swing.JTextArea();
         challengeTitleLabel = new javax.swing.JLabel();
         ChallengeDescriptionTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -132,7 +133,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         ComandsTextArea.setRows(5);
         ComandsScrollPane.setViewportView(ComandsTextArea);
 
-        getContentPane().add(ComandsScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 290, 300));
+        getContentPane().add(ComandsScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 290, 270));
 
         challengeTitleLabel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         challengeTitleLabel.setText("Reto:");
@@ -140,6 +141,9 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
 
         ChallengeDescriptionTextField.setEditable(false);
         getContentPane().add(ChallengeDescriptionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 490, 20));
+
+        jLabel2.setText("Comandos utilizados:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         bindingGroup.bind();
 
@@ -206,6 +210,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
     private javax.swing.JLabel instructionsQCLabel;
     private javax.swing.JLabel intructionsESLabel;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel selectedImageLabel;
     private javax.swing.JLabel timeTitleLabel;
     private javax.swing.JLabel turtleImageLabel;
