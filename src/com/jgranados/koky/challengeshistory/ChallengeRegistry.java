@@ -1,6 +1,7 @@
 package com.jgranados.koky.challengeshistory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 
@@ -11,13 +12,26 @@ public class ChallengeRegistry implements Serializable, Comparable<ChallengeRegi
     private int totalInstructions;
     private String identifierRegistry;
     private String challengeDescription;
+    private ArrayList<String> instructionsList;
 
-    public ChallengeRegistry(String userName, int totalSeconds, int totalInstructions, String identifierRegistry, String challengeDescription) {
+    public ChallengeRegistry(String userName, int totalSeconds, int totalInstructions, String identifierRegistry, String challengeDescription, ArrayList<String> instructionsList) {
         this.userName = userName;
         this.totalSeconds = totalSeconds;
         this.totalInstructions = totalInstructions;
         this.identifierRegistry = identifierRegistry;
         this.challengeDescription = challengeDescription;
+        this.instructionsList = instructionsList;
+    }
+
+    public ChallengeRegistry() {
+    }
+
+    public ArrayList<String> getInstructionsList() {
+        return instructionsList;
+    }
+
+    public void setInstructionsList(ArrayList<String> instructionsList) {
+        this.instructionsList = instructionsList;
     }
 
     public String getChallengeDescription() {
@@ -64,5 +78,17 @@ public class ChallengeRegistry implements Serializable, Comparable<ChallengeRegi
     public int compareTo(ChallengeRegistry o) {
         return userName.compareTo(o.getUserName());
     }
+    
+    public ChallengeRegistry cloneRegistry(){
+    ChallengeRegistry challengeRegistryClone = new ChallengeRegistry();
+    challengeRegistryClone.setChallengeDescription(getChallengeDescription());
+    challengeRegistryClone.setIdentifierRegistry(getIdentifierRegistry());
+    challengeRegistryClone.setInstructionsList(getInstructionsList());
+    challengeRegistryClone.setTotalInstructions(getTotalInstructions());
+    challengeRegistryClone.setTotalSeconds(getTotalSeconds());
+    challengeRegistryClone.setUserName(getUserName());
+    return challengeRegistryClone;
+    }
+    
     
 }

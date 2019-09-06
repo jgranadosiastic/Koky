@@ -133,7 +133,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
                 endChallengeButtonActionPerformed(evt);
             }
         });
-        getContentPane().add(endChallengeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, -1, -1));
+        getContentPane().add(endChallengeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 260, -1, -1));
 
         yourChallengeIsLabel.setForeground(new java.awt.Color(0, 0, 0));
         yourChallengeIsLabel.setText("Tu reto es:");
@@ -156,6 +156,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
         int userElection = JOptionPane.showConfirmDialog(this, "¿Deseas abandonar el reto?", "Retos | Koky", yesOrNoMessage);
         if (userElection == 0) {
             chronometerState = false;
+            koyFrame.cleanInstructionsMadeList();
             koyFrame.enableButonsInChallenge(true);
             this.dispose();
         } else {
@@ -164,6 +165,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         koyFrame.cleanAll();
+        koyFrame.cleanInstructionsMadeList();
         moveToCorner();
         chronometerState = true;
         Thread userTimerThread = new Thread() {
@@ -210,12 +212,13 @@ public class ChallengesFrame extends javax.swing.JFrame {
         if (!imagesCarpet.exists()) {imagesCarpet.mkdir();}
         chronometerState = false;
         ImageIcon icon = new ImageIcon(ICON_URL);
-        JOptionPane.showMessageDialog(null, "¡Exelente trabajo!", "Reto completado.", JOptionPane.DEFAULT_OPTION, icon);
+        JOptionPane.showMessageDialog(null, "¡Excelente trabajo!", "Reto completado.", JOptionPane.DEFAULT_OPTION, icon);
         String imageIdentifier = generateIdentifier(userName, totalTimeInSeconds, milliseconds, koyFrame.returnTotalAttempts());
         try {
-            historyHandler.addChallengeRegistry(userName, totalTimeInSeconds, koyFrame.returnTotalAttempts(), imageIdentifier, challengeDescriptionTextPane.getText());
+            historyHandler.addChallengeRegistry(userName, totalTimeInSeconds, koyFrame.returnTotalAttempts(), imageIdentifier, challengeDescriptionTextPane.getText(), koyFrame.returnComandsList());
             File outputFile = new File(CHALLENGES_URL + imageIdentifier);
             ImageIO.write(userDraw, JPG_FILE_EXTENSION, outputFile);
+            koyFrame.cleanInstructionsMadeList();
         } catch (IOException ex) {
             Logger.getLogger(ChallengesFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -254,9 +257,6 @@ public class ChallengesFrame extends javax.swing.JFrame {
         int intervalNumber = challengesList.size() - 1;
         int challengeNumber = (int) (Math.random() * intervalNumber) + 1;
         challengeDescriptionTextPane.setText(challengesList.get(challengeNumber));
-        for (int i = 0; i < challengesList.size(); i++) {
-            System.out.println(i + " - " + challengesList.get(i));
-        }
     }
 
     private void initStyleComponents() {
