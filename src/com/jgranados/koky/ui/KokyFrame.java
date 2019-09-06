@@ -1,6 +1,7 @@
 package com.jgranados.koky.ui;
 
 import com.jgranados.koky.challengeshistory.HistoryHandler;
+import com.jgranados.koky.instructions.logic.Languages;
 
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
@@ -22,6 +23,7 @@ import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -42,6 +44,7 @@ public class KokyFrame extends KFrame {
     private ArrayList<String> instructionsMadeList = new ArrayList<>();
     private Boolean makingChallenge = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
+    private DrawingInstruction draw;
 
     public KokyFrame() {
         super(false);
@@ -51,6 +54,7 @@ public class KokyFrame extends KFrame {
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.draw = new DrawingInstruction(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -91,6 +95,13 @@ public class KokyFrame extends KFrame {
         interactiveMenu = new javax.swing.JMenu();
         takeChallengeMenuItem = new javax.swing.JMenuItem();
         challengeHistoryMEnuItem = new javax.swing.JMenuItem();
+        drawingMenu = new javax.swing.JMenu();
+        squareMenuItem = new javax.swing.JMenuItem();
+        triangleMenuItem = new javax.swing.JMenuItem();
+        circleMenuItem = new javax.swing.JMenuItem();
+        pentagonMenuItem = new javax.swing.JMenuItem();
+        starMenuItem = new javax.swing.JMenuItem();
+        cubeMenuItem = new javax.swing.JMenuItem();
         lenguagesMenu = new javax.swing.JMenu();
         lenguagesAll = new javax.swing.JMenuItem();
         lenguageEnglish = new javax.swing.JMenuItem();
@@ -304,6 +315,58 @@ public class KokyFrame extends KFrame {
         });
         interactiveMenu.add(challengeHistoryMEnuItem);
 
+        drawingMenu.setText("Dibujos predefinidos");
+
+        squareMenuItem.setText("Cuadrado");
+        squareMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                squareMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(squareMenuItem);
+
+        triangleMenuItem.setText("Triangulo");
+        triangleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                triangleMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(triangleMenuItem);
+
+        circleMenuItem.setText("Circulo");
+        circleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                circleMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(circleMenuItem);
+
+        pentagonMenuItem.setText("Pentagono");
+        pentagonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pentagonMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(pentagonMenuItem);
+
+        starMenuItem.setText("Estrella");
+        starMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                starMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(starMenuItem);
+
+        cubeMenuItem.setText("Cubo");
+        cubeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cubeMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(cubeMenuItem);
+
+        interactiveMenu.add(drawingMenu);
+
         jMenuBar1.add(interactiveMenu);
 
         lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -423,14 +486,12 @@ public class KokyFrame extends KFrame {
     }//GEN-LAST:event_txtInstructionKeyReleased
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
-
         parseInstruction(CLEARS, this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
         instructionsSymTable.cleanAll();
         instructionsSymProcedureTable.cleanAll();
-
     }//GEN-LAST:event_btnCleanAllActionPerformed
 
     private void btnSaveInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsActionPerformed
@@ -518,21 +579,80 @@ public class KokyFrame extends KFrame {
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
         selectLanguageEnglish();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
         selectLanguageSpanish();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
         selectLanguageKiche();
-        languageLabel.setText(super.language.name()); 
+        languageLabel.setText(super.language.name());
         addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
+
+    private void squareMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_squareMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_squareMenuItemActionPerformed
+
+    private void triangleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_triangleMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_ISTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_triangleMenuItemActionPerformed
+
+    private void circleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_circleMenuItemActionPerformed
+
+    private void pentagonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pentagonMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_pentagonMenuItemActionPerformed
+
+    private void starMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_starMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage()|| Languages.ALL.getTypeLanguage() ) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_QUICHE);
+        }     }//GEN-LAST:event_starMenuItemActionPerformed
+
+    private void cubeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cubeMenuItemActionPerformed
+          if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_cubeMenuItemActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -543,11 +663,11 @@ public class KokyFrame extends KFrame {
     }
 
     public ArrayList<String> returnComandsList() {
-        return  this.instructionsMadeList;
+        return this.instructionsMadeList;
     }
-    
-    public void cleanInstructionsMadeList(){
-    this.instructionsMadeList.clear();
+
+    public void cleanInstructionsMadeList() {
+        this.instructionsMadeList.clear();
     }
 
     public void cleanAll() {
@@ -652,6 +772,11 @@ public class KokyFrame extends KFrame {
         return null;
     }
 
+    public JTextArea getTxtInstructions() {
+        return txtInstructions;
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JButton btnChangeImage;
@@ -663,7 +788,10 @@ public class KokyFrame extends KFrame {
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JMenuItem challengeHistoryMEnuItem;
     private javax.swing.JMenuItem changeVarNameMenu;
+    private javax.swing.JMenuItem circleMenuItem;
     private javax.swing.JMenuItem colorItem;
+    private javax.swing.JMenuItem cubeMenuItem;
+    private javax.swing.JMenu drawingMenu;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
@@ -685,9 +813,13 @@ public class KokyFrame extends KFrame {
     private javax.swing.JMenuItem lenguageSpanish;
     private javax.swing.JMenuItem lenguagesAll;
     private javax.swing.JMenu lenguagesMenu;
+    private javax.swing.JMenuItem pentagonMenuItem;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
+    private javax.swing.JMenuItem squareMenuItem;
+    private javax.swing.JMenuItem starMenuItem;
     private javax.swing.JMenuItem takeChallengeMenuItem;
+    private javax.swing.JMenuItem triangleMenuItem;
     private javax.swing.JTextField txtInstruction;
     private javax.swing.JTextArea txtInstructions;
     private javax.swing.JEditorPane txtMessages;
