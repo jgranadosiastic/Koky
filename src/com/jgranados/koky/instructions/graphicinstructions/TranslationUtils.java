@@ -1,7 +1,5 @@
-
 package com.jgranados.koky.instructions.graphicinstructions;
 
-import com.jgranados.koky.ui.EndPosition;
 import com.jgranados.koky.ui.KokyPointer;
 import com.jgranados.koky.ui.PanelDraw;
 
@@ -13,7 +11,10 @@ public final class TranslationUtils {
 
     public static final int MINIMUN_RANGE_X = 0;
     public static final int MINIMUN_RANGE_Y = 0;
-    public static final int RAISED_TO = 2;
+    public static final String PLAIN_TEXT_WIDTH = "Ancho (min 900):";
+    public static final String PLAIN_TEXT_HEIGHT = "Alto (min 450):";
+    public static final int ARRAY_SIZE = 2;
+    public static final int INIT_METHOD = 1;
 
     private TranslationUtils() throws IllegalAccessException {
         throw new IllegalAccessException("Not supporter");
@@ -56,56 +57,182 @@ public final class TranslationUtils {
     }
 
     //Return true if point position is out of range
-    public static boolean isOutOfRange(int endX, int endY) {
-        if (endX < TranslationUtils.MINIMUN_RANGE_X || endX > PanelDraw.PANEL_WIDTH) {
-            return true;
+    public static boolean isOutOfRange(int endX, int endY, KokyPointer actualPoint) {
+        return isXOutOfRange(endX, actualPoint.getPanelDrawWidth()) || isYOutOfRange(endY, actualPoint.getPanelDrawHeight());
+    }
+
+    private static boolean isXOutOfRange(int axisX, int limitX) {
+        return isXDownOfRange(axisX) || isXUpOfRange(axisX, limitX);
+    }
+
+    private static boolean isYOutOfRange(int axisY, int limitY) {
+        return isYDownOfRange(axisY) || isYUpOfRange(axisY, limitY);
+    }
+
+    private static boolean isXDownOfRange(int axisX) {
+        return axisX < TranslationUtils.MINIMUN_RANGE_X;
+    }
+
+    private static boolean isXUpOfRange(int axisX, int limitX) {
+        return axisX > limitX;
+    }
+
+    private static boolean isYDownOfRange(int axisY) {
+        return axisY < TranslationUtils.MINIMUN_RANGE_Y;
+    }
+
+    private static boolean isYUpOfRange(int axisY, int limitY) {
+        return axisY > limitY;
+    }
+
+    public static int[] setEndPosition(KokyPointer actualPoint, int option) {
+        int[] endPositions = new int[]{actualPoint.getPosX(), actualPoint.getPosY()};
+        double translationX = getTranslation(actualPoint.getPosX(), actualPoint.getOutPosX());
+        double translationY = getTranslation(actualPoint.getPosY(), actualPoint.getOutPosY());
+        int finalX = 0;
+        int finalY = 0;
+        double slope = 0;
+        if (translationX != 0) {
+            slope = getSlope(translationX, translationY);
         }
-        if (endY < TranslationUtils.MINIMUN_RANGE_Y || endY > PanelDraw.PANEL_HEIGHT) {
-            return true;
+
+        boolean isPointOutOfRange = (isXOutOfRange(actualPoint.getOutPosX(), actualPoint.getPanelDrawWidth())
+                && isYOutOfRange(actualPoint.getOutPosY(), actualPoint.getPanelDrawHeight()));
+
+        switch (option) {
+            case 1:
+                if (isXDownOfRange(actualPoint.getOutPosX())) {
+                    finalY = getAxisY(endPositions, slope, MINIMUN_RANGE_X);
+                    if (isPointOutOfRange) {
+                        if (finalY > MINIMUN_RANGE_Y && finalY < actualPoint.getPanelDrawHeight()) {
+                            endPositions[0] = MINIMUN_RANGE_X;
+                            endPositions[1] = finalY;
+                        } else {
+                            return setEndPosition(actualPoint, ++option);
+                        }
+                    } else {
+                        endPositions[0] = MINIMUN_RANGE_X;
+                        endPositions[1] = finalY;
+                    }
+                } else {
+                    return setEndPosition(actualPoint, ++option);
+                }
+                break;
+            case 2:
+                if (isXUpOfRange(actualPoint.getOutPosX(), actualPoint.getPanelDrawWidth())) {
+                    if (slope != 0) {
+                        finalX = getAxisX(endPositions, slope, actualPoint.getPanelDrawHeight());
+                    } else {
+                        finalX = actualPoint.getOutPosX();
+                    }
+                    finalY = getAxisY(endPositions, slope, actualPoint.getPanelDrawWidth());
+                    if (isPointOutOfRange) {
+                        if (finalY > MINIMUN_RANGE_Y && finalY < actualPoint.getPanelDrawHeight()) {
+                            endPositions[0] = actualPoint.getPanelDrawWidth();
+                            endPositions[1] = finalY;
+                        } else {
+                            return setEndPosition(actualPoint, ++option);
+                        }
+                    } else {
+                        endPositions[0] = actualPoint.getPanelDrawWidth();
+                        endPositions[1] = finalY;
+                    }
+                } else {
+                    return setEndPosition(actualPoint, ++option);
+                }
+                break;
+            case 3:
+                if (isYDownOfRange(actualPoint.getOutPosY())) {
+                    if (slope != 0) {
+                        finalX = getAxisX(endPositions, slope, MINIMUN_RANGE_Y);
+                    } else {
+                        finalX = actualPoint.getOutPosX();
+                    }
+                    if (isPointOutOfRange) {
+                        if (finalX > 0) {
+                            endPositions[0] = finalX;
+                            endPositions[1] = MINIMUN_RANGE_Y;
+                        } else {
+                            return setEndPosition(actualPoint, ++option);
+                        }
+                    } else {
+                        endPositions[0] = finalX;
+                        endPositions[1] = MINIMUN_RANGE_Y;
+                    }
+                } else {
+                    return setEndPosition(actualPoint, ++option);
+                }
+                break;
+            case 4:
+                if (isYUpOfRange(actualPoint.getOutPosY(), actualPoint.getPanelDrawHeight())) {
+                    if (slope != 0) {
+                        finalX = getAxisX(endPositions, slope, actualPoint.getPanelDrawHeight());
+                    } else {
+                        finalX = actualPoint.getOutPosX();
+                    }
+                    if (isPointOutOfRange) {
+                        if (finalX > 0) {
+                            endPositions[0] = finalX;
+                            endPositions[1] = actualPoint.getPanelDrawHeight();
+                        } else {
+                            return setEndPosition(actualPoint, ++option);
+                        }
+                    } else {
+                        endPositions[0] = finalX;
+                        endPositions[1] = actualPoint.getPanelDrawHeight();
+                    }
+                } else {
+                    return setEndPosition(actualPoint, ++option);
+                }
+                break;
+            default:
+                return null;
         }
-        return false;
+        verificatePosition(endPositions, actualPoint);
+        return endPositions;
     }
 
-    public static EndPosition getEndPosition(EndPosition endPos, KokyPointer actualPoint) {
-        EndPosition endPosition = new EndPosition();
-        if (endPos.getEndPosX() < TranslationUtils.MINIMUN_RANGE_X) {
-            endPosition.setPosXY(0, endPos.getEndPosY());
-//            endPosition.setPosXY(0, actualPoint.getPosY() + getAxisY(actualPoint.getAngle(), getHypotenuseWithX(actualPoint.getAngle(), actualPoint.getPosX())));
-            return endPosition;
-        } else if (endPos.getEndPosX() > PanelDraw.PANEL_WIDTH) {
-            endPosition.setPosXY(PanelDraw.PANEL_WIDTH, endPos.getEndPosY());
-//            endPosition.setPosXY(PanelDraw.PANEL_WIDTH, actualPoint.getPosY() - getAxisY(actualPoint.getAngle(), getHypotenuseWithX(actualPoint.getAngle(), getDistance(PanelDraw.PANEL_WIDTH, actualPoint.getPosX()))));
-            return endPosition;
-        } else if (endPos.getEndPosY() < TranslationUtils.MINIMUN_RANGE_Y) {
-            endPosition.setPosXY(endPos.getEndPosX(), TranslationUtils.MINIMUN_RANGE_Y);
-//            endPosition.setPosXY(actualPoint.getPosX() + getAxisX(actualPoint.getAngle(), getHypotenuseWithY(actualPoint.getAngle(), actualPoint.getPosY())), 0);
-            return endPosition;
-        } else if (endPos.getEndPosY() > PanelDraw.PANEL_HEIGHT) {
-            endPosition.setPosXY(endPos.getEndPosX(), PanelDraw.PANEL_HEIGHT);
-//            endPosition.setPosXY(actualPoint.getPosX() - getAxisX(actualPoint.getAngle(), getHypotenuseWithY(actualPoint.getAngle(), getDistance(PanelDraw.PANEL_HEIGHT, actualPoint.getPosY()))), PanelDraw.PANEL_HEIGHT);
-            return endPosition;
+    public static int[] setOutPosition(KokyPointer actualPointer) {
+        int endPosition[] = new int[]{actualPointer.getPosX(), actualPointer.getPosY()};
+        if (isXDownOfRange(actualPointer.getOutPosX())) {
+            endPosition[0] = TranslationUtils.MINIMUN_RANGE_X;
+        } else if (isXUpOfRange(actualPointer.getOutPosX(), actualPointer.getPanelDrawWidth())) {
+            endPosition[0] = actualPointer.getPanelDrawWidth();
         }
-        return null;
+        if (isYDownOfRange(actualPointer.getOutPosY())) {
+            endPosition[1] = TranslationUtils.MINIMUN_RANGE_Y;
+        } else if (isYUpOfRange(actualPointer.getOutPosY(), actualPointer.getPanelDrawHeight())) {
+            endPosition[1] = actualPointer.getPanelDrawHeight();
+        }
+        return endPosition;
     }
 
-    public static int getHypotenuseWithX(int angle, int x) {
-        return (int) (Math.round(x / (Math.sin(Math.toRadians(angle)))));
+    private static void verificatePosition(int endPosition[], KokyPointer actualPoint) {
+        if (isXDownOfRange(endPosition[0])) {
+            endPosition[0] = TranslationUtils.MINIMUN_RANGE_X;
+        } else if (isXUpOfRange(endPosition[0], actualPoint.getPanelDrawWidth())) {
+            endPosition[0] = actualPoint.getPanelDrawWidth();
+        } else if (isYDownOfRange(endPosition[1])) {
+            endPosition[1] = TranslationUtils.MINIMUN_RANGE_Y;
+        } else if (isYUpOfRange(endPosition[1], actualPoint.getPanelDrawHeight())) {
+            endPosition[1] = actualPoint.getPanelDrawHeight();
+        }
     }
 
-    public static int getHypotenuseWithY(int angle, int y) {
-        return (int) (Math.round(y / (Math.cos(Math.toRadians(angle)))));
+    private static int getAxisY(int endPosition[], double slope, int posX) {
+        return (int) (Math.round((slope * (posX - endPosition[0])) + endPosition[1]));
     }
 
-    public static int getAxisY(int angle, int hypotenuse) {
-        return (int) (Math.round((Math.cos(Math.toRadians(angle))) * (hypotenuse)));
+    private static int getAxisX(int endPosition[], double slope, int posY) {
+        return (int) (Math.round(((posY - endPosition[1]) / slope) + endPosition[0]));
     }
 
-    public static int getAxisX(int angle, int hypotenuse) {
-        return (int) (Math.round((Math.sin(Math.toRadians(angle))) * (hypotenuse)));
+    private static double getTranslation(int point1, int point2) {
+        return new Double(point1 - point2);
     }
 
-    public static int getDistance(int firstPoint, int secontPoint) {
-        return (int) (Math.round(Math.sqrt(Math.pow(secontPoint - firstPoint, TranslationUtils.RAISED_TO))));
+    private static double getSlope(double translationX, double translationY) {
+        return (translationY / translationX);
     }
 
 }

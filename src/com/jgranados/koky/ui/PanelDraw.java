@@ -26,8 +26,10 @@ import javax.swing.JOptionPane;
  */
 public class PanelDraw extends javax.swing.JPanel {
 
-    public static final int PANEL_WIDTH = 1000;
-    public static final int PANEL_HEIGHT = 460;     
+    public static final int DEFAULT_WIDTH = 900;
+    public static final int DEFAULT_HEIGHT = 450;
+    public static final int MINIMUN_WIDTH = 900;
+    public static final int MINIMUN_HEIGHT = 450;
     private KokyPointer kokyPointer;
     private BufferedImage imageWithPointer;
     private BufferedImage imageNoPointer;
@@ -39,8 +41,13 @@ public class PanelDraw extends javax.swing.JPanel {
      * Creates new form PanelDraw
      */
     public PanelDraw() {
-        setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-        setMinimumSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        setMinimumSize(new Dimension(MINIMUN_WIDTH, MINIMUN_HEIGHT));
+    }
+    
+    public PanelDraw(int customizeWidth, int customizeHeight) {
+        setPreferredSize(new Dimension(customizeWidth, customizeHeight));
+        setMinimumSize(new Dimension(MINIMUN_WIDTH, MINIMUN_HEIGHT));
     }
 
     @Override
@@ -48,6 +55,8 @@ public class PanelDraw extends javax.swing.JPanel {
         super.paintComponent(g);
         if (imageWithPointer == null) {
             kokyPointer = new KokyPointer(this.getWidth() / 2, this.getHeight() / 2, 0, this, KokyPointer.BRUSH_WIDTH);
+            kokyPointer.setOutPosX(kokyPointer.getPosX());
+            kokyPointer.setOutPosY(kokyPointer.getPosY());
             initImages();
         }
         g.drawImage(imageWithPointer, 0, 0, null);
@@ -112,5 +121,5 @@ public class PanelDraw extends javax.swing.JPanel {
     public BufferedImage returnDraw(){
     return imageNoPointer;
     }
-
+    
 }

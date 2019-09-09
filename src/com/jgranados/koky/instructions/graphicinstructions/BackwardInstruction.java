@@ -41,7 +41,7 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     protected Integer calculateOutEndX(KokyPointer currentPointer) {
-        return currentPointer.getEndPosition().getEndPosX() - TranslationUtils
+        return currentPointer.getOutPosX() - TranslationUtils
                 .calculateXDimension(
                         currentPointer.getAngle(),
                         steps.operate(),
@@ -50,7 +50,7 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
 
     @Override
     protected Integer calculateOutEndY(KokyPointer currentPointer) {
-        return currentPointer.getEndPosition().getEndPosY() + TranslationUtils
+        return currentPointer.getOutPosY() + TranslationUtils
                 .calculateYDimension(
                         currentPointer.getAngle(),
                         steps.operate(),
@@ -73,22 +73,6 @@ public class BackwardInstruction extends TranslationInstruction implements Execu
                 currentPointer.getAccumulationY());
     }
     
-    @Override
-    protected double calculateAccumulationOutX(KokyPointer currentPointer) {
-        return TranslationUtils.calculateAccumulationX(
-                currentPointer.getAngle(),
-                steps.operate(),
-                currentPointer.getEndPosition().getAccumulationX());
-    }
-
-    @Override
-    protected double calculateAccumulationOutY(KokyPointer currentPointer) {
-        return TranslationUtils.calculateAccumulationY(
-                currentPointer.getAngle(),
-                steps.operate(),
-                currentPointer.getEndPosition().getAccumulationY());
-    }
-
     @Override
     public String getExecutionDescription() {
         return Messages.bkMessage(steps);

@@ -1,11 +1,11 @@
 
 package com.jgranados.koky.instructions.graphicinstructions;
 
-import com.jgranados.koky.ui.EndPosition;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Arrays;
 
 /**
  *
@@ -15,29 +15,33 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
+        int [] outPositions = {currentPointer.getOutPosX(), currentPointer.getOutPosY()};
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
         int outPosX = endPosX; //Out position
         int outPosY = endPosY;
-        if (currentPointer.getEndPosition() != null) {
-            if (TranslationUtils.isOutOfRange(currentPointer.getEndPosition().getEndPosX(), currentPointer.getEndPosition().getEndPosY())) {
-                outPosX = calculateOutEndX(currentPointer);
-                outPosY = calculateOutEndY(currentPointer);
-            }
+        if (TranslationUtils.isOutOfRange(currentPointer.getOutPosX(), currentPointer.getOutPosY(), currentPointer)) {
+            outPosX = calculateOutEndX(currentPointer);
+            outPosY = calculateOutEndY(currentPointer);
         }
-        currentPointer.setEndPosition(new EndPosition(outPosX, outPosY));
-        if (TranslationUtils.isOutOfRange(outPosX, outPosY)) {
-            EndPosition endPosition = TranslationUtils.getEndPosition(new EndPosition(outPosX, outPosY), currentPointer);
-            endPosX = endPosition.getEndPosX();
-            endPosY = endPosition.getEndPosY();
+        currentPointer.setOutPosX(outPosX);
+        currentPointer.setOutPosY(outPosY);
+        if (TranslationUtils.isOutOfRange(outPosX, outPosY, currentPointer)) {
+            if (!TranslationUtils.isOutOfRange(outPositions[0], outPositions[1], currentPointer)) {
+                outPositions = Arrays.copyOf(TranslationUtils.setEndPosition(currentPointer, TranslationUtils.INIT_METHOD), TranslationUtils.ARRAY_SIZE);
+            } else {
+                outPositions = Arrays.copyOf(TranslationUtils.setOutPosition(currentPointer), TranslationUtils.ARRAY_SIZE);
+            }
+            endPosX = outPositions[0];
+            endPosY = outPositions[1];
         } else {
             endPosX = outPosX;
             endPosY = outPosY;
         }
         currentPointer.setAccumulationX(calculateAccumulationX(currentPointer));
         currentPointer.setAccumulationY(calculateAccumulationY(currentPointer));
-        currentPointer.setAccumulationOutX(calculateAccumulationX(currentPointer));
-        currentPointer.setAccumulationOutY(calculateAccumulationY(currentPointer));
+        currentPointer.setOutAccumulationX(calculateAccumulationX(currentPointer));
+        currentPointer.setOutAccumulationY(calculateAccumulationY(currentPointer));
         drawLine(graphicsNoPointer, currentPointer, endPosX, endPosY);
         return graphicsNoPointer;
     }
@@ -67,9 +71,5 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     protected abstract double calculateAccumulationX(KokyPointer currentPointer);
 
     protected abstract double calculateAccumulationY(KokyPointer currentPointer);
-
-    protected abstract double calculateAccumulationOutX(KokyPointer currentPointer);
-
-    protected abstract double calculateAccumulationOutY(KokyPointer currentPointer);
-
 }
+
