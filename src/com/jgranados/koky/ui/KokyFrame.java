@@ -6,13 +6,6 @@ import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.graphicinstructions.TranslationUtils;
 import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
-import com.jgranados.koky.interpreter.lexer.Lexer;
-import com.jgranados.koky.interpreter.lexer.languages.LexerAll;
-import com.jgranados.koky.interpreter.lexer.languages.LexerEs;
-import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
-import com.jgranados.koky.interpreter.parser.Parser;
-import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
-import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
 import java.awt.Color;
@@ -35,13 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java_cup.runtime.Scanner;
 import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import static javax.swing.text.html.HTML.Tag.HEAD;
 
 /**
  *
@@ -49,37 +41,28 @@ import static javax.swing.text.html.HTML.Tag.HEAD;
  */
 public class KokyFrame extends KFrame {
 
+    private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
+    private static final String CLEARS = "clears";
+    private static final int NUM_SUBSTRING = 2;
     private PanelDraw panelDraw;
-    private SymbolsTable instructionsSymTable;
-    private ProcedureTable instructionsSymProcedureTable;
     private String lastInput;
     private ArrayList<String> historyInput = new ArrayList<>();
     private int history = 0;
     private int instructionsMade = 0;
-    private Boolean coutingSteps = false;
+    private ArrayList<String> instructionsMadeList = new ArrayList<>();
+    private Boolean makingChallenge = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
-    private Scanner sc;
-    public static List<String> infoMes = new ArrayList<>();
+    private DrawingInstruction draw;
 
     public KokyFrame() {
         super(false);
         panelDraw = new PanelDraw();
         initComponents();
+        languageLabel.setText(super.language.name());
         txtInstruction.requestFocusInWindow();
-        typeLanguage();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
-//        super(false);
-//        panelDraw = new PanelDraw();
-//        initComponents();
-//        myLexer = new Lexer(new StringReader(""));
-//        instructionsSymTable = new SymbolsTable(myLexer.getErrorsList());
-//        procedureTable = new ProcedureTable(myLexer.getErrorsList());
-//        myParser = new Parser(myLexer, instructionsSymTable,procedureTable);
-//        txtInstruction.requestFocusInWindow();
-//        typeLanguage();
-//        this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
-//        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.draw = new DrawingInstruction(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -104,6 +87,8 @@ public class KokyFrame extends KFrame {
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
         btnChangeImage = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        languageLabel = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFile = new javax.swing.JMenu();
@@ -119,6 +104,13 @@ public class KokyFrame extends KFrame {
         interactiveMenu = new javax.swing.JMenu();
         takeChallengeMenuItem = new javax.swing.JMenuItem();
         challengeHistoryMEnuItem = new javax.swing.JMenuItem();
+        drawingMenu = new javax.swing.JMenu();
+        squareMenuItem = new javax.swing.JMenuItem();
+        triangleMenuItem = new javax.swing.JMenuItem();
+        circleMenuItem = new javax.swing.JMenuItem();
+        pentagonMenuItem = new javax.swing.JMenuItem();
+        starMenuItem = new javax.swing.JMenuItem();
+        cubeMenuItem = new javax.swing.JMenuItem();
         lenguagesMenu = new javax.swing.JMenu();
         lenguagesAll = new javax.swing.JMenuItem();
         lenguageEnglish = new javax.swing.JMenuItem();
@@ -219,22 +211,36 @@ public class KokyFrame extends KFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel1.setText("Lenguaje:");
+
+        languageLabel.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(languageLabel)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCleanAll, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSaveInstructions, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnChangeImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(languageLabel))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -327,6 +333,58 @@ public class KokyFrame extends KFrame {
         });
         interactiveMenu.add(challengeHistoryMEnuItem);
 
+        drawingMenu.setText("Dibujos predefinidos");
+
+        squareMenuItem.setText("Cuadrado");
+        squareMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                squareMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(squareMenuItem);
+
+        triangleMenuItem.setText("Triangulo");
+        triangleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                triangleMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(triangleMenuItem);
+
+        circleMenuItem.setText("Circulo");
+        circleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                circleMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(circleMenuItem);
+
+        pentagonMenuItem.setText("Pentagono");
+        pentagonMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pentagonMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(pentagonMenuItem);
+
+        starMenuItem.setText("Estrella");
+        starMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                starMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(starMenuItem);
+
+        cubeMenuItem.setText("Cubo");
+        cubeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cubeMenuItemActionPerformed(evt);
+            }
+        });
+        drawingMenu.add(cubeMenuItem);
+
+        interactiveMenu.add(drawingMenu);
+
         jMenuBar1.add(interactiveMenu);
 
         lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
@@ -396,8 +454,8 @@ public class KokyFrame extends KFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -453,7 +511,6 @@ public class KokyFrame extends KFrame {
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
         instructionsSymTable.cleanAll();
         instructionsSymProcedureTable.cleanAll();
-
     }//GEN-LAST:event_btnCleanAllActionPerformed
 
     private void btnSaveInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsActionPerformed
@@ -477,8 +534,9 @@ public class KokyFrame extends KFrame {
         historyInput.add(input);
         history = historyInput.size();
         lastInput = "";
-        if (coutingSteps) {
+        if (makingChallenge) {
             instructionsMade++;
+            instructionsMadeList.add(input);
         }
     }
 
@@ -521,10 +579,18 @@ public class KokyFrame extends KFrame {
         if (userElection == 0) {
             cleanAll();
             String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
-            ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.coutingSteps, this, challengeHistoryHandler);
-            challengesFrame.setVisible(true);
-            coutingSteps = true;
-            enableButonsInChallenge(false);
+            if (userName == null) {
+            } else if (userName.equals("")) {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), "Amigo", instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            } else {
+                ChallengesFrame challengesFrame = new ChallengesFrame(panelDraw.returnDraw(), userName, instructionsMade, this.makingChallenge, this, challengeHistoryHandler);
+                challengesFrame.setVisible(true);
+                makingChallenge = true;
+                enableButonsInChallenge(false);
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Puedes continuar dibujando.", "Salir de reto", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -542,64 +608,49 @@ public class KokyFrame extends KFrame {
 
 
     private void lenguagesAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguagesAllActionPerformed
-
-        Languages.ALL.setTypeLanguage(true);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageAll();
+        languageLabel.setText(super.language.name());
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguagesAllActionPerformed
 
     private void lenguageEnglishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageEnglishActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(true);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageEnglish();
+        languageLabel.setText(super.language.name());
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageEnglishActionPerformed
 
     private void lenguageSpanishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageSpanishActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(true);
-        Languages.KICHE.setTypeLanguage(false);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageSpanish();
+        languageLabel.setText(super.language.name());
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageSpanishActionPerformed
 
     private void lenguageKicheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lenguageKicheActionPerformed
-
-        Languages.ALL.setTypeLanguage(false);
-        Languages.ENGLISH.setTypeLanguage(false);
-        Languages.SPANISH.setTypeLanguage(false);
-        Languages.KICHE.setTypeLanguage(true);
-        typeLanguage();
-        addMessagesInfo(Messages.changeMessage());
+        selectLanguageKiche();
+        languageLabel.setText(super.language.name());
+        addMessageInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
     private void changeSizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeSizeButtonActionPerformed
         int answer = JOptionPane.showConfirmDialog(null, "    ¿Esta seguro?\nSe borrar la pantalla", "Alerta!", JOptionPane.YES_NO_OPTION);
         if (answer == JOptionPane.YES_OPTION) {
-            
             List<String> inputs = JOptionPaneMultiInput.getMultiInput(
                     new String[]{TranslationUtils.PLAIN_TEXT_WIDTH, TranslationUtils.PLAIN_TEXT_HEIGHT});
             int width = 0;
             int height = 0;
-            
             try {
-                
                 width = Integer.parseInt(inputs.get(0));
                 height = Integer.parseInt(inputs.get(1));
+                if (width < PanelDraw.MINIMUN_WIDTH || height < PanelDraw.MINIMUN_HEIGHT) {
+                    JOptionPane.showMessageDialog(
+                            this, "Parametro(s) menor(es) a los minimos. Se ha limitado el tamaño a (" + PanelDraw.MINIMUN_WIDTH + " x "
+                            + PanelDraw.MINIMUN_HEIGHT + ")");
+                }
                 JViewport viewport = (JViewport) scrollpnl.getViewport();
                 viewport.remove(panelDraw);
                 panelDraw = new PanelDraw(width, height);
                 viewport.add(panelDraw);
                 repaint();
-                
             } catch (NullPointerException e1) {
                 JOptionPane.showMessageDialog(
                         this, "Campos incompletos. Intentalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
@@ -608,6 +659,64 @@ public class KokyFrame extends KFrame {
             }
         }
     }//GEN-LAST:event_changeSizeButtonActionPerformed
+    private void squareMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_squareMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.SQUARE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_squareMenuItemActionPerformed
+
+    private void triangleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_triangleMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_ISTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.TRIANGLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_triangleMenuItemActionPerformed
+
+    private void circleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CIRCLE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_circleMenuItemActionPerformed
+
+    private void pentagonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pentagonMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.PENTAGON_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_pentagonMenuItemActionPerformed
+
+    private void starMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_starMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.STAR_INSTRUCTION_QUICHE);
+        }     }//GEN-LAST:event_starMenuItemActionPerformed
+
+    private void cubeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cubeMenuItemActionPerformed
+        if (Languages.SPANISH.getTypeLanguage() || Languages.ALL.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_SPANISH);
+        } else if (Languages.ENGLISH.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_ENGLISH);
+        } else if (Languages.KICHE.getTypeLanguage()) {
+            this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_QUICHE);
+        }
+    }//GEN-LAST:event_cubeMenuItemActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
@@ -615,6 +724,14 @@ public class KokyFrame extends KFrame {
 
     public int returnTotalAttempts() {
         return instructionsMade;
+    }
+
+    public ArrayList<String> returnComandsList() {
+        return this.instructionsMadeList;
+    }
+
+    public void cleanInstructionsMadeList() {
+        this.instructionsMadeList.clear();
     }
 
     public void cleanAll() {
@@ -707,6 +824,7 @@ public class KokyFrame extends KFrame {
         interactiveMenu.setEnabled(inputInstruction);
         btnCleanAll.setEnabled(inputInstruction);
         btnSaveInstructions.setEnabled(inputInstruction);
+        lenguagesMenu.setEnabled(inputInstruction);
     }
 
     public File openFile() {
@@ -717,6 +835,11 @@ public class KokyFrame extends KFrame {
         }
         return null;
     }
+
+    public JTextArea getTxtInstructions() {
+        return txtInstructions;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnAbout;
@@ -730,11 +853,15 @@ public class KokyFrame extends KFrame {
     private javax.swing.JMenuItem challengeHistoryMEnuItem;
     private javax.swing.JMenuItem changeSizeButton;
     private javax.swing.JMenuItem changeVarNameMenu;
+    private javax.swing.JMenuItem circleMenuItem;
     private javax.swing.JMenuItem colorItem;
+    private javax.swing.JMenuItem cubeMenuItem;
+    private javax.swing.JMenu drawingMenu;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JEditorPane helpPane;
     private javax.swing.JMenu interactiveMenu;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -745,14 +872,19 @@ public class KokyFrame extends KFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JLabel languageLabel;
     private javax.swing.JMenuItem lenguageEnglish;
     private javax.swing.JMenuItem lenguageKiche;
     private javax.swing.JMenuItem lenguageSpanish;
     private javax.swing.JMenuItem lenguagesAll;
     private javax.swing.JMenu lenguagesMenu;
+    private javax.swing.JMenuItem pentagonMenuItem;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
+    private javax.swing.JMenuItem squareMenuItem;
+    private javax.swing.JMenuItem starMenuItem;
     private javax.swing.JMenuItem takeChallengeMenuItem;
+    private javax.swing.JMenuItem triangleMenuItem;
     private javax.swing.JTextField txtInstruction;
     private javax.swing.JTextArea txtInstructions;
     private javax.swing.JEditorPane txtMessages;

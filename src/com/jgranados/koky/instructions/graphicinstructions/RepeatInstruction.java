@@ -42,9 +42,9 @@ public class RepeatInstruction extends GraphicsInstruction implements ExecutionD
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            loops.setAmbit(this.getAmbit());
+            loops.changeAmbit(this.getAmbit());
         }else{
-            loops.setAmbit(AmbitEnum.GLOBAL);
+            loops.changeAmbit(AmbitEnum.GLOBAL);
         }
     }
 

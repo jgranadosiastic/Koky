@@ -162,6 +162,8 @@ Comment     = "#" [^\r\n]*
     {R_}{E_}{P_}{E_}{T_}{I_}{R_}                {   return symbol(REPEAT);              }
     {A_}{N_}{C_}{H_}{O_}                        {   return symbol(WIDTH);               }
     {A_}{N_}                                    {   return symbol(WIDTH);               }
+    {P_}{R_}{O_}{C_}{E_}{S_}{O_}                {   return symbol(VOID);                }
+    {L_}{L_}{A_}{M_}{A_}{R_}                    {   return symbol(CALL);                }                             
     {WhiteSpace} 	{   /*return symbol(WHITESPACE); */  }
 
     {Comment}           {   /* ignoring */  }

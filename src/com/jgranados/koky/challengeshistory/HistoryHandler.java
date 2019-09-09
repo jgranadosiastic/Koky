@@ -14,8 +14,8 @@ public class HistoryHandler implements Serializable {
     public HistoryHandler() {
     }
 
-    public void addChallengeRegistry(String userName, int totalSeconds, int intructionsMade, String identifier, String description) throws IOException {
-        challengesList.add(new ChallengeRegistry(userName, totalSeconds, intructionsMade, identifier, description));
+    public void addChallengeRegistry(String userName, int totalSeconds, int intructionsMade, String identifier, String description, ArrayList<String> instructionsList) throws IOException {
+        challengesList.add(new ChallengeRegistry(userName, totalSeconds, intructionsMade, identifier, description, instructionsList));
         HistoryDataHandler.saveHistoryArrayList(challengesList);
     }
 

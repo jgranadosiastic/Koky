@@ -79,16 +79,16 @@ public class ForwardInstruction extends TranslationInstruction implements Execut
     @Override
     public void assignAmbitToExpresions() {
         if(this.getAmbit()!=null){
-            steps.setAmbit(this.getAmbit());
+            steps.changeAmbit(this.getAmbit());
         }else{
-            steps.setAmbit(AmbitEnum.GLOBAL);
+            steps.changeAmbit(AmbitEnum.GLOBAL);
         }
         
     }
 
     @Override
     public void assignTableTokenValue(Token token) {
-        steps.setTableToken(token);
+        steps.changeTableToken(token);
     }
     
     
