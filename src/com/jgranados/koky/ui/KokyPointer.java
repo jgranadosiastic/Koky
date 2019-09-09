@@ -64,6 +64,11 @@ public class KokyPointer {
         this.posY = posY;
     }
 
+    public void setPosXY(int posX, int posY){
+        this.posX = posX;
+        this.posY = posY;
+    }
+    
     public int getAngle() {
         return angle;
     }

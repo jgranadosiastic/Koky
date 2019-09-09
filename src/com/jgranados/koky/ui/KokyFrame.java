@@ -3,6 +3,7 @@ package com.jgranados.koky.ui;
 import com.jgranados.koky.challengeshistory.HistoryHandler;
 
 import com.jgranados.koky.instructions.Instruction;
+import com.jgranados.koky.instructions.graphicinstructions.TranslationUtils;
 import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.interpreter.lexer.Lexer;
@@ -15,15 +16,21 @@ import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,7 +38,7 @@ import java.util.logging.Logger;
 import java_cup.runtime.Scanner;
 import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static javax.swing.text.html.HTML.Tag.HEAD;
@@ -40,10 +47,8 @@ import static javax.swing.text.html.HTML.Tag.HEAD;
  *
  * @author jose
  */
+public class KokyFrame extends KFrame {
 
-public class KokyFrame extends KFrame{
-
-   
     private PanelDraw panelDraw;
     private SymbolsTable instructionsSymTable;
     private ProcedureTable instructionsSymProcedureTable;
@@ -110,6 +115,7 @@ public class KokyFrame extends KFrame{
         btnAbout = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         changeVarNameMenu = new javax.swing.JMenuItem();
+        changeSizeButton = new javax.swing.JMenuItem();
         interactiveMenu = new javax.swing.JMenu();
         takeChallengeMenuItem = new javax.swing.JMenuItem();
         challengeHistoryMEnuItem = new javax.swing.JMenuItem();
@@ -148,7 +154,7 @@ public class KokyFrame extends KFrame{
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
             .addComponent(txtInstruction)
         );
         jPanel2Layout.setVerticalGroup(
@@ -171,6 +177,7 @@ public class KokyFrame extends KFrame{
         jSplitPane1.setRightComponent(jScrollPane1);
 
         scrollpnl.setBackground(new java.awt.Color(255, 255, 255));
+        scrollpnl.setPreferredSize(new Dimension(PanelDraw.DEFAULT_WIDTH, PanelDraw.DEFAULT_HEIGHT));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -281,7 +288,7 @@ public class KokyFrame extends KFrame{
         jMenuBar1.add(helpMenu);
 
         exportMenu.setForeground(new java.awt.Color(255, 255, 255));
-        exportMenu.setText("Exportar");
+        exportMenu.setText("Imagen");
 
         changeVarNameMenu.setText("Guardar Imagen");
         changeVarNameMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -290,6 +297,14 @@ public class KokyFrame extends KFrame{
             }
         });
         exportMenu.add(changeVarNameMenu);
+
+        changeSizeButton.setText("Cambiar tamaño Imagen");
+        changeSizeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeSizeButtonActionPerformed(evt);
+            }
+        });
+        exportMenu.add(changeSizeButton);
 
         jMenuBar1.add(exportMenu);
 
@@ -361,9 +376,9 @@ public class KokyFrame extends KFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(scrollpnl, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1)
+                    .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,7 +447,7 @@ public class KokyFrame extends KFrame{
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
 
-        parseInstruction(CLEARS,this.panelDraw);
+        parseInstruction(CLEARS, this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -455,7 +470,7 @@ public class KokyFrame extends KFrame{
 
     //Metodo para parsear
     public void run(String input) {
-        parseInstruction(input,this.panelDraw);
+        parseInstruction(input, this.panelDraw);
         this.txtInstructions.append(input + LINE);
         this.txtInstruction.setText("");
         errorLanguage();
@@ -480,7 +495,16 @@ public class KokyFrame extends KFrame{
             Clipboard systemCopy = Toolkit.getDefaultToolkit().getSystemClipboard();
             StringSelection selectedString = new StringSelection(hexaString);
             systemCopy.setContents(selectedString, selectedString);
+            try {
+                Transferable t = systemCopy.getContents(null);
+                if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                    txtInstruction.setText(txtInstruction.getText() + t.getTransferData(DataFlavor.stringFlavor));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }//GEN-LAST:event_colorItemActionPerformed
     private void changeVarNameMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeVarNameMenuActionPerformed
         generateImage();
@@ -513,7 +537,7 @@ public class KokyFrame extends KFrame{
         } catch (IOException ex) {
             Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_challengeHistoryMEnuItemActionPerformed
 
 
@@ -557,18 +581,44 @@ public class KokyFrame extends KFrame{
         addMessagesInfo(Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
+    private void changeSizeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeSizeButtonActionPerformed
+        int answer = JOptionPane.showConfirmDialog(null, "    ¿Esta seguro?\nSe borrar la pantalla", "Alerta!", JOptionPane.YES_NO_OPTION);
+        if (answer == JOptionPane.YES_OPTION) {
+            
+            List<String> inputs = JOptionPaneMultiInput.getMultiInput(
+                    new String[]{TranslationUtils.PLAIN_TEXT_WIDTH, TranslationUtils.PLAIN_TEXT_HEIGHT});
+            int width = 0;
+            int height = 0;
+            
+            try {
+                
+                width = Integer.parseInt(inputs.get(0));
+                height = Integer.parseInt(inputs.get(1));
+                JViewport viewport = (JViewport) scrollpnl.getViewport();
+                viewport.remove(panelDraw);
+                panelDraw = new PanelDraw(width, height);
+                viewport.add(panelDraw);
+                repaint();
+                
+            } catch (NullPointerException e1) {
+                JOptionPane.showMessageDialog(
+                        this, "Campos incompletos. Intentalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException e2) {
+                JOptionPane.showMessageDialog(this, "Ingresar numeros enteros", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_changeSizeButtonActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
     }
-
 
     public int returnTotalAttempts() {
         return instructionsMade;
     }
 
     public void cleanAll() {
-        parseInstruction(CLEARS,this.panelDraw);
+        parseInstruction(CLEARS, this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
@@ -600,7 +650,7 @@ public class KokyFrame extends KFrame{
             JOptionPane.showMessageDialog(null, "¡Ups! Hubo un error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     public PanelDraw getPanelDraw() {
         return this.panelDraw;
     }
@@ -619,8 +669,9 @@ public class KokyFrame extends KFrame{
                     JOptionPane.ERROR_MESSAGE);
         }
         return file.getName();
-    
+
     }
+
     public String saveInstructionsToFile(String input) {
         saveFileChooser.showSaveDialog(this);
         File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
@@ -648,8 +699,8 @@ public class KokyFrame extends KFrame{
         }
         return baseName;
     }
-    
-    public void enableButonsInChallenge(Boolean inputInstruction){
+
+    public void enableButonsInChallenge(Boolean inputInstruction) {
         btnOpenFile.setEnabled(inputInstruction);
         helpMenu.setEnabled(inputInstruction);
         exportMenu.setEnabled(inputInstruction);
@@ -657,8 +708,6 @@ public class KokyFrame extends KFrame{
         btnCleanAll.setEnabled(inputInstruction);
         btnSaveInstructions.setEnabled(inputInstruction);
     }
-    
-    
 
     public File openFile() {
         int status = saveFileChooser.showOpenDialog(this);
@@ -679,6 +728,7 @@ public class KokyFrame extends KFrame{
     private javax.swing.JButton btnSaveInstructions;
     private javax.swing.JMenuItem btnSaveInstructionsMenuItem;
     private javax.swing.JMenuItem challengeHistoryMEnuItem;
+    private javax.swing.JMenuItem changeSizeButton;
     private javax.swing.JMenuItem changeVarNameMenu;
     private javax.swing.JMenuItem colorItem;
     private javax.swing.JMenu exportMenu;

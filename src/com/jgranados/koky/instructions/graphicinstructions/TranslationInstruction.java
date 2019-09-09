@@ -1,11 +1,11 @@
 
 package com.jgranados.koky.instructions.graphicinstructions;
 
-import com.jgranados.koky.ui.EndPosition;
 import com.jgranados.koky.ui.KokyPointer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Arrays;
 
 /**
  *
@@ -15,25 +15,25 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
-        EndPosition endPosition = new EndPosition(currentPointer.getOutPosX(), currentPointer.getOutPosY());
+        int [] outPositions = {currentPointer.getOutPosX(), currentPointer.getOutPosY()};
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
         int outPosX = endPosX; //Out position
         int outPosY = endPosY;
-        if (TranslationUtils.isOutOfRange(currentPointer.getOutPosX(), currentPointer.getOutPosY())) {
+        if (TranslationUtils.isOutOfRange(currentPointer.getOutPosX(), currentPointer.getOutPosY(), currentPointer)) {
             outPosX = calculateOutEndX(currentPointer);
             outPosY = calculateOutEndY(currentPointer);
         }
         currentPointer.setOutPosX(outPosX);
         currentPointer.setOutPosY(outPosY);
-        if (TranslationUtils.isOutOfRange(outPosX, outPosY)) {
-            if (!TranslationUtils.isOutOfRange(endPosition.getPosX(), endPosition.getPosY())) {
-                endPosition = TranslationUtils.getEndPosition(currentPointer);
+        if (TranslationUtils.isOutOfRange(outPosX, outPosY, currentPointer)) {
+            if (!TranslationUtils.isOutOfRange(outPositions[0], outPositions[1], currentPointer)) {
+                outPositions = Arrays.copyOf(TranslationUtils.setEndPosition(currentPointer, TranslationUtils.INIT_METHOD), TranslationUtils.ARRAY_SIZE);
             } else {
-                endPosition = TranslationUtils.getOutPosition(currentPointer);
+                outPositions = Arrays.copyOf(TranslationUtils.setOutPosition(currentPointer), TranslationUtils.ARRAY_SIZE);
             }
-            endPosX = endPosition.getPosX();
-            endPosY = endPosition.getPosY();
+            endPosX = outPositions[0];
+            endPosY = outPositions[1];
         } else {
             endPosX = outPosX;
             endPosY = outPosY;
