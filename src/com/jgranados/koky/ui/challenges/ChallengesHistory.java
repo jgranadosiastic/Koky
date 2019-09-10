@@ -51,6 +51,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         jLabel1 = new javax.swing.JLabel();
         ChallengesTableScrollPane = new javax.swing.JScrollPane();
         challengeRegistryTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         timeTitleLabel = new javax.swing.JLabel();
         ShowFormatedTimeLabel = new javax.swing.JLabel();
         instructionsQCLabel = new javax.swing.JLabel();
@@ -95,6 +96,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         }
 
         getContentPane().add(ChallengesTableScrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 450, 240));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 90, 170, 130));
 
         timeTitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         timeTitleLabel.setText("Tiempo:");
@@ -187,7 +189,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
             ChallengeDescriptionTextField.setText(challengeSelected.getChallengeDescription());
             String path = CHALLENGES_URL + challengeSelected.getIdentifierRegistry();
             ImageIcon icono = new ImageIcon(path);
-            Image img = icono.getImage().getScaledInstance(selectedImageLabel.getWidth(), selectedImageLabel.getHeight(), Image.SCALE_SMOOTH);
+            Image img = icono.getImage().getScaledInstance(selectedImageLabel.getWidth(), selectedImageLabel.getHeight(), Image.SCALE_SMOOTH);           
             selectedImageLabel.setIcon(new ImageIcon(img));
             ShowFormatedTimeLabel.setText(generateTime(challengeSelected.getTotalSeconds()));
             for (int i = 0; i < challengeSelected.getInstructionsList().size(); i++) {
@@ -211,6 +213,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
     private javax.swing.JLabel intructionsESLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel selectedImageLabel;
     private javax.swing.JLabel timeTitleLabel;
     private javax.swing.JLabel turtleImageLabel;

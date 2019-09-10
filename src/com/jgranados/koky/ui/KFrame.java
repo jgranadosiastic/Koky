@@ -47,6 +47,8 @@ public class KFrame extends javax.swing.JFrame {
     protected boolean isFile;
     protected List<String> infoMesages = new ArrayList<>();
     protected Language language;
+    private String cleanWord = "clears";
+
     public KFrame(boolean isFile) {
         this.typeLanguage();
         txtMessages = new JEditorPane();
@@ -215,43 +217,51 @@ public class KFrame extends javax.swing.JFrame {
             typeParser(sc, instructionsSymTable, instructionsSymProcedureTable);
             this.language = Language.Kiche;
         }
-
     }
 
     protected void typeParser(Scanner sc, SymbolsTable symbols, ProcedureTable procedures) {
         myParser = new Parser(sc, symbols, procedures); //se agrego tambien la tabla de Procedures
         myParser.setLexersAnalyzingFile(true);
     }
-    
+
     protected void selectLanguageAll() {
+        cleanWord = "clears";
         Languages.ALL.setTypeLanguage(true);
         Languages.ENGLISH.setTypeLanguage(false);
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
     }
-    
+
     protected void selectLanguageEnglish() {
+        cleanWord = "clears";
         Languages.ALL.setTypeLanguage(false);
         Languages.ENGLISH.setTypeLanguage(true);
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
     }
-    
+
     protected void selectLanguageSpanish() {
+        cleanWord = "limpiar";
         Languages.ALL.setTypeLanguage(false);
         Languages.ENGLISH.setTypeLanguage(false);
         Languages.SPANISH.setTypeLanguage(true);
         Languages.KICHE.setTypeLanguage(false);
         typeLanguage();
     }
-    
+
     protected void selectLanguageKiche() {
+        cleanWord = "su'nik";
         Languages.ALL.setTypeLanguage(false);
         Languages.ENGLISH.setTypeLanguage(false);
         Languages.SPANISH.setTypeLanguage(false);
         Languages.KICHE.setTypeLanguage(true);
         typeLanguage();
     }
+
+    protected String returnCleanLenguage() {
+        return cleanWord;
+    }
+
 }

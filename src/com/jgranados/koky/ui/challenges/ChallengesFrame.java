@@ -40,6 +40,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
     private static final String CHALLENGES_FILE = "src/com/jgranados/koky/challengesfiles/Challenges.txt";
     private static final String ICON_URL = "src/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String CHALLENGES_URL = "ImagenesRetos/";
+    private static final String CHALLENGE_BUTTON = "challengeButton";
     private static final String JPG_FILE_EXTENSION = "jpg";
     private static final String JPG__DOT_FILE_EXTENSION = ".jpg";
     private ArrayList<String> challengesList = new ArrayList<>();
@@ -188,7 +189,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        koyFrame.cleanAll();
+        koyFrame.cleanAll(CHALLENGE_BUTTON);
         koyFrame.cleanInstructionsMadeList();
         moveToCorner();
         chronometerState = true;
