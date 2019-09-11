@@ -133,6 +133,10 @@ public class KFrame extends javax.swing.JFrame {
 
     //type of lexer to execute
     private void lexerAll(LexerAll lexer, String instruction, PanelDraw panelDraw) {
+        // TODO remove this kind of logic
+        if (lexer == null) {
+            lexer = new LexerAll(new StringReader(""));
+        }
         lexer.yyreset(new StringReader(instruction + LINE));
         try {
             List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
@@ -147,6 +151,9 @@ public class KFrame extends javax.swing.JFrame {
     }
 
     private void lexerSpanish(LexerEs lexer, String instruction, PanelDraw panelDraw) {
+        if (lexer == null) {
+            lexer = new LexerEs(new StringReader(""));
+        }
         lexer.yyreset(new StringReader(instruction + LINE));
         try {
             List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
@@ -160,6 +167,9 @@ public class KFrame extends javax.swing.JFrame {
     }
 
     private void lexerEnglish(Lexer lexer, String instruction, PanelDraw panelDraw) {
+        if (lexer == null) {
+            lexer = new Lexer(new StringReader(""));
+        }
         lexer.yyreset(new StringReader(instruction + LINE));
         try {
             List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
@@ -173,6 +183,9 @@ public class KFrame extends javax.swing.JFrame {
     }
 
     private void lexerKiche(LexerKiche lexer, String instruction, PanelDraw panelDraw) {
+        if (lexer == null) {
+            lexer = new LexerKiche(new StringReader(""));
+        }
         lexer.yyreset(new StringReader(instruction + LINE));
         try {
             List<Instruction> instructions = (List<Instruction>) this.myParser.parse().value;
