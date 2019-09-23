@@ -187,7 +187,7 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
             ChallengeDescriptionTextField.setText(challengeSelected.getChallengeDescription());
             String path = CHALLENGES_URL + challengeSelected.getIdentifierRegistry();
             ImageIcon icono = new ImageIcon(path);
-            Image img = icono.getImage().getScaledInstance(selectedImageLabel.getWidth(), selectedImageLabel.getHeight(), Image.SCALE_SMOOTH);
+            Image img = icono.getImage().getScaledInstance(calculateProporcionalWidth(icono.getIconHeight(), icono.getIconWidth(), selectedImageLabel.getHeight()), selectedImageLabel.getHeight(), Image.SCALE_SMOOTH);           
             selectedImageLabel.setIcon(new ImageIcon(img));
             ShowFormatedTimeLabel.setText(generateTime(challengeSelected.getTotalSeconds()));
             for (int i = 0; i < challengeSelected.getInstructionsList().size(); i++) {
@@ -196,6 +196,12 @@ public class ChallengesHistory extends javax.swing.JFrame implements Serializabl
         } else {
             this.challengeSelected = null;
         }
+    }
+    
+    private int calculateProporcionalWidth(int imageHeight, int imageWidth, int labelHeight){
+    int result;
+    result = (int ) (imageWidth*labelHeight)/imageHeight;
+    return result;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

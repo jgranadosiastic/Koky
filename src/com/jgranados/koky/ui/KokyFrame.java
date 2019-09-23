@@ -42,7 +42,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class KokyFrame extends KFrame {
 
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
-    private static final String CLEARS = "clears";
+    private static final String CHALLENGE_BUTTON = "challengeButton";
+    private static final String CLEAN_ALL_BUTTON = "cleanAllButton";
     private static final int NUM_SUBSTRING = 2;
     private PanelDraw panelDraw;
     private String lastInput;
@@ -221,7 +222,7 @@ public class KokyFrame extends KFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
@@ -454,8 +455,8 @@ public class KokyFrame extends KFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
+                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -504,13 +505,7 @@ public class KokyFrame extends KFrame {
     }//GEN-LAST:event_txtInstructionKeyReleased
 
     private void btnCleanAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanAllActionPerformed
-
-        parseInstruction(CLEARS, this.panelDraw);
-        txtInstructions.setText("");
-        txtInstruction.setText("");
-        txtMessages.setText("<p style=\"margin-top: 0\"></p>");
-        instructionsSymTable.cleanAll();
-        instructionsSymProcedureTable.cleanAll();
+        cleanAll(CLEAN_ALL_BUTTON);
     }//GEN-LAST:event_btnCleanAllActionPerformed
 
     private void btnSaveInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInstructionsActionPerformed
@@ -577,7 +572,7 @@ public class KokyFrame extends KFrame {
         int yesOrNoMessage = JOptionPane.YES_NO_OPTION;
         int userElection = JOptionPane.showConfirmDialog(this, "Todos tus cambios actuales se van a borrar ¿Deseas continuar?", "Retos | Koky", yesOrNoMessage);
         if (userElection == 0) {
-            cleanAll();
+            cleanAll(CHALLENGE_BUTTON);
             String userName = JOptionPane.showInputDialog(this, "¿Cuál es tu nombre?", "Ingresa un nombre de usuario", JOptionPane.INFORMATION_MESSAGE);
             if (userName == null) {
             } else if (userName.equals("")) {
@@ -734,14 +729,16 @@ public class KokyFrame extends KFrame {
         this.instructionsMadeList.clear();
     }
 
-    public void cleanAll() {
-        parseInstruction(CLEARS, this.panelDraw);
+    public void cleanAll(String buttonActioned) {
+        parseInstruction(returnCleanLenguage(), this.panelDraw);
         txtInstructions.setText("");
         txtInstruction.setText("");
         txtMessages.setText("<p style=\"margin-top: 0\"></p>");
         instructionsSymTable.cleanAll();
         instructionsSymProcedureTable.cleanAll();
-        instructionsMade = 0;
+        if (buttonActioned.equals(CHALLENGE_BUTTON)) {
+            instructionsMade = 0;
+        }
     }
 
     public void generateImage() {
