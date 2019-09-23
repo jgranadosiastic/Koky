@@ -18,21 +18,21 @@ import java.util.List;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.undo.CannotUndoException;
 
 /**
  *
  * @author anclenius
  */
 public class EditorFrame extends KFrame {
-    
+
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
     private int unnamedTabs;
     private JEditorPane txtMessages;
     private MessageDialog messageDialog;
     private List<String> messages;
-    
-    
+
     public EditorFrame(KokyFrame kokyFrame) {
         super(true);
         initComponents();
@@ -48,7 +48,6 @@ public class EditorFrame extends KFrame {
         this.undoFile.setEnabled(true);
         this.redoFile.setEnabled(true);
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -328,17 +327,26 @@ public class EditorFrame extends KFrame {
     }//GEN-LAST:event_executeFileActionPerformed
 
     private void closeTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeTabActionPerformed
-        int index = Inputs.getSelectedIndex();
-        unnamedTabs--;
-        try{
-            Inputs.remove(index);
-        } catch(Exception ex){
-            System.out.println("Controlada");
+        int option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de cerrar esta pestaña?");
+        if(option == JOptionPane.YES_OPTION) {
+            if(Inputs.getTabCount() == 0) JOptionPane.showMessageDialog(null, "No hay pestañas para cerrar");
+            else {
+                int index = Inputs.getSelectedIndex();
+                unnamedTabs--;
+                try {
+                    if (Inputs.getTabCount() - 1 == 0) {
+                        Inputs.getComponentAt(0).setVisible(false);
+                    }
+                    Inputs.remove(index);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }//GEN-LAST:event_closeTabActionPerformed
 
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
-        InputTab tab = (InputTab)Inputs.getSelectedComponent();
+        InputTab tab = (InputTab) Inputs.getSelectedComponent();
         String name = kokyFrame.saveInstructionsToFile(tab.getText());
         int index = Inputs.getSelectedIndex();
         Inputs.setTitleAt(index, name);
@@ -348,17 +356,22 @@ public class EditorFrame extends KFrame {
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void InputsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_InputsStateChanged
-        InputTab tab = (InputTab)Inputs.getSelectedComponent();
-        this.undoManager = tab.getManager();
-        this.undoFile.setEnabled(true);
-        this.redoFile.setEnabled(true);
+        try{
+            InputTab tab = (InputTab) Inputs.getSelectedComponent();
+            this.undoManager = tab.getManager();
+            this.undoFile.setEnabled(true);
+            this.redoFile.setEnabled(true);
+        } catch(Exception ex) {
+            this.undoFile.setEnabled(false);
+            this.redoFile.setEnabled(false);
+        }
     }//GEN-LAST:event_InputsStateChanged
 
     private void undoFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoFileActionPerformed
         try {
             undoManager.undo();
-        } catch (CannotRedoException ex) {
-            
+        } catch (CannotUndoException ex) {
+
         }
     }//GEN-LAST:event_undoFileActionPerformed
 
@@ -366,7 +379,7 @@ public class EditorFrame extends KFrame {
         try {
             undoManager.redo();
         } catch (CannotRedoException cre) {
-            
+
         }
     }//GEN-LAST:event_redoFileActionPerformed
 
@@ -402,13 +415,12 @@ public class EditorFrame extends KFrame {
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
 
-    
     public void run() {
-        InputTab in = (InputTab)Inputs.getSelectedComponent();
+        InputTab in = (InputTab) Inputs.getSelectedComponent();
         this.kokyFrame.setVisible(true);
-        super.parseInstruction(in.getText(),this.kokyFrame.getPanelDraw());
+        super.parseInstruction(in.getText(), this.kokyFrame.getPanelDraw());
         errorLanguage();
-        if(messageDialog == null || !messageDialog.isVisible()) {
+        if (messageDialog == null || !messageDialog.isVisible()) {
             messageDialog = new MessageDialog(this.txtMessages);
             messageDialog.setVisible(true);
         } else if (messageDialog.isVisible()) {
@@ -416,42 +428,40 @@ public class EditorFrame extends KFrame {
             messageDialog = new MessageDialog(this.txtMessages);
             messageDialog.setVisible(true);
         }
-        
-        
-        
+
     }
-    
+
     public void addTab() {
         unnamedTabs++;
-        InputTab newTab = new InputTab("Pestaña "+unnamedTabs);
-        Inputs.addTab("*"+newTab.getName(), newTab);
+        InputTab newTab = new InputTab("Pestaña " + unnamedTabs);
+        Inputs.addTab("*" + newTab.getName(), newTab);
         this.undoManager = newTab.getManager();
-        Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
+//        System.out.println(Inputs.getComponentCount());
+//        Inputs.setSelectedIndex(Inputs.getComponentCount()-2);
         newTab.getTextArea().requestFocus();
-        newTab.getTextArea().addCaretListener( new CaretListener() {
-            public void caretUpdate( CaretEvent e ) {
-            int pos = e.getDot();
+        newTab.getTextArea().addCaretListener(new CaretListener() {
+            public void caretUpdate(CaretEvent e) {
+                int pos = e.getDot();
                 try {
-                    int row = newTab.getTextArea().getLineOfOffset( pos ) + 1;
-                    int col = pos - newTab.getTextArea().getLineStartOffset( row - 1 ) + 1;
-                    lineCount.setText("Línea: " + row + " Columna: " + col );
-                }
-                catch( BadLocationException exc ){
+                    int row = newTab.getTextArea().getLineOfOffset(pos) + 1;
+                    int col = pos - newTab.getTextArea().getLineStartOffset(row - 1) + 1;
+                    lineCount.setText("Línea: " + row + " Columna: " + col);
+                } catch (BadLocationException exc) {
                     System.out.println(exc);
                 }
             }
         });
     }
-    
-    public void addTab(String input,String name) {
+
+    public void addTab(String input, String name) {
         InputTab newTab = new InputTab(name);
         newTab.setText(input);
         Inputs.addTab(name, newTab);
         this.undoManager = newTab.getManager();
-        Inputs.setSelectedIndex(Inputs.getComponentCount()-1);
+//        Inputs.setSelectedIndex(Inputs.getComponentCount()-2);
     }
-    
-    public void openFile(){
+
+    public void openFile() {
         File file = kokyFrame.openFile();
         String name = file.getName();
         String buffer = "";
@@ -464,13 +474,11 @@ public class EditorFrame extends KFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        addTab(buffer,name);
-        
-        
+        addTab(buffer, name);
+
         this.setVisible(true);
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Inputs;
