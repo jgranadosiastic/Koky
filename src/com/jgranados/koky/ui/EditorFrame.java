@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 import com.jgranados.koky.instructions.logic.Messages;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.event.CaretEvent;
@@ -25,6 +26,8 @@ import javax.swing.undo.CannotUndoException;
  * @author anclenius
  */
 public class EditorFrame extends KFrame {
+    
+    private static final String ICON_URL = "/com/jgranados/koky/ui/images/editor_icon.png";
 
     private UndoManager undoManager;
     private KokyFrame kokyFrame;
@@ -70,17 +73,18 @@ public class EditorFrame extends KFrame {
         btnOpenFIle = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
         bntOpenFile = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        btnInstructions = new javax.swing.JMenuItem();
-        btnAbout = new javax.swing.JMenuItem();
         lenguagesMenu = new javax.swing.JMenu();
         lenguagesAll = new javax.swing.JMenuItem();
         lenguageEnglish = new javax.swing.JMenuItem();
         lenguageSpanish = new javax.swing.JMenuItem();
         lenguageKiche = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        btnInstructions = new javax.swing.JMenuItem();
+        btnAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editor de Texto");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ICON_URL)));
 
         jToolBar1.setRollover(true);
 
@@ -189,6 +193,7 @@ public class EditorFrame extends KFrame {
         btnOpenFIle.setForeground(new java.awt.Color(255, 255, 255));
         btnOpenFIle.setText("Archivo");
 
+        btnSaveInstructionsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         btnSaveInstructionsMenuItem.setText("Guardar Instrucciones");
         btnSaveInstructionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -197,6 +202,7 @@ public class EditorFrame extends KFrame {
         });
         btnOpenFIle.add(btnSaveInstructionsMenuItem);
 
+        bntOpenFile.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         bntOpenFile.setText("Abrir archivo");
         bntOpenFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,6 +212,48 @@ public class EditorFrame extends KFrame {
         btnOpenFIle.add(bntOpenFile);
 
         jMenuBar1.add(btnOpenFIle);
+
+        lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
+        lenguagesMenu.setText("Idiomas");
+        lenguagesMenu.setToolTipText("");
+
+        lenguagesAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        lenguagesAll.setText("Todos");
+        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguagesAllActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguagesAll);
+
+        lenguageEnglish.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageEnglish.setText("Ingles");
+        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageEnglishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageEnglish);
+
+        lenguageSpanish.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageSpanish.setText("Español");
+        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageSpanishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageSpanish);
+
+        lenguageKiche.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageKiche.setText("Kiche");
+        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageKicheActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageKiche);
+
+        jMenuBar1.add(lenguagesMenu);
 
         jMenu2.setForeground(new java.awt.Color(255, 255, 255));
         jMenu2.setText("Ayuda");
@@ -222,44 +270,6 @@ public class EditorFrame extends KFrame {
         jMenu2.add(btnAbout);
 
         jMenuBar1.add(jMenu2);
-
-        lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
-        lenguagesMenu.setText("Idiomas");
-        lenguagesMenu.setToolTipText("");
-
-        lenguagesAll.setText("Todos");
-        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguagesAllActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguagesAll);
-
-        lenguageEnglish.setText("Ingles");
-        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageEnglishActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguageEnglish);
-
-        lenguageSpanish.setText("Español");
-        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageSpanishActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguageSpanish);
-
-        lenguageKiche.setText("Kiche");
-        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageKicheActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguageKiche);
-
-        jMenuBar1.add(lenguagesMenu);
 
         setJMenuBar(jMenuBar1);
 

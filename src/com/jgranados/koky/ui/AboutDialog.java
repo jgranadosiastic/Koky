@@ -13,7 +13,7 @@ public class AboutDialog extends javax.swing.JDialog {
         super(parent);
         initComponents();
         this.setLocationRelativeTo(null);
-        this.getContentPane().setBackground(new java.awt.Color(51, 51, 255));
+        this.getContentPane().setBackground(new java.awt.Color(153, 51, 0));
     }
 
     /**
@@ -30,17 +30,17 @@ public class AboutDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Acerca de...");
-        setBackground(new java.awt.Color(51, 51, 255));
+        setBackground(new java.awt.Color(153, 51, 0));
         setModal(true);
         setResizable(false);
 
         jLabel1.setBackground(new java.awt.Color(51, 51, 255));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("<html><p>Variante del lenguaje LOGO para inicar a niños en la programación.<br> <p><center>Ingeniero José Moisés Granados Guevara <br>Org. de Leng. y Compiladores 1<br>CUNOC<br>2019-05-18</center>");
+        jLabel1.setText("<html><p>Variante del lenguaje LOGO para enseñar conceptos básicos de programación a niños de 6to primaria en adelante.</p><p><center>Organización de Lenguajes y Compiladores 2<br>CUNOC USAC<br>2019-09-01<br>Versión 1.0</center><p>Desarrolladores:</p><br>Ingeniero José Moisés Granados Guevara<br>Augusto Ricardo Méndez Pum <br>Juan Pablo Orizábal Gil<br>Jesfrin Jesser González Fuentes<br>Juan Pablo Valiente González<br>Jonathan Bryant Daniel Chiroy Rivera<br>Jose Daniel Mazariegos Antón<br>Iván Fabricio Racancoj García<br>Bryan Misael Monzon Fuentes");
 
         btnClose.setBackground(new java.awt.Color(255, 255, 255));
-        btnClose.setForeground(new java.awt.Color(51, 51, 255));
+        btnClose.setForeground(new java.awt.Color(0, 153, 0));
         btnClose.setText("Cerrar");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -54,21 +54,21 @@ public class AboutDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(150, 150, 150)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addGap(185, 185, 185))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();

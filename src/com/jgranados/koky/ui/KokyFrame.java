@@ -2,14 +2,12 @@ package com.jgranados.koky.ui;
 
 import com.jgranados.koky.challengeshistory.HistoryHandler;
 
-import com.jgranados.koky.instructions.Instruction;
 import com.jgranados.koky.instructions.graphicinstructions.TranslationUtils;
 import com.jgranados.koky.instructions.logic.Languages;
 import com.jgranados.koky.instructions.logic.Messages;
 import com.jgranados.koky.ui.challenges.ChallengesFrame;
 import com.jgranados.koky.ui.challenges.ChallengesHistory;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -17,22 +15,20 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JColorChooser;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JViewport;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -95,10 +91,12 @@ public class KokyFrame extends KFrame {
         btnOpenFile = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
         btnOpenEditor = new javax.swing.JMenuItem();
-        helpMenu = new javax.swing.JMenu();
-        btnInstructions = new javax.swing.JMenuItem();
-        colorItem = new javax.swing.JMenuItem();
-        btnAbout = new javax.swing.JMenuItem();
+        btnClose = new javax.swing.JMenuItem();
+        lenguagesMenu = new javax.swing.JMenu();
+        lenguagesAll = new javax.swing.JMenuItem();
+        lenguageEnglish = new javax.swing.JMenuItem();
+        lenguageSpanish = new javax.swing.JMenuItem();
+        lenguageKiche = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         changeVarNameMenu = new javax.swing.JMenuItem();
         changeSizeButton = new javax.swing.JMenuItem();
@@ -112,11 +110,10 @@ public class KokyFrame extends KFrame {
         pentagonMenuItem = new javax.swing.JMenuItem();
         starMenuItem = new javax.swing.JMenuItem();
         cubeMenuItem = new javax.swing.JMenuItem();
-        lenguagesMenu = new javax.swing.JMenu();
-        lenguagesAll = new javax.swing.JMenuItem();
-        lenguageEnglish = new javax.swing.JMenuItem();
-        lenguageSpanish = new javax.swing.JMenuItem();
-        lenguageKiche = new javax.swing.JMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        btnInstructions = new javax.swing.JMenuItem();
+        colorItem = new javax.swing.JMenuItem();
+        btnAbout = new javax.swing.JMenuItem();
 
         saveFileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
 
@@ -147,7 +144,7 @@ public class KokyFrame extends KFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
             .addComponent(txtInstruction)
         );
         jPanel2Layout.setVerticalGroup(
@@ -222,7 +219,7 @@ public class KokyFrame extends KFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
@@ -252,6 +249,7 @@ public class KokyFrame extends KFrame {
         btnOpenFile.setForeground(new java.awt.Color(255, 255, 255));
         btnOpenFile.setText("Archivo");
 
+        btnSaveInstructionsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         btnSaveInstructionsMenuItem.setText("Guardar Instrucciones");
         btnSaveInstructionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,6 +258,7 @@ public class KokyFrame extends KFrame {
         });
         btnOpenFile.add(btnSaveInstructionsMenuItem);
 
+        btnOpenEditor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         btnOpenEditor.setText("Abrir el Editor de Texto");
         btnOpenEditor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -268,31 +267,52 @@ public class KokyFrame extends KFrame {
         });
         btnOpenFile.add(btnOpenEditor);
 
+        btnClose.setText("Salir");
+        btnOpenFile.add(btnClose);
+
         jMenuBar1.add(btnOpenFile);
 
-        helpMenu.setForeground(new java.awt.Color(255, 255, 255));
-        helpMenu.setText("Ayuda");
+        lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
+        lenguagesMenu.setText("Idiomas");
+        lenguagesMenu.setToolTipText("");
 
-        btnInstructions.setText("Instrucciones");
-        helpMenu.add(btnInstructions);
-
-        colorItem.setText("Consultar color");
-        colorItem.addActionListener(new java.awt.event.ActionListener() {
+        lenguagesAll.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        lenguagesAll.setText("Todos");
+        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                colorItemActionPerformed(evt);
+                lenguagesAllActionPerformed(evt);
             }
         });
-        helpMenu.add(colorItem);
+        lenguagesMenu.add(lenguagesAll);
 
-        btnAbout.setText("Acerca de...");
-        btnAbout.addActionListener(new java.awt.event.ActionListener() {
+        lenguageEnglish.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageEnglish.setText("Ingles");
+        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAboutActionPerformed(evt);
+                lenguageEnglishActionPerformed(evt);
             }
         });
-        helpMenu.add(btnAbout);
+        lenguagesMenu.add(lenguageEnglish);
 
-        jMenuBar1.add(helpMenu);
+        lenguageSpanish.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageSpanish.setText("Español");
+        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageSpanishActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageSpanish);
+
+        lenguageKiche.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.CTRL_MASK));
+        lenguageKiche.setText("Kiche");
+        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lenguageKicheActionPerformed(evt);
+            }
+        });
+        lenguagesMenu.add(lenguageKiche);
+
+        jMenuBar1.add(lenguagesMenu);
 
         exportMenu.setForeground(new java.awt.Color(255, 255, 255));
         exportMenu.setText("Imagen");
@@ -388,43 +408,30 @@ public class KokyFrame extends KFrame {
 
         jMenuBar1.add(interactiveMenu);
 
-        lenguagesMenu.setForeground(new java.awt.Color(255, 255, 255));
-        lenguagesMenu.setText("Idiomas");
-        lenguagesMenu.setToolTipText("");
+        helpMenu.setForeground(new java.awt.Color(255, 255, 255));
+        helpMenu.setText("Ayuda");
 
-        lenguagesAll.setText("Todos");
-        lenguagesAll.addActionListener(new java.awt.event.ActionListener() {
+        btnInstructions.setText("Instrucciones");
+        helpMenu.add(btnInstructions);
+
+        colorItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        colorItem.setText("Consultar color");
+        colorItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguagesAllActionPerformed(evt);
+                colorItemActionPerformed(evt);
             }
         });
-        lenguagesMenu.add(lenguagesAll);
+        helpMenu.add(colorItem);
 
-        lenguageEnglish.setText("Ingles");
-        lenguageEnglish.addActionListener(new java.awt.event.ActionListener() {
+        btnAbout.setText("Acerca de...");
+        btnAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageEnglishActionPerformed(evt);
+                btnAboutActionPerformed(evt);
             }
         });
-        lenguagesMenu.add(lenguageEnglish);
+        helpMenu.add(btnAbout);
 
-        lenguageSpanish.setText("Español");
-        lenguageSpanish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageSpanishActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguageSpanish);
-
-        lenguageKiche.setText("Kiche");
-        lenguageKiche.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lenguageKicheActionPerformed(evt);
-            }
-        });
-        lenguagesMenu.add(lenguageKiche);
-
-        jMenuBar1.add(lenguagesMenu);
+        jMenuBar1.add(helpMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -434,15 +441,15 @@ public class KokyFrame extends KFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .addComponent(jSeparator3)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -770,20 +777,7 @@ public class KokyFrame extends KFrame {
     }
 
     public String saveInstructionsToFile() {
-        saveFileChooser.showSaveDialog(this);
-        File file = new File(normalizeFileName(saveFileChooser.getSelectedFile().getAbsolutePath()));
-        try (PrintWriter printer = new PrintWriter(file);) {
-            printer.print(txtInstructions.getText());
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Error guardando instrucciones en el archivo\n" + file.getAbsolutePath(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        return file.getName();
-
+        return saveInstructionsToFile(txtInstructions.getText());
     }
 
     public String saveInstructionsToFile(String input) {
@@ -842,6 +836,7 @@ public class KokyFrame extends KFrame {
     private javax.swing.JMenuItem btnAbout;
     private javax.swing.JButton btnChangeImage;
     private javax.swing.JButton btnCleanAll;
+    private javax.swing.JMenuItem btnClose;
     private javax.swing.JMenuItem btnInstructions;
     private javax.swing.JMenuItem btnOpenEditor;
     private javax.swing.JMenu btnOpenFile;

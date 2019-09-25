@@ -5,7 +5,7 @@
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Acerca de..."/>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-      <Color blue="ff" green="33" red="33" type="rgb"/>
+      <Color blue="0" green="33" red="99" type="rgb"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
@@ -31,13 +31,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" pref="0" max="32767" attributes="0"/>
+              <Component id="jLabel1" pref="451" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="btnClose" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace pref="150" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -45,10 +45,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="175" max="-2" attributes="0"/>
+              <Component id="jLabel1" pref="369" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnClose" min="-2" pref="39" max="-2" attributes="0"/>
-              <EmptySpace pref="26" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -65,7 +65,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Variante del lenguaje LOGO para inicar a ni&#xf1;os en la programaci&#xf3;n.&lt;br&gt; &lt;p&gt;&lt;center&gt;Ingeniero Jos&#xe9; Mois&#xe9;s Granados Guevara &lt;br&gt;Org. de Leng. y Compiladores 1&lt;br&gt;CUNOC&lt;br&gt;2019-05-18&lt;/center&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Variante del lenguaje LOGO para ense&#xf1;ar conceptos b&#xe1;sicos de programaci&#xf3;n a ni&#xf1;os de 6to primaria en adelante.&lt;/p&gt;&lt;p&gt;&lt;center&gt;Organizaci&#xf3;n de Lenguajes y Compiladores 2&lt;br&gt;CUNOC USAC&lt;br&gt;2019-09-01&lt;br&gt;Versi&#xf3;n 1.0&lt;/center&gt;&lt;p&gt;Desarrolladores:&lt;/p&gt;&lt;br&gt;Ingeniero Jos&#xe9; Mois&#xe9;s Granados Guevara&lt;br&gt;Augusto Ricardo M&#xe9;ndez Pum &lt;br&gt;Juan Pablo Oriz&#xe1;bal Gil&lt;br&gt;Jesfrin Jesser Gonz&#xe1;lez Fuentes&lt;br&gt;Juan Pablo Valiente Gonz&#xe1;lez&lt;br&gt;Jonathan Bryant Daniel Chiroy Rivera&lt;br&gt;Jose Daniel Mazariegos Ant&#xf3;n&lt;br&gt;Iv&#xe1;n Fabricio Racancoj Garc&#xed;a&lt;br&gt;Bryan Misael Monzon Fuentes"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnClose">
@@ -74,7 +74,7 @@
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="33" red="33" type="rgb"/>
+          <Color blue="0" green="99" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cerrar"/>
       </Properties>

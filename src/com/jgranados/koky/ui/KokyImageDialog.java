@@ -50,7 +50,6 @@ public class KokyImageDialog extends javax.swing.JDialog {
         jPanel.setForeground(new java.awt.Color(51, 255, 51));
 
         lblImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jgranados/koky/ui/images/kokyG.png"))); // NOI18N
-        lblImage.setBorder(null);
 
         buttonNext.setBackground(new java.awt.Color(255, 255, 255));
         buttonNext.setForeground(new java.awt.Color(0, 153, 0));
@@ -64,6 +63,7 @@ public class KokyImageDialog extends javax.swing.JDialog {
         buttonPrevious.setBackground(new java.awt.Color(255, 255, 255));
         buttonPrevious.setForeground(new java.awt.Color(0, 153, 0));
         buttonPrevious.setText("Anterior");
+        buttonPrevious.setPreferredSize(new java.awt.Dimension(92, 27));
         buttonPrevious.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonPreviousActionPerformed(evt);
@@ -105,17 +105,17 @@ public class KokyImageDialog extends javax.swing.JDialog {
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(buttonPrevious)
+                        .addComponent(buttonPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(buttonNext))
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(36, 36, 36)
-                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonRandom)
-                    .addComponent(buttonAccept)
-                    .addComponent(buttonCancel))
+                .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonRandom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonAccept, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(36, 36, 36))
         );
         jPanelLayout.setVerticalGroup(
@@ -127,7 +127,7 @@ public class KokyImageDialog extends javax.swing.JDialog {
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(buttonPrevious)
+                            .addComponent(buttonPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(buttonNext)))
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
