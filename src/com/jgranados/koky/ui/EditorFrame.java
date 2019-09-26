@@ -258,9 +258,16 @@ public class EditorFrame extends KFrame {
         jMenu2.setForeground(new java.awt.Color(255, 255, 255));
         jMenu2.setText("Ayuda");
 
+        btnInstructions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         btnInstructions.setText("Instrucciones");
+        btnInstructions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInstructionsActionPerformed(evt);
+            }
+        });
         jMenu2.add(btnInstructions);
 
+        btnAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -424,6 +431,10 @@ public class EditorFrame extends KFrame {
         language.setText(super.language.name());
         JOptionPane.showMessageDialog(null, Messages.changeMessage());
     }//GEN-LAST:event_lenguageKicheActionPerformed
+
+    private void btnInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstructionsActionPerformed
+        openInstructions();
+    }//GEN-LAST:event_btnInstructionsActionPerformed
 
     public void run() {
         InputTab in = (InputTab) Inputs.getSelectedComponent();

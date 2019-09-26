@@ -10,6 +10,8 @@ import com.jgranados.koky.interpreter.lexer.languages.LexerKiche;
 import com.jgranados.koky.interpreter.parser.Parser;
 import com.jgranados.koky.interpreter.symbolstable.ProcedureTable;
 import com.jgranados.koky.interpreter.symbolstable.SymbolsTable;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java_cup.runtime.Scanner;
 import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 
@@ -275,6 +278,17 @@ public class KFrame extends javax.swing.JFrame {
 
     protected String returnCleanLenguage() {
         return cleanWord;
+    }
+
+    protected void openInstructions() {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File myFile = new File("Manual-de-Usuario-Koky.pdf");
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "No tiene instalado programa para leer archivos pdf", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
 }

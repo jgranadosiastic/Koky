@@ -267,7 +267,13 @@ public class KokyFrame extends KFrame {
         });
         btnOpenFile.add(btnOpenEditor);
 
+        btnClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         btnClose.setText("Salir");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
         btnOpenFile.add(btnClose);
 
         jMenuBar1.add(btnOpenFile);
@@ -411,7 +417,13 @@ public class KokyFrame extends KFrame {
         helpMenu.setForeground(new java.awt.Color(255, 255, 255));
         helpMenu.setText("Ayuda");
 
+        btnInstructions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         btnInstructions.setText("Instrucciones");
+        btnInstructions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInstructionsActionPerformed(evt);
+            }
+        });
         helpMenu.add(btnInstructions);
 
         colorItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
@@ -423,6 +435,7 @@ public class KokyFrame extends KFrame {
         });
         helpMenu.add(colorItem);
 
+        btnAbout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
         btnAbout.setText("Acerca de...");
         btnAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -719,6 +732,14 @@ public class KokyFrame extends KFrame {
             this.draw.drawingInstruction(DrawingInstruction.CUBE_INSTRUCTION_QUICHE);
         }
     }//GEN-LAST:event_cubeMenuItemActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnInstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInstructionsActionPerformed
+        openInstructions();
+    }//GEN-LAST:event_btnInstructionsActionPerformed
 
     public String getCurrentLine() {
         return txtInstruction.getText();
