@@ -67,48 +67,48 @@ public class Messages {
     //toggle true
     private static final String TOGGLE_TRUE_SPANISH = "He vuelto para dibujar.";
     private static final String TOGGLE_TRUE_ENGLISH = "I'm back to draw.";
-    private static final String TOGGLE_TRUE_KICHE = "KICHE KICHE KICHE";
+    private static final String TOGGLE_TRUE_KICHE = "Xintzalij chik che ub'anik utz juch'anik.";
      //toggle false
     private static final String TOGGLE_FALSE_SPANISH = "Descansare por un momento. (Puedo dibujar)";
     private static final String TOGGLE_FALSE_ENGLISH = "I will rest for a moment (I can draw)";
-    private static final String TOGGLE_FALSE_KICHE = "KICHE KICHE KICHE";
+    private static final String TOGGLE_FALSE_KICHE = "Kinuxlan jutz'it (kuya' kinjuch'anik)";
     //toggle for PEN true
     private static final String TOGGLE_PEN_TRUE_SPANISH = "Listo para dibujar.";
     private static final String TOGGLE_PEN_TRUE_ENGLISH = "I'm ready to draw";
-    private static final String TOGGLE_PEN_TRUE_KICHE = "KICHE KICHE KICHE";
+    private static final String TOGGLE_PEN_TRUE_KICHE = "Kuya' chik kinjuchanik.";
      //toggle fot PEN false
     private static final String TOGGLE_PEN_FALSE_SPANISH = "Descansare por un momento. (No hago trazos)";
     private static final String TOGGLE_PEN_FALSE_ENGLISH = "I will rest for a moment. (I don't make strokes)";
-    private static final String TOGGLE_PEN_FALSE_KICHE = "KICHE KICHE KICHE";
+    private static final String TOGGLE_PEN_FALSE_KICHE = "Kinuxlan jutz'it (Man kinjuch'an taj)";
     //toggle for PEN true
     private static final String ERASE_TRUE_SPANISH = "Borrador activado.";
     private static final String ERASE_TRUE_ENGLISH = "Draft activated";
-    private static final String ERASE_TRUE_KICHE = "KICHE KICHE KICHE";
+    private static final String ERASE_TRUE_KICHE = "Tzijtal ri chupub'al.";
      //toggle fot PEN false
     private static final String ERASE_FALSE_SPANISH = "Borrador desactivado";
     private static final String ERASE_FALSE_ENGLISH = "Draft deactivated";
-    private static final String ERASE_FALSE_KICHE = "KICHE KICHE KICHE";
+    private static final String ERASE_FALSE_KICHE = "Chupital ri chupub'al.";
      //REPEAT
     private static final String REPEAT_SPANISH = "Instruccion repetir";
     private static final String REPEAT_ENGLISH = "Repeat instruction";
-    private static final String REPEAT_KICHE = "KICHE KICHE KICHE";
+    private static final String REPEAT_KICHE = "Utzalijik ub'eya'l.";
     //NEW VARIABLE
     private static final String VAR_SPANISH = "NUEVA VARIABLE";
     private static final String VAR_ENGLISH = "NEW VARIABLE";
-    private static final String VAR_KICHE = "KICHE KICHE KICHE";
+    private static final String VAR_KICHE = "K'ak' kojob'al.";
     //ERRORS IN VARIABLES
     //error creating
     private static final String ERROR_CREATE_VAR_SPANISH = "La variable '%s' no se ha creado en el area de instrucciones. Ingrese una instrucción para crear la variable.";
     private static final String ERROR_CREATE_VAR_ENGLISH = "The variable '%s' was not created in the instruction area. Enter an instruction to create the variable.";
-    private static final String ERROR_CREATE_VAR_KICHE = "KICHE KICHE KICHE";
+    private static final String ERROR_CREATE_VAR_KICHE = "Ri kojob'al '%s' man b'anom ta cho upam ri ub'eya'l. Chawokisaj jun b'eya'l chik che ub'anik jun kojob'al.";
     //error of double variable
     private static final String ERROR_DOUBLE_VAR_SPANISH = "La variable '%s' que intenta declar ya fue declarada anteriormente en el area de instrucciones.";
     private static final String ERROR_DOUBLE_VAR_ENGLISH = "The variable '%s' that you are trying to declare has already been declared previously in the instruction area.";
-    private static final String ERROR_DOUBLE_VAR_KICHE = "KICHE KICHE KICHE";
+    private static final String ERROR_DOUBLE_VAR_KICHE = "Ri kojob'al '%s' ri kawaj kapitz'o ya'om chik chisaq nab'e kanoq cho upam ri b'eya'l. ";
     //messages for new assignment
     private static final String NEW_ASSIGNMENT_SPANISH = "Nueva asignacion de valores";
     private static final String NEW_ASSIGNMENT_ENGLISH = "New value assignment.";
-    private static final String NEW_ASSIGNMENT_KICHE = "Nueva asignacion de valores";
+    private static final String NEW_ASSIGNMENT_KICHE = "K'ak' ukojik ri taq rajilab'al. ";
     
     //LEXERS
     //lexerAll
