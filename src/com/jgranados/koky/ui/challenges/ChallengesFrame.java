@@ -5,6 +5,7 @@ import com.jgranados.koky.ui.KokyFrame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -13,17 +14,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -37,8 +37,8 @@ public class ChallengesFrame extends javax.swing.JFrame {
     /**
      * Creates new form ChallengesFrame
      */
-    private static final String CHALLENGES_FILE = "src/com/jgranados/koky/challengesfiles/Challenges.txt";
-    private static final String ICON_URL = "src/com/jgranados/koky/ui/images/kok_pointer.png";
+    private static final String CHALLENGES_FILE = "/com/jgranados/koky/ui/challenges/Challenges.txt";
+    private static final String ICON_URL = "/com/jgranados/koky/ui/images/kok_pointer.png";
     private static final String CHALLENGES_URL = "ImagenesRetos/";
     private static final String CHALLENGE_BUTTON = "challengeButton";
     private static final String JPG_FILE_EXTENSION = "jpg";
@@ -238,7 +238,7 @@ public class ChallengesFrame extends javax.swing.JFrame {
             imagesCarpet.mkdir();
         }
         chronometerState = false;
-        ImageIcon icon = new ImageIcon(ICON_URL);
+        ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ICON_URL)));
         JOptionPane.showMessageDialog(null, "¡Excelente trabajo!", "Reto completado.", JOptionPane.DEFAULT_OPTION, icon);
         String imageIdentifier = generateIdentifier(userName, totalTimeInSeconds, milliseconds, koyFrame.returnTotalAttempts());
         try {
@@ -263,7 +263,9 @@ public class ChallengesFrame extends javax.swing.JFrame {
 
     private void importChallenges() {
         challengesList.clear();
-        File challengesTxtFile = new File(CHALLENGES_FILE);
+        
+        // TODO HOTFIX START
+        /*File challengesTxtFile = new File(CHALLENGES_FILE);
         try {
             try (BufferedReader reader = new BufferedReader(new FileReader(challengesTxtFile))) {
                 String textLine = reader.readLine();
@@ -277,7 +279,19 @@ public class ChallengesFrame extends javax.swing.JFrame {
             Logger.getLogger(ChallengesFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ChallengesFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        
+        challengesList.add("Crea un triangulo isósceles, escaleno y equilátero.");
+        challengesList.add("Crea una flor utilizando circulos.");
+        challengesList.add("Deberás dibujar una casa que tenga una puerta y una ventana.");
+        challengesList.add("¡Dibuja una mariposa!");
+        challengesList.add("Intenta escribir los numeros de 1 al 5.");
+        challengesList.add("Dibuja un carita feliz.");
+        challengesList.add("Intenta dibujar dos montañas y un sol.");
+        challengesList.add("Dibuja un carro de color rojo.");
+        challengesList.add("Algo fácil: Escribe tu nombre!");
+        challengesList.add("Dibuja una cancha de fútbol.");
+        // TODO HOTFIX END
     }
 
     private void selectRandomChallenge() {
