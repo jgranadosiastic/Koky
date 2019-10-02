@@ -11,14 +11,15 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.jgranados.koky.instructions.ExecutionDescribable;
+import com.jgranados.koky.instructions.graphicinstructions.TranslationInstruction;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -35,16 +36,15 @@ public class PanelDraw extends javax.swing.JPanel {
     private BufferedImage imageNoPointer;
     private Graphics2D graphicsWithPointer;
     private Graphics2D graphicsNoPointer;
-    
+    private JLabel positionLbl;
 
     /**
      * Creates new form PanelDraw
      */
     public PanelDraw() {
-        setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-        setMinimumSize(new Dimension(MINIMUN_WIDTH, MINIMUN_HEIGHT));
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
-    
+
     public PanelDraw(int customizeWidth, int customizeHeight) {
         setPreferredSize(new Dimension(customizeWidth, customizeHeight));
         setMinimumSize(new Dimension(MINIMUN_WIDTH, MINIMUN_HEIGHT));
@@ -78,12 +78,19 @@ public class PanelDraw extends javax.swing.JPanel {
         return imgGraphic;
     }
 
+    private void updatePositionLabel() {
+        int coordinateX = kokyPointer != null ? kokyPointer.getCoordinatePosX() : 0;
+        int coordinateY = kokyPointer != null ? kokyPointer.getCoordinatePosY() : 0;
+        this.positionLbl.setText("(" + coordinateX + ", " + coordinateY + ")");
+    }
+
     public void runInstruction(Instruction instruction) {
         if (instruction instanceof Graphicable) {
             drawInstruction((Graphicable) instruction);
         } else if (instruction instanceof Assignable) {
             ((Assignable) instruction).assign();
         }
+        updatePositionLabel();
     }
 
     private void drawInstruction(Graphicable instruction) {
@@ -117,9 +124,14 @@ public class PanelDraw extends javax.swing.JPanel {
         kokyPointer.drawPointer(graphicsWithPointer);
         this.repaint();
     }
-    
-    public BufferedImage returnDraw(){
-    return imageNoPointer;
+
+    public BufferedImage returnDraw() {
+        return imageNoPointer;
     }
-    
+
+    public void setPositionLbl(JLabel positionLbl) {
+        this.positionLbl = positionLbl;
+        updatePositionLabel();
+    }
+
 }

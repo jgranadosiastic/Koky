@@ -55,6 +55,7 @@ public class KokyFrame extends KFrame {
         super(false);
         panelDraw = new PanelDraw();
         initComponents();
+        panelDraw.setPositionLbl(positionLbl);
         languageLabel.setText(super.language.name());
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
@@ -86,6 +87,8 @@ public class KokyFrame extends KFrame {
         btnChangeImage = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         languageLabel = new javax.swing.JLabel();
+        positionLabelLbl = new javax.swing.JLabel();
+        positionLbl = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFile = new javax.swing.JMenu();
@@ -209,22 +212,31 @@ public class KokyFrame extends KFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel1.setText("Lenguaje:");
 
-        languageLabel.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
+        languageLabel.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+
+        positionLabelLbl.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        positionLabelLbl.setText("Posición:");
+
+        positionLbl.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(positionLabelLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(languageLabel)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(languageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(positionLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -238,8 +250,11 @@ public class KokyFrame extends KFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(languageLabel))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(languageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(positionLabelLbl, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(positionLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
@@ -475,8 +490,8 @@ public class KokyFrame extends KFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
+                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -892,6 +907,8 @@ public class KokyFrame extends KFrame {
     private javax.swing.JMenuItem lenguagesAll;
     private javax.swing.JMenu lenguagesMenu;
     private javax.swing.JMenuItem pentagonMenuItem;
+    private javax.swing.JLabel positionLabelLbl;
+    private javax.swing.JLabel positionLbl;
     private javax.swing.JFileChooser saveFileChooser;
     private javax.swing.JScrollPane scrollpnl;
     private javax.swing.JMenuItem squareMenuItem;

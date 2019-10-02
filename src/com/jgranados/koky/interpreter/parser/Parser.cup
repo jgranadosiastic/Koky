@@ -156,7 +156,7 @@ terminal Token          MINUS, MULT, DIV, EQ, FORWARD, BACKWARD, RIGHT, LEFT;
 terminal Token          CLEARS, PENUP, PENDOWN, TOCENTER, COLOR, POSITIONXY;
 terminal Token          POSITIONX, POSITIONY, HIDETURTLE, SHOWTURTLE, TOERASE;
 terminal Token          TODRAW, REPEAT,WIDTH;
-terminal Token          VOID, CALL;
+terminal Token          VOID, CALL, UMINUS;
 
 /* Non-terminals */
 non terminal List<Instruction>          program, instructions, instructionsVoid;
@@ -172,6 +172,7 @@ non terminal Expr                       expresion;
 /* precedence */
 precedence left     PLUS, MINUS;
 precedence left     MULT, DIV;
+precedence left     UMINUS;
 
 /* The grammar */
 start with program;
@@ -714,6 +715,11 @@ expr ::=    expr:e1 PLUS expr:e2
                 {:
                     RESULT = new Expr(sym.DIV, e1, e2);
                 :}
+            | MINUS expr:e1
+                {:
+                    RESULT = new Expr(sym.UMINUS, e1);
+                :}
+                 %prec UMINUS
             | OPEN_PAR expr:e CLOSE_PAR
                 {:
                     RESULT = e;
@@ -746,9 +752,9 @@ expr ::=    expr:e1 PLUS expr:e2
                         
                      }else if (Languages.SPANISH.getTypeLanguage()==true) {
 			if (symTable.verifyTemporalVar(e.getLexeme())) {
-                    		RESULT = new Expr(e, procedureTable, symTable);
+                    		RESULT = new Expr(e, symTable);
                     	} else {
-                    		if (symTable.exists(e, lexerEs.isAnalyzingFile())) {
+                    		if (symTable.exists(e, procedureTable, lexerEs.isAnalyzingFile())) {
                             		RESULT = new Expr(e, symTable);
                         	} else {
                             		RESULT = null;

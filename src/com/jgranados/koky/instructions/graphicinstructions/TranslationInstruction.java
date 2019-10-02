@@ -15,6 +15,7 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
 
     @Override
     public Graphics2D execute(Graphics2D graphicsNoPointer, KokyPointer currentPointer) {
+        // TODO refactor the behaviour about borders
         int [] outPositions = {currentPointer.getOutPosX(), currentPointer.getOutPosY()};
         int endPosX = calculateEndX(currentPointer);
         int endPosY = calculateEndY(currentPointer);
@@ -71,5 +72,6 @@ public abstract class TranslationInstruction extends GraphicsInstruction {
     protected abstract double calculateAccumulationX(KokyPointer currentPointer);
 
     protected abstract double calculateAccumulationY(KokyPointer currentPointer);
+
 }
 

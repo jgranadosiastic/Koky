@@ -25,6 +25,12 @@ public class Expr {
         this.right = right;
         this.ambit = AmbitEnum.GLOBAL;
     }
+    
+    public Expr(int operator, Expr right) {
+        this.operator = operator;
+        this.right = right;
+        this.ambit = AmbitEnum.GLOBAL;
+    }
 
     public Expr(String literalValue) {
         this.literalValue = Integer.valueOf(literalValue);
@@ -47,6 +53,8 @@ public class Expr {
                 return left.operate() * right.operate();
             case sym.DIV:
                 return left.operate() / right.operate();
+            case sym.UMINUS:
+                return right.operate() * -1;
             default:
                 return getValue();
 

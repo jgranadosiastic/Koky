@@ -10,7 +10,8 @@ import com.jgranados.koky.instructions.logic.Messages;
  */
 public abstract class PositionInstruction extends TranslationInstruction implements ExecutionDescribable {
 
-     private KokyPointer currentPointer;
+    private KokyPointer currentPointer;
+
     @Override
     protected Integer calculateEndX(KokyPointer currentPointer) {
         this.currentPointer = currentPointer;
@@ -29,7 +30,7 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
         }
         return currentPointer.getPosY();
     }
-    
+
     @Override
     protected Integer calculateOutEndX(KokyPointer currentPointer) {
         this.currentPointer = currentPointer;
@@ -58,20 +59,14 @@ public abstract class PositionInstruction extends TranslationInstruction impleme
     protected double calculateAccumulationY(KokyPointer currentPointer) {
         return 0d;
     }
+
     protected abstract Integer getPositionX(KokyPointer currentPointer);
 
     protected abstract Integer getPositionY(KokyPointer currentPointer);
-    
-    private Integer denormalizePosX() {
-        return currentPointer.getPosX() - currentPointer.getPanelDrawWidth() / 2;
-    }
-    
-    private Integer denormalizePosY() {
-        return currentPointer.getPanelDrawHeight() / 2 - currentPointer.getPosY();
-    }
 
     @Override
     public String getExecutionDescription() {
-        return Messages.positionMessage(denormalizePosX(), denormalizePosY());
+        return Messages.positionMessage(currentPointer.getCoordinatePosX(),
+                currentPointer.getCoordinatePosY());
     }
 }

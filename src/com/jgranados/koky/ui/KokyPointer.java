@@ -214,5 +214,13 @@ public class KokyPointer {
     public void setOutAccumulationY(double outAccumulationY) {
         this.outAccumulationY = outAccumulationY;
     }
-            
+
+    public int getCoordinatePosX() {
+        return getPosX() - getPanelDrawWidth() / 2;
+    }
+
+    public int getCoordinatePosY() {
+        return getPanelDrawHeight() / 2 - getPosY();
+    }
+    
 }
