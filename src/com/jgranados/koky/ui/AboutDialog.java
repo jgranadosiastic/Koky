@@ -37,7 +37,7 @@ public class AboutDialog extends javax.swing.JDialog {
         jLabel1.setBackground(new java.awt.Color(51, 51, 255));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("<html><p>Variante del lenguaje LOGO para enseñar conceptos básicos de programación a niños de 6to primaria en adelante.</p><p><center>Organización de Lenguajes y Compiladores 2<br>CUNOC USAC<br>2019-09-01<br>Versión 1.0</center><p>Desarrolladores:</p><br>Ingeniero José Moisés Granados Guevara<br>Augusto Ricardo Méndez Pum <br>Juan Pablo Orizábal Gil<br>Jesfrin Jesser González Fuentes<br>Juan Pablo Valiente González<br>Jonathan Bryant Daniel Chiroy Rivera<br>Jose Daniel Mazariegos Antón<br>Iván Fabricio Racancoj García<br>Bryan Misael Monzon Fuentes");
+        jLabel1.setText("<html><p>Variante del lenguaje LOGO para enseñar conceptos básicos de programación a niños de 6to primaria en adelante.</p><p><center>Organización de Lenguajes y Compiladores 2<br>CUNOC USAC<br>2019-09-01<br>Versión 1.0.1</center><p>Desarrolladores:</p><br>Ingeniero José Moisés Granados Guevara<br>Augusto Ricardo Méndez Pum <br>Juan Pablo Orizábal Gil<br>Jesfrin Jesser González Fuentes<br>Juan Pablo Valiente González<br>Jonathan Bryant Daniel Chiroy Rivera<br>Jose Daniel Mazariegos Antón<br>Iván Fabricio Racancoj García<br>Bryan Misael Monzon Fuentes");
 
         btnClose.setBackground(new java.awt.Color(255, 255, 255));
         btnClose.setForeground(new java.awt.Color(0, 153, 0));
@@ -70,6 +70,8 @@ public class AboutDialog extends javax.swing.JDialog {
                 .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        jLabel1.getAccessibleContext().setAccessibleName("<html><p>Variante del lenguaje LOGO para enseñar conceptos básicos de programación a niños de 6to primaria en adelante.</p><p><center>Organización de Lenguajes y Compiladores 2<br>CUNOC USAC<br>2019-09-01<br>Versión 1.0.1</center><p>Desarrolladores:</p><br>Ingeniero José Moisés Granados Guevara<br>Augusto Ricardo Méndez Pum <br>Juan Pablo Orizábal Gil<br>Jesfrin Jesser González Fuentes<br>Juan Pablo Valiente González<br>Jonathan Bryant Daniel Chiroy Rivera<br>Jose Daniel Mazariegos Antón<br>Iván Fabricio Racancoj García<br>Bryan Misael Monzon Fuentes");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
