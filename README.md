@@ -1,6 +1,9 @@
-# Project Title
+# Koky
 
-Koky
+Software con fines didácticos que permite la enseñanza de la programación de manera amigable a niños y jóvenes de sexto primaria en adelante.
+
+El nombre de este programa es Koky, proveniente de la palabra kʼicheʼ Kok (tortuga), y puede usarse para enseñar la mayoría de los principales conceptos de la programación utilizando comandos para dibujar en la pantalla de la computadora.
+
 
 ## Getting Started
 
