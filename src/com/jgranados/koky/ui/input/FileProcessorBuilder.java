@@ -12,7 +12,7 @@ public class FileProcessorBuilder {
 
     public static FileProcessor build(File file) throws IOException {
         String mimeType = Files.probeContentType(file.toPath());
-        if (mimeType.equalsIgnoreCase("image/jpeg")) {
+        if (mimeType != null && mimeType.equalsIgnoreCase("image/jpeg")) {
             return new ImageFileProcessor();
         } else {
             return new KokyFileProcessor();
