@@ -2,20 +2,19 @@ package com.jgranados.koky.ui;
 
 import com.jgranados.koky.components.InputTab;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
 import com.jgranados.koky.instructions.logic.Messages;
+import com.jgranados.koky.ui.input.FileProcessorBuilder;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
@@ -26,7 +25,7 @@ import javax.swing.undo.CannotUndoException;
  * @author anclenius
  */
 public class EditorFrame extends KFrame {
-    
+
     private static final String ICON_URL = "/com/jgranados/koky/ui/images/editor_icon.png";
 
     private UndoManager undoManager;
@@ -345,9 +344,10 @@ public class EditorFrame extends KFrame {
 
     private void closeTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeTabActionPerformed
         int option = JOptionPane.showConfirmDialog(null, "¿Estás seguro de cerrar esta pestaña?");
-        if(option == JOptionPane.YES_OPTION) {
-            if(Inputs.getTabCount() == 0) JOptionPane.showMessageDialog(null, "No hay pestañas para cerrar");
-            else {
+        if (option == JOptionPane.YES_OPTION) {
+            if (Inputs.getTabCount() == 0) {
+                JOptionPane.showMessageDialog(null, "No hay pestañas para cerrar");
+            } else {
                 int index = Inputs.getSelectedIndex();
                 unnamedTabs--;
                 try {
@@ -373,12 +373,12 @@ public class EditorFrame extends KFrame {
     }//GEN-LAST:event_saveFileActionPerformed
 
     private void InputsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_InputsStateChanged
-        try{
+        try {
             InputTab tab = (InputTab) Inputs.getSelectedComponent();
             this.undoManager = tab.getManager();
             this.undoFile.setEnabled(true);
             this.redoFile.setEnabled(true);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             this.undoFile.setEnabled(false);
             this.redoFile.setEnabled(false);
         }
@@ -487,13 +487,10 @@ public class EditorFrame extends KFrame {
         String name = file.getName();
         String buffer = "";
         try {
-            Scanner scan = new Scanner(new FileInputStream(file));
-            while (scan.hasNext()) {
-                buffer += scan.nextLine() + LINE;
-            }
-            System.out.println(buffer);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(KokyFrame.class.getName()).log(Level.SEVERE, null, ex);
+            buffer = FileProcessorBuilder.build(file).processInputFile(file).toString();
+        } catch (IOException ex) {
+            buffer = "ERROR: Archivo no reconocido";
+            Logger.getLogger(EditorFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         addTab(buffer, name);
 
