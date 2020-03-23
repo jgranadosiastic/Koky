@@ -29,7 +29,7 @@ import javax.swing.text.html.HTMLDocument;
 public class KFrame extends javax.swing.JFrame {
 
     protected static final String KOK_EXTENSION = "kok";
-    protected static final String KOK_EXTENSION_DESC = "Archivos Kok";
+    protected static final String KOK_EXTENSION_DESC = "Archivo Kok o JPG";
     protected static final String JPG_FILE_EXTENSION = "jpg";
     protected static final String JPG__DOT_FILE_EXTENSION = ".jpg";
     protected static final String LINE = "\n";
