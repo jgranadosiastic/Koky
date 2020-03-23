@@ -16,7 +16,7 @@ public class ImageFileProcessor implements FileProcessor {
     private static final int MAX_WIDTH = 15;
     private static final String CMD_PENUP = "wa'lijik";
     private static final String CMD_PENDOWN = "qajik";
-    private static final String CMD_FORWRAD = "b'inik";
+    private static final String CMD_FORWARD = "b'inik";
     private static final String CMD_WIDTH = "uwach";
     private static final String CMD_RIGHT = "k'iq'ab'";
     private static final String CMD_POSITIONXY = "kriqtajxy ";
@@ -39,7 +39,7 @@ public class ImageFileProcessor implements FileProcessor {
                 if (color != 0) {
                     builder.append(CMD_COLOR).append(String.format("#%06X", (0xFFFFFF & color))).append(System.lineSeparator());
                 }
-                builder.append(CMD_FORWRAD + " 15").append(System.lineSeparator());
+                builder.append(CMD_FORWARD + " 15").append(System.lineSeparator());
                 j += 15;
             }
             i += 14;
