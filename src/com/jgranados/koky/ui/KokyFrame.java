@@ -59,7 +59,7 @@ public class KokyFrame extends KFrame {
         languageLabel.setText(super.language.name());
         txtInstruction.requestFocusInWindow();
         this.getContentPane().setBackground(new java.awt.Color(0, 153, 0));
-        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION));
+        this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KOK_EXTENSION_DESC, KOK_EXTENSION, JPG_FILE_EXTENSION));
         this.draw = new DrawingInstruction(this);
     }
 
