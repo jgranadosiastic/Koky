@@ -164,6 +164,7 @@ public class KokyFrame extends KFrame {
         jScrollPane1.setMinimumSize(new java.awt.Dimension(300, 22));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 26));
 
+        txtMessages.setEditable(false);
         txtMessages.setContentType("text/html"); // NOI18N
         txtMessages.setText("");
         jScrollPane1.setViewportView(txtMessages);
