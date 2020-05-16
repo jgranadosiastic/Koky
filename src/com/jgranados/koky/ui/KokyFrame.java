@@ -132,6 +132,7 @@ public class KokyFrame extends KFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 0));
 
+        txtInstructions.setEditable(false);
         txtInstructions.setColumns(20);
         txtInstructions.setRows(5);
         jScrollPane3.setViewportView(txtInstructions);
