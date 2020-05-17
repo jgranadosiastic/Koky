@@ -21,7 +21,7 @@ public class PdfViewerFrame extends JFrame {
         SwingViewBuilder factory = new SwingViewBuilder(controller);
         JPanel viewerComponentPanel = factory.buildViewerPanel();
         setTitle(filePath);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().add(viewerComponentPanel);
         controller.openDocument(filePath);
         pack();
