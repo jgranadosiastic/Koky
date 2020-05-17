@@ -50,6 +50,7 @@ public class KokyFrame extends KFrame {
     private Boolean makingChallenge = false;
     private HistoryHandler challengeHistoryHandler = new HistoryHandler();
     private DrawingInstruction draw;
+    private EditorFrame currentCodeEditor;
 
     public KokyFrame() {
         super(false);
@@ -604,7 +605,10 @@ public class KokyFrame extends KFrame {
 
 
     private void btnOpenEditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenEditorActionPerformed
-        new EditorFrame(this);
+        if (currentCodeEditor == null) {
+            currentCodeEditor = new EditorFrame(this);
+        }
+        currentCodeEditor.setVisible(true);
     }//GEN-LAST:event_btnOpenEditorActionPerformed
 
     private void takeChallengeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_takeChallengeMenuItemActionPerformed
