@@ -43,7 +43,6 @@ public class EditorFrame extends KFrame {
         this.txtMessages = super.getEditorPane();
         txtMessages.setContentType("text/html");
         this.kokyFrame = kokyFrame;
-        this.setVisible(true);
         this.unnamedTabs = 0;
         this.saveFileChooser.setFileFilter(new FileNameExtensionFilter(KokyFrame.KOK_EXTENSION_DESC, KokyFrame.KOK_EXTENSION));
         this.addTab();
