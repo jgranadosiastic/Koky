@@ -558,18 +558,20 @@ public class KokyFrame extends KFrame {
     }//GEN-LAST:event_btnSaveInstructionsMenuItemActionPerformed
 
     //Metodo para parsear
-    public void run(String input) {
-        parseInstruction(input, this.panelDraw);
-        this.txtInstructions.append(input + LINE);
-        this.txtInstruction.setText("");
-        errorLanguage();
-        historyInput.add(input);
-        history = historyInput.size();
-        lastInput = "";
-        if (makingChallenge) {
-            instructionsMade++;
-            instructionsMadeList.add(input);
+    private void run(String input) {
+        if (!input.trim().isEmpty()) {
+            parseInstruction(input, this.panelDraw);
+            this.txtInstructions.append(input + LINE);
+            errorLanguage();
+            historyInput.add(input);
+            history = historyInput.size();
+            lastInput = "";
+            if (makingChallenge) {
+                instructionsMade++;
+                instructionsMadeList.add(input);
+            }
         }
+        this.txtInstruction.setText("");
     }
 
     private void btnChangeImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangeImageActionPerformed
