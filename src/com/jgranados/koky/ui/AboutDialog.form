@@ -26,32 +26,8 @@
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" pref="451" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnClose" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" pref="369" max="32767" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="btnClose" min="-2" pref="39" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+    <Property name="useNullLayout" type="boolean" value="false"/>
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -65,11 +41,16 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Variante del lenguaje LOGO para ense&#xf1;ar conceptos b&#xe1;sicos de programaci&#xf3;n a ni&#xf1;os de 6to primaria en adelante.&lt;/p&gt;&lt;p&gt;&lt;center&gt;Organizaci&#xf3;n de Lenguajes y Compiladores 2&lt;br&gt;CUNOC USAC&lt;br&gt;2019-09-01&lt;br&gt;Versi&#xf3;n 1.0.1&lt;/center&gt;&lt;p&gt;Desarrolladores:&lt;/p&gt;&lt;br&gt;Ingeniero Jos&#xe9; Mois&#xe9;s Granados Guevara&lt;br&gt;Augusto Ricardo M&#xe9;ndez Pum &lt;br&gt;Juan Pablo Oriz&#xe1;bal Gil&lt;br&gt;Jesfrin Jesser Gonz&#xe1;lez Fuentes&lt;br&gt;Juan Pablo Valiente Gonz&#xe1;lez&lt;br&gt;Jonathan Bryant Daniel Chiroy Rivera&lt;br&gt;Jose Daniel Mazariegos Ant&#xf3;n&lt;br&gt;Iv&#xe1;n Fabricio Racancoj Garc&#xed;a&lt;br&gt;Bryan Misael Monzon Fuentes"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Variante del lenguaje LOGO para ense&#xf1;ar conceptos b&#xe1;sicos de programaci&#xf3;n a ni&#xf1;os de 6to primaria en adelante.&lt;/p&gt;&lt;p&gt;&lt;center&gt;Organizaci&#xf3;n de Lenguajes y Compiladores 2&lt;br&gt;CUNOC USAC&lt;br&gt;2019-09-01&lt;br&gt;Versi&#xf3;n 1.0.2&lt;/center&gt;&lt;p&gt;Desarrolladores:&lt;/p&gt;&lt;br&gt;Ingeniero Jos&#xe9; Mois&#xe9;s Granados Guevara&lt;br&gt;Augusto Ricardo M&#xe9;ndez Pum &lt;br&gt;Juan Pablo Oriz&#xe1;bal Gil&lt;br&gt;Jesfrin Jesser Gonz&#xe1;lez Fuentes&lt;br&gt;Juan Pablo Valiente Gonz&#xe1;lez&lt;br&gt;Jonathan Bryant Daniel Chiroy Rivera&lt;br&gt;Jose Daniel Mazariegos Ant&#xf3;n&lt;br&gt;Iv&#xe1;n Fabricio Racancoj Garc&#xed;a&lt;br&gt;Bryan Misael Monzon Fuentes"/>
       </Properties>
       <AccessibilityProperties>
         <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="&lt;html&gt;&lt;p&gt;Variante del lenguaje LOGO para ense&#xf1;ar conceptos b&#xe1;sicos de programaci&#xf3;n a ni&#xf1;os de 6to primaria en adelante.&lt;/p&gt;&lt;p&gt;&lt;center&gt;Organizaci&#xf3;n de Lenguajes y Compiladores 2&lt;br&gt;CUNOC USAC&lt;br&gt;2019-09-01&lt;br&gt;Versi&#xf3;n 1.0.1&lt;/center&gt;&lt;p&gt;Desarrolladores:&lt;/p&gt;&lt;br&gt;Ingeniero Jos&#xe9; Mois&#xe9;s Granados Guevara&lt;br&gt;Augusto Ricardo M&#xe9;ndez Pum &lt;br&gt;Juan Pablo Oriz&#xe1;bal Gil&lt;br&gt;Jesfrin Jesser Gonz&#xe1;lez Fuentes&lt;br&gt;Juan Pablo Valiente Gonz&#xe1;lez&lt;br&gt;Jonathan Bryant Daniel Chiroy Rivera&lt;br&gt;Jose Daniel Mazariegos Ant&#xf3;n&lt;br&gt;Iv&#xe1;n Fabricio Racancoj Garc&#xed;a&lt;br&gt;Bryan Misael Monzon Fuentes"/>
       </AccessibilityProperties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="12" y="12" width="451" height="369"/>
+        </Constraint>
+      </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="btnClose">
       <Properties>
@@ -84,6 +65,23 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCloseActionPerformed"/>
       </Events>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="190" y="399" width="100" height="39"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/jgranados/koky/ui/images/inglogo.png"/>
+        </Property>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="260" y="180" width="210" height="220"/>
+        </Constraint>
+      </Constraints>
     </Component>
   </SubComponents>
 </Form>

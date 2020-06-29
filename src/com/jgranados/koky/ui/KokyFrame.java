@@ -69,7 +69,6 @@ public class KokyFrame extends KFrame {
     private void initComponents() {
 
         saveFileChooser = new javax.swing.JFileChooser();
-        jSeparator1 = new javax.swing.JSeparator();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -77,11 +76,6 @@ public class KokyFrame extends KFrame {
         txtInstruction = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMessages = super.getEditorPane();
-        scrollpnl = new javax.swing.JScrollPane();
-        scrollpnl.setViewportView(panelDraw);
-        jSeparator2 = new javax.swing.JSeparator();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        helpPane = new javax.swing.JEditorPane();
         jPanel1 = new javax.swing.JPanel();
         btnCleanAll = new javax.swing.JButton();
         btnSaveInstructions = new javax.swing.JButton();
@@ -90,7 +84,11 @@ public class KokyFrame extends KFrame {
         languageLabel = new javax.swing.JLabel();
         positionLabelLbl = new javax.swing.JLabel();
         positionLbl = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        helpPane = new javax.swing.JEditorPane();
+        scrollpnl = new javax.swing.JScrollPane();
+        scrollpnl.setViewportView(panelDraw);
         jMenuBar1 = new javax.swing.JMenuBar();
         btnOpenFile = new javax.swing.JMenu();
         btnSaveInstructionsMenuItem = new javax.swing.JMenuItem();
@@ -149,7 +147,7 @@ public class KokyFrame extends KFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
             .addComponent(txtInstruction)
         );
         jPanel2Layout.setVerticalGroup(
@@ -171,20 +169,6 @@ public class KokyFrame extends KFrame {
         jScrollPane1.setViewportView(txtMessages);
 
         jSplitPane1.setRightComponent(jScrollPane1);
-
-        scrollpnl.setBackground(new java.awt.Color(255, 255, 255));
-        scrollpnl.setPreferredSize(new Dimension(PanelDraw.DEFAULT_WIDTH, PanelDraw.DEFAULT_HEIGHT));
-
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        helpPane.setEditable(false);
-        try {
-            helpPane.setPage(getClass().getResource("/com/jgranados/koky/ui/basicInstructions.html")
-            );
-        } catch (java.io.IOException e1) {
-            e1.printStackTrace();
-        }
-        jScrollPane4.setViewportView(helpPane);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 0));
 
@@ -230,7 +214,7 @@ public class KokyFrame extends KFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnCleanAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(btnChangeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnSaveInstructions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -240,7 +224,7 @@ public class KokyFrame extends KFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(languageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(positionLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,6 +243,31 @@ public class KokyFrame extends KFrame {
                     .addComponent(positionLabelLbl, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(positionLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
+
+        jSplitPane2.setDividerLocation(900);
+        jSplitPane2.setResizeWeight(0.9);
+        jSplitPane2.setContinuousLayout(true);
+        jSplitPane2.setOneTouchExpandable(true);
+
+        jScrollPane4.setMinimumSize(new java.awt.Dimension(106, 22));
+        jScrollPane4.setPreferredSize(new java.awt.Dimension(260, 26));
+
+        helpPane.setEditable(false);
+        helpPane.setMaximumSize(new java.awt.Dimension(106, 2147483647));
+        try {
+            helpPane.setPage(getClass().getResource("/com/jgranados/koky/ui/basicInstructions.html")
+            );
+        } catch (java.io.IOException e1) {
+            e1.printStackTrace();
+        }
+        jScrollPane4.setViewportView(helpPane);
+
+        jSplitPane2.setRightComponent(jScrollPane4);
+
+        scrollpnl.setBackground(new java.awt.Color(255, 255, 255));
+        scrollpnl.setMinimumSize(new Dimension(PanelDraw.DEFAULT_WIDTH - 25, PanelDraw.DEFAULT_HEIGHT - 25));
+        scrollpnl.setPreferredSize(new Dimension(PanelDraw.DEFAULT_WIDTH, PanelDraw.DEFAULT_HEIGHT));
+        jSplitPane2.setLeftComponent(scrollpnl);
 
         jMenuBar1.setBackground(new java.awt.Color(153, 51, 0));
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
@@ -472,40 +481,24 @@ public class KokyFrame extends KFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                    .addComponent(jSeparator1)
-                    .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                    .addComponent(jSeparator3)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSplitPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrollpnl, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -904,10 +897,8 @@ public class KokyFrame extends KFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JLabel languageLabel;
     private javax.swing.JMenuItem lenguageEnglish;
     private javax.swing.JMenuItem lenguageKiche;
